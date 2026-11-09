@@ -1,13 +1,13 @@
-Clara application screenshots — refreshed 9 November 2026
+Clara application screenshots — gradient refresh, 9 November 2026
 
-Captured from the actual Phoenix application in /home/drasko/ideas/clara, served for this capture at http://127.0.0.1:4002. Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
+Captured from the actual Phoenix application in /home/drasko/ideas/clara, served for this capture at http://127.0.0.1:4003. Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
 
 plays.png: /fieldnotes-bloom-demo/plays — live content-play catalog.
 linkedin.png: the same route with the real LinkedIn play dialog open and a fictional Fieldnotes brief entered. The play was not submitted.
 brand.png: /fieldnotes-bloom-demo/brand — saved fictional brand voice, audience, and writing guidelines.
 
-The running app already used the approved In bloom logo. Its four colored petals and yellow center were verified in the live sidebar before every capture. Screenshots were taken directly through Playwright with no DOM substitutions or image edits.
+Captured from a fresh instance of app commit a0606185 (Add bloom-inspired gradients to Clara screens), after rebuilding its assets with mix assets.build. The served app stylesheet was verified byte-for-byte against the compiled CSS from /home/drasko/ideas/clara; the previous instance on port 4002 served a different stylesheet and was not used. The running app uses the approved In bloom logo and a violet, coral, and yellow radial-gradient canvas. The sidebar logo and all three gradient colors, sizes, and positions were verified in the computed dashboard styles before every capture: violet at 0% 0% (70% × 75%), coral at 105% 35% (55% × 70%), and yellow at 65% 105% (75% × 55%). Screenshots were taken directly through Playwright with no DOM substitutions or image edits.
 
-The capture instance used the separate local PostgreSQL database clara_website_screenshots, with background queues disabled. A normal demo-account login and a dedicated fictional Fieldnotes workspace were used. Only fictional brand settings were saved; no generation or publishing was run. Existing application source was not modified for this capture.
+The capture instance used the separate local PostgreSQL database clara_website_screenshots, with background queues disabled. A normal demo-account login and a dedicated fictional Fieldnotes workspace were used. Existing fictional brand settings were reused; no settings changes, generation, or publishing were run during this refresh. Existing application source was not modified for this capture.
 
 Temporary capture scripts and browser sessions are not included in the website. These images contain only demo workspace information.
