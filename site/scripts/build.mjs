@@ -8,8 +8,8 @@ const src = path.join(root, 'src');
 const out = path.join(root, 'dist');
 await mkdir(out, { recursive: true });
 await cp(path.join(src, 'assets'), path.join(out, 'assets'), { recursive: true });
-for (const file of ['styles.css', 'site.js']) await cp(path.join(src, file), path.join(out, file));
-const brand = '<img src="/assets/clara-symbol.svg" width="36" height="36" alt=""/><span>Clara</span>';
+for (const file of ['styles.css', 'site.js', 'logo-directions.css', 'logo-directions.js', 'bloom-directions.css', 'bloom-directions.js']) await cp(path.join(src, file), path.join(out, file));
+const brand = '<img src="/assets/clara-bloom.svg" width="36" height="36" alt=""/><span>Clara</span>';
 const arrow = '<span aria-hidden="true">↗</span>';
 const accessForm = (prefix) => `<form class="access-form" data-access-form>
   <label for="${prefix}-name">Your name<input id="${prefix}-name" name="name" autocomplete="name" required maxlength="100" placeholder="Alex Morgan" /></label>
@@ -37,7 +37,7 @@ const pages = [
 ];
 for (const page of pages) {
   const body = (page.body ?? await readFile(path.join(src, page.file), 'utf8')).replace('{{ACCESS_FORM}}', accessForm('page'));
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#fffcf7"/><title>${page.title}</title><meta name="description" content="${page.description}"/><meta property="og:title" content="${page.title}"/><meta property="og:description" content="${page.description}"/><meta property="og:type" content="website"/><meta property="og:site_name" content="Clara"/><meta name="twitter:card" content="summary"/><link rel="icon" type="image/svg+xml" href="/assets/clara-favicon-color.svg"/><link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin/><link rel="stylesheet" href="/styles.css"/><script src="/site.js" defer></script></head><body>${header(page.route)}<main id="main">${body}</main>${!['early-access','privacy','404'].includes(page.route) && !page.route.startsWith('docs') && !page.route.startsWith('blog/') ? closing : ''}${footer}<dialog id="access-dialog" aria-labelledby="access-title"><button class="dialog-close" type="button" aria-label="Close early access form">×</button><p class="eyebrow">LET’S MEET</p><h2 id="access-title">A little clarity<br/>for your next chapter.</h2><p class="dialog-intro">Tell us about your product. We’ll discuss early access and how Clara could fit your team.</p>${accessForm('dialog')}</dialog></body></html>`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#fffcf7"/><title>${page.title}</title><meta name="description" content="${page.description}"/><meta property="og:title" content="${page.title}"/><meta property="og:description" content="${page.description}"/><meta property="og:type" content="website"/><meta property="og:site_name" content="Clara"/><meta name="twitter:card" content="summary"/><link rel="icon" type="image/svg+xml" href="/assets/clara-favicon-bloom.svg"/><link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin/><link rel="stylesheet" href="/styles.css"/><script src="/site.js" defer></script></head><body>${header(page.route)}<main id="main">${body}</main>${!['early-access','privacy','404'].includes(page.route) && !page.route.startsWith('docs') && !page.route.startsWith('blog/') ? closing : ''}${footer}<dialog id="access-dialog" aria-labelledby="access-title"><button class="dialog-close" type="button" aria-label="Close early access form">×</button><p class="eyebrow">LET’S MEET</p><h2 id="access-title">A little clarity<br/>for your next chapter.</h2><p class="dialog-intro">Tell us about your product. We’ll discuss early access and how Clara could fit your team.</p>${accessForm('dialog')}</dialog></body></html>`;
   const dir = page.route && page.route !== '404' ? path.join(out, page.route) : out;
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, page.route === '404' ? '404.html' : 'index.html'), html);
@@ -48,3 +48,10 @@ console.log(`Built ${pages.length} pages in dist/.`);
 const formerFormats = path.join(out, 'what-you-can-make');
 await mkdir(formerFormats, { recursive: true });
 await writeFile(path.join(formerFormats, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>What you can make — Clara</title><meta name="description" content="Explore what Clara can make on the homepage."/><meta http-equiv="refresh" content="0;url=/#create"/><link rel="stylesheet" href="/styles.css"/></head><body><main class="container section"><h1>What you can make</h1><p><a href="/#create">Continue to the Clara homepage →</a></p></main></body></html>`);
+
+// Private local design comparison; not linked from the marketing navigation.
+await mkdir(path.join(out, 'logo-directions'), { recursive: true });
+await cp(path.join(src, 'logo-directions.html'), path.join(out, 'logo-directions/index.html'));
+
+await mkdir(path.join(out, 'logo-directions/bloom'), { recursive: true });
+await cp(path.join(src, 'bloom-directions.html'), path.join(out, 'logo-directions/bloom/index.html'));
