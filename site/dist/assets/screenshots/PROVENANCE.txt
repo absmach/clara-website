@@ -1,11 +1,13 @@
-Clara application screenshots — 9 November 2026
+Clara application screenshots — refreshed 9 November 2026
 
-Captured from the actual Phoenix application in /home/drasko/ideas/clara, served at http://127.0.0.1:4000. Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
+Captured from the actual Phoenix application in /home/drasko/ideas/clara, served for this capture at http://127.0.0.1:4002. Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
 
-plays.png: /fieldnotes-website-demo/plays — live content-play catalog.
+plays.png: /fieldnotes-bloom-demo/plays — live content-play catalog.
 linkedin.png: the same route with the real LinkedIn play dialog open and a fictional Fieldnotes brief entered. The play was not submitted.
-brand.png: /fieldnotes-website-demo/brand — saved fictional brand voice, audience, and writing guidelines.
+brand.png: /fieldnotes-bloom-demo/brand — saved fictional brand voice, audience, and writing guidelines.
 
-The application used a separate local PostgreSQL database named clara_website_screenshots, with background queues disabled, and a dedicated local demo identity. Existing Clara development data was not migrated. The app source was not edited. Screenshots were taken directly through Playwright with no DOM substitutions or image edits.
+The running app already used the approved In bloom logo. Its four colored petals and yellow center were verified in the live sidebar before every capture. Screenshots were taken directly through Playwright with no DOM substitutions or image edits.
 
-The temporary capture scripts and browser session are not included in the website. These image files contain only demo workspace information.
+The capture instance used the separate local PostgreSQL database clara_website_screenshots, with background queues disabled. A normal demo-account login and a dedicated fictional Fieldnotes workspace were used. Only fictional brand settings were saved; no generation or publishing was run. Existing application source was not modified for this capture.
+
+Temporary capture scripts and browser sessions are not included in the website. These images contain only demo workspace information.

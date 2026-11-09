@@ -1,23 +1,74 @@
-# Clara website
+<p align="center">
+  <img src="site/src/assets/clara-bloom.svg" width="72" height="72" alt="Clara’s In bloom logo" />
+</p>
 
-Clara’s product website, informed by the Clara application and the Atomic website. The standalone project lives in `site/`; hosting serves `site/dist/`.
+<h1 align="center">Clara</h1>
+<p align="center"><strong>You make great things. Let’s tell the world.</strong></p>
+<p align="center">The product website for Clara, an AI content teammate that turns product knowledge into articles, social posts, and campaigns.</p>
+
+---
+
+## Run locally
+
+Requires **Node.js 22+**. No dependencies to install.
 
 ```sh
-npm run dev     # build and serve at http://127.0.0.1:4173
-npm run build   # generate the static site
-npm run check   # check JavaScript and local pages/assets
+npm run dev
 ```
 
-No package installation is required. Node.js 22 or later is sufficient. Re-run the build after editing source files; the preview serves the generated files.
+Open **[localhost:4173](http://localhost:4173)**. After editing source files, run `npm run build` and refresh the browser; the preview server does not watch for changes.
 
-The site includes a homepage with animated product screenshots and interactive content examples, a workflow guide, an about page, Docs with four guides, Blog with two articles, an early-access inquiry page, website privacy information, and a 404 page. The former standalone content-formats route redirects to the homepage. The header and footer, metadata, and inquiry forms are shared by `site/scripts/build.mjs`. Page content, styles, and interactions live in `site/src/`. Local Inter fonts and their license are included.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Build the site and start the local preview |
+| `npm run build` | Generate the static site in `site/dist/` |
+| `npm run check` | Check JavaScript syntax, page metadata, links, and assets |
 
-Early-access links open an accessible dialog; opening the link in another tab or without JavaScript uses the standalone page. The form prepares an email to the existing Abstract Machines contact, `info@absmach.eu`. It does not submit or store inquiries. The visitor reviews and sends the email. No signup backend or analytics is configured.
+## What’s inside
 
-The campaign demonstration uses fictional Fieldnotes content. Tabs switch prewritten examples, and visitors can copy the selected sample. It does not invoke a model or publish content. The product gallery contains unmodified screenshots of the actual running Clara Phoenix application, captured in a separate local demo workspace. Hero artwork and the separate content examples remain explicitly fictional.
+- **Product homepage** with real app screenshots, an animated product tour, and interactive content examples.
+- **How it works and About** pages explaining Clara’s workflow and approach.
+- **Docs and Blog** with product guides and introductory articles.
+- **Early access** through an email draft that visitors review and send.
 
-The website uses Inter typography, violet actions, warm white surfaces, and sunshine yellow, coral, pink, and peach accents. The Morse-code C mark retains its geometry with violet bars and coral dots. The editorial layout combines serif accents with playful illustrations and brief entrance motion that respects reduced-motion preferences. The compact footer and shared navigation include Docs and Blog.
+The site is static HTML, CSS, and JavaScript. Fonts and artwork are served locally. There is no inquiry database, analytics integration, or AI generation running on the website.
 
-Product claims were checked against `../clara/README.md`, `../clara/lib/clara_web/live/home_live.ex`, the campaign catalog, publishing implementations, and carousel/video guides. The older generated documentation still describes a prior Python service, so it was not used as the product source of truth. Pricing, launch dates, customer statistics, and future sales/CRM capabilities are intentionally not presented as available features.
+## Make changes
 
-Before a public launch, choose the final domain, confirm access availability, and connect an approved inquiry service if email is no longer the desired flow. The earlier Sites preview is not updated by this local revision. The current version is served locally at http://localhost:4173.
+```text
+site/
+├── src/                    Page content, styles, scripts, and assets
+├── scripts/
+│   ├── build.mjs           Shared layout and page generation
+│   ├── resource-pages.mjs  Docs and Blog content
+│   ├── check.mjs           Static validation
+│   └── serve.mjs           Local preview server
+└── dist/                   Generated files for static hosting
+```
+
+Edit source files in `site/src/` or `site/scripts/`, then rebuild. Treat `site/dist/` as generated output; it is tracked alongside the source.
+
+See the [maintenance guide](site/README.md) for specific editing locations and publishing notes.
+
+## Brand and product imagery
+
+Clara’s **In bloom** mark pairs violet petals with a coral accent and a sunshine-yellow heart. The site carries those colors through warm surfaces and playful editorial illustrations.
+
+- [Color logo](site/src/assets/clara-bloom.svg) · [One-color logo](site/src/assets/clara-bloom-mono.svg) · [Favicon](site/src/assets/clara-favicon-bloom.svg)
+- App screenshots are captured from the real Clara application using a fictional **Fieldnotes** workspace. See [capture provenance](site/src/assets/screenshots/PROVENANCE.txt).
+- Hero illustrations and sample content are illustrative; they are separate from the real app screenshots.
+
+## Build for hosting
+
+```sh
+npm run build
+npm run check
+```
+
+Serve **`site/dist/`** with a static host that supports directory index pages. Use `404.html` as the not-found page. The build and preview commands do not publish the site.
+
+Early-access inquiries currently open an email draft to **info@absmach.eu**. The visitor must send the email; the website does not submit or store it.
+
+---
+
+Built by [Abstract Machines](https://absmach.eu).

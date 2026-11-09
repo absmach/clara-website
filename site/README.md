@@ -1,25 +1,47 @@
-# Clara product website
+# Website maintenance
 
-A dependency-free static website for Clara. Node.js 22+ is sufficient; no installation is needed.
+For setup and an overview, see the [repository README](../README.md).
+
+## Where to edit
+
+| Change | Source |
+| --- | --- |
+| Homepage and content examples | `src/home.html` |
+| How it works, About, early access, privacy | Corresponding HTML files in `src/` |
+| Docs and Blog | `scripts/resource-pages.mjs` |
+| Header, footer, metadata, shared inquiry form | `scripts/build.mjs` |
+| Layout, colors, responsive styles | `src/styles.css` |
+| Gallery, navigation, dialogs, sample interactions | `src/site.js` |
+| Logo and favicon | `src/assets/clara-bloom.svg`, `src/assets/clara-favicon-bloom.svg` |
+| Real app screenshots | `src/assets/screenshots/` |
+
+From either the repository root or this directory:
 
 ```sh
-npm run dev
 npm run build
 npm run check
 ```
 
-The preview runs at `http://127.0.0.1:4173`. Edit `src/` and rebuild to update it. The build script owns shared navigation, footer, metadata, and the early-access form. Static hosting serves `dist/`; `.openai/hosting.json` retains the Sites identity.
+The preview serves `dist/` at [localhost:4173](http://localhost:4173). Rebuild and refresh after edits. Commit the regenerated `dist/` files with their source changes.
 
-The 14 generated pages include the homepage with content formats and examples, workflow guide, about page, early-access inquiry, website privacy, 404, Docs overview and four guides, and Blog overview and two articles. `scripts/resource-pages.mjs` owns the Docs and Blog content; the guides describe the current Phoenix workspace rather than the legacy CLI/Next.js documentation. Inter and its license are included locally. The approved “In bloom” mark uses four turning petals: three violet, one coral, and a sunshine-yellow heart. `src/assets/clara-bloom.svg` is the website master; `clara-bloom-mono.svg` is the one-color variant. The favicon uses the same flower on a white rounded tile, with a dedicated `clara-favicon-bloom.svg` URL to avoid the previous favicon’s browser cache. The website pairs Clara violet with coral, sunshine yellow, pink, and peach illustration accents on a warm white background. Decorative hero shapes and cards enter once (under four seconds); reduced-motion preferences disable their animation. No third-party image or analytics requests are made.
+## Product tour
 
-The gallery includes three actual screenshots of the running Phoenix app: content plays, the LinkedIn brief dialog, and populated brand guidelines. The gallery cycles every three seconds while in view, crossfades between screens, and provides a pause/play control. Manual tab selection pauses rotation; keyboard focus, hidden browser tabs, and leaving the viewport suspend playback. Reduced-motion preferences disable automatic playback by default. These screens were captured with Chromium at 1440 × 1000 in an isolated local screenshot database. No screenshot pixels or application DOM were edited. The demo workspace contains fictional Fieldnotes data, and no generation or publishing was run. See `src/assets/screenshots/PROVENANCE.txt`.
+The homepage gallery uses three 1440 × 1000 captures: content plays, the LinkedIn brief dialog, and brand guidelines. Capture them from the running Clara app using fictional demo data, then update [PROVENANCE.txt](src/assets/screenshots/PROVENANCE.txt). Preserve authentic interface content and capture the logo from the app itself.
 
-The homepage content samples are prewritten content for the fictional Fieldnotes product. They can be explored and copied, but do not generate or publish anything. The early-access form opens an email draft to `info@absmach.eu`, with a copy fallback. The visitor must send it. No signup backend, inquiry storage, or analytics is configured.
+The gallery advances every three seconds while visible. Visitors can pause it or select a tab; manual selection pauses playback. Keyboard focus, a hidden browser tab, and leaving the viewport suspend playback. Reduced-motion preferences disable automatic playback by default.
 
-The layout and product story were informed by the local Clara application and Atomic website. The retired temporary brand is not used. Current content and approval workflows are described; future sales/CRM features, pricing, launch dates, and customer claims are not represented as available.
+The separate Fieldnotes content examples are prewritten samples. They do not call a model or publish anything.
 
-Validation: static checks cover all local links, fragments, assets, IDs, metadata, and accessible references. Chromium checks covered five pages at 320, 390, 768, 1024, and 1440 pixels, plus tab keyboard navigation, clipboard fallbacks, FAQ expansion, dialog behavior, email drafts, mobile navigation, a 404, and the no-JavaScript contact path.
+## Branding
 
-The shared footer provides Product, Create, Resources, and Company navigation with compact 13px desktop links, 14px mobile links, and 44px mobile link targets. Navigation includes Docs and Blog, indicates the current page, and switches to the mobile menu at 1150px. The About illustration uses layered working notes. Recent Chromium checks cover all 15 routes at 320, 390, 1151, and 1440 pixels, including navigation, content samples, footer sizing, and runtime errors.
+**In bloom** is the approved logo: four turning petals, one coral accent, and a yellow center. Use the color master for the website and `src/assets/clara-bloom-mono.svg` for one-color applications. The favicon places the flower on a white rounded tile.
 
-The homepage contains the real application gallery, format cards, visual studio banner, and interactive Fieldnotes examples. The formats section is available on the homepage and through the footer; it has no separate header menu item. The former separate route redirects to that section, so the content is maintained in one place. Format descriptions and sample text use 15px type; controls and captions have also been enlarged.
+The earlier logo studies remain at `/logo-directions/` and `/logo-directions/bloom/`. They are built into `dist/`, but are not linked from the marketing navigation; they are not access-controlled.
+
+## Before publishing
+
+Run the build and static checks. Preview visual changes at desktop and mobile sizes, and exercise any interactions you changed. Static checks cover local links, fragments, assets, IDs, metadata, and accessible references; they do not replace browser review.
+
+Deploy `dist/` to static hosting. Preserve directory URLs such as `/docs/` and configure `404.html` for missing pages. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
+
+The early-access form prepares an email to `info@absmach.eu`, with a copy fallback. Changing it to collect submissions requires an inquiry service. No inquiry storage or analytics is currently configured.
