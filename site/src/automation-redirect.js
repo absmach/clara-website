@@ -1,6 +1,6 @@
 const destinations = {
-  '#workflows': '#workflow-screen',
-  '#agents': '#agent-screen',
+  '#workflows': '#workflows',
+  '#agents': '#agents',
   '#autonomy': '#autonomy',
   '#automation': '#workflows'
 };

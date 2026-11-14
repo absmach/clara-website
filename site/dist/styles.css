@@ -164,3 +164,11 @@
 @media(max-width:1000px){.planner-intro-grid{gap:35px;grid-template-columns:1fr 1.15fr}.planner-priority{padding:16px;margin-right:10px}.planner-priority strong{font-size:14px}.planner-spark{display:none}.planner-task{padding:10px}.planner-task strong{font-size:12px}.planner-task-post{padding:8px}.planner-task-post strong{font-size:10px}.planner-week-heading{padding:20px 18px}}
 @media(max-width:800px){.planner-intro-grid{grid-template-columns:1fr;gap:38px}.planner-copy>p:not(.eyebrow){max-width:57ch}.planner-art{width:min(100%,580px);justify-self:center}.planner-intro{padding-block:64px}.planner-priority strong{font-size:16px}.planner-task strong{font-size:14px}.planner-task-post strong{font-size:12px}}
 @media(max-width:450px){.planner-intro{padding-block:52px}.planner-copy>p:not(.eyebrow){font-size:15px}.planner-art{padding-inline:0}.planner-priority{gap:10px;padding:14px;margin-right:5px}.planner-priority strong{font-size:12px}.planner-priority-icon{flex-basis:34px;height:34px;font-size:24px}.planner-art-label{font-size:8px}.planner-week-heading strong{font-size:19px}.planner-task{padding:9px}.planner-task-kind{font-size:7px}.planner-task strong{font-size:11px}.planner-task>span:last-child{font-size:9px}.planner-task-post{grid-column:1/6;gap:9px}.planner-task-post strong{font-size:12px}.planner-art figcaption{font-size:11px}.guide-tour,.guide-team{margin-top:30px}}
+
+/* Role cards retain the visual weight of the illustrated guide. */
+.guide-team .automation-role-heading{margin-bottom:26px}
+.guide-team .agent-role{padding:28px 24px;border-radius:12px}
+.guide-team .agent-symbol{width:52px;height:52px;border-radius:15px;font-size:29px;margin-bottom:28px}
+.guide-team .agent-role h3{font-size:23px;font-weight:550;line-height:1.3;margin-bottom:16px}
+.guide-team .agent-role>p{font-size:15px;line-height:1.75;margin:0}
+@media(max-width:650px){.guide-team .agent-role{padding:26px}.guide-team .agent-symbol{margin-bottom:24px}}
