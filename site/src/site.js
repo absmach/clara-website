@@ -145,25 +145,38 @@ document.querySelector('#copy-sample')?.addEventListener('click', async () => {
 });
 
 const screenDetails = {
+  workflows: {
+    caption: 'Connect research, creation, and review on the workflow canvas. Demo draft · Never run.',
+    alt: 'Actual Clara Workflows canvas with a draft release campaign: research branches into article and social content, each passes through review, and the branches join at a team notification.'
+  },
+  agents: {
+    caption: 'Choose a marketing role in the Agent library, then make its jobs your own.',
+    alt: 'Actual Clara Agent library showing Content Writer, Social Manager, Competitor Analyst, and other marketing roles with their workflow jobs.'
+  },
+  chat: {
+    caption: 'Start a conversation with your idea, your brief, and your product context.',
+    alt: 'Actual Clara chat composer with an illustrative Fieldnotes launch brief ready to send. No message has been submitted.'
+  },
   plays: {
-    caption: 'Choose a starting point from Clara’s content plays.',
-    alt: 'Actual Clara application showing its content-play catalog, with blog posts, LinkedIn posts, X posts, threads, release notes, and carousels.'
+    caption: 'Choose a content Play for the format and channel you have in mind.',
+    alt: 'Actual Clara content Plays catalog with starting points for articles, LinkedIn posts, X threads, release notes, and carousels.'
   },
   linkedin: {
-    caption: 'Give Clara a brief and choose the context for a LinkedIn draft.',
-    alt: 'Actual Clara LinkedIn play dialog with a fictional Fieldnotes brief, brand guidelines, image options, and the Start play button. The brief has not been submitted.'
+    caption: 'Give your Play a brief and bring in your brand voice before creating a draft.',
+    alt: 'Actual Clara LinkedIn Play dialog containing a fictional Fieldnotes launch brief. The Play has not been submitted.'
   },
   brand: {
     caption: 'Set the voice, audience, and writing guidelines behind the work.',
     alt: 'Actual Clara Brand and knowledge screen with saved example brand voice, audience, and writing guidelines for the fictional Fieldnotes workspace.'
   }
 };
-const screenTabs = [...document.querySelectorAll('[data-screen]')];
-if (screenTabs.length) {
-  const gallery = document.querySelector('.product-gallery');
-  const image = document.querySelector('#product-screenshot');
-  const screenPanel = document.querySelector('#screenshot-panel');
-  const toggle = document.querySelector('#screenshot-playback');
+// Each tour owns its playback, focus, image loading, and visible slide.
+for (const gallery of document.querySelectorAll('[data-screenshot-gallery]')) {
+  const screenTabs = [...gallery.querySelectorAll('[data-screen]')];
+  if (!screenTabs.length) continue;
+  const image = gallery.querySelector('[data-gallery-image]');
+  const screenPanel = gallery.querySelector('[data-gallery-panel]');
+  const toggle = gallery.querySelector('[data-gallery-playback]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const duration = 3000;
   const keys = screenTabs.map(tab => tab.dataset.screen);
@@ -180,6 +193,7 @@ if (screenTabs.length) {
   const previous = image.cloneNode();
   previous.removeAttribute('id');
   previous.removeAttribute('loading');
+  previous.removeAttribute('data-gallery-image');
   previous.className = 'screenshot-outgoing';
   previous.alt = '';
   previous.setAttribute('aria-hidden', 'true');
@@ -207,7 +221,7 @@ if (screenTabs.length) {
     toggle.querySelector('[data-playback-icon]').textContent = userPaused ? '▷' : 'Ⅱ';
     if (!playing) return;
     if (!motion.matches) {
-      progress = document.querySelector(`#screen-${activeKey} .screen-tab-progress`).animate(
+      progress = screenTabs.find(tab => tab.dataset.screen === activeKey).querySelector('.screen-tab-progress').animate(
         [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
         { duration, easing: 'linear', fill: 'forwards' }
       );
@@ -219,7 +233,7 @@ if (screenTabs.length) {
   }
 
   async function selectScreen(key, { automatic = false, focus = false } = {}) {
-    if (!screenDetails[key]) return;
+    if (!keys.includes(key) || !screenDetails[key]) return;
     if (!automatic) userPaused = true;
     const currentRequest = ++request;
     loading = true;
@@ -244,6 +258,8 @@ if (screenTabs.length) {
     }
     image.src = cachedImages.get(key).src;
     image.alt = screenDetails[key].alt;
+    image.width = cachedImages.get(key).naturalWidth;
+    image.height = cachedImages.get(key).naturalHeight;
     activeKey = key;
     for (const tab of screenTabs) {
       const active = tab.dataset.screen === key;
@@ -251,9 +267,9 @@ if (screenTabs.length) {
       tab.tabIndex = active ? 0 : -1;
       if (active && focus) tab.focus();
     }
-    document.querySelector('#screenshot-full').href = image.src;
-    document.querySelector('#screenshot-caption').textContent = screenDetails[key].caption;
-    screenPanel.setAttribute('aria-labelledby', `screen-${key}`);
+    gallery.querySelector('[data-gallery-full]').href = image.src;
+    gallery.querySelector('[data-gallery-caption]').textContent = screenDetails[key].caption;
+    screenPanel.setAttribute('aria-labelledby', screenTabs.find(tab => tab.dataset.screen === key).id);
     if (!previous.hidden) {
       fade = previous.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, easing: 'ease-in-out', fill: 'forwards' });
       fade.onfinish = () => { previous.hidden = true; };
@@ -275,6 +291,20 @@ if (screenTabs.length) {
       selectScreen(screenTabs[next].dataset.screen, { focus: true });
     });
   });
+  function selectLinkedScreen() {
+    const tab = screenTabs.find(tab => tab.dataset.galleryAnchor === location.hash.slice(1));
+    if (tab) selectScreen(tab.dataset.screen);
+  }
+  window.addEventListener('hashchange', selectLinkedScreen);
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href]');
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const destination = new URL(link.href, location.href);
+    if (destination.origin !== location.origin || destination.pathname !== location.pathname) return;
+    const tab = screenTabs.find(tab => tab.dataset.galleryAnchor === destination.hash.slice(1));
+    if (tab) selectScreen(tab.dataset.screen);
+  });
+  selectLinkedScreen();
   toggle.hidden = false;
   toggle.addEventListener('click', () => {
     userPaused = !userPaused;

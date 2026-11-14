@@ -4,7 +4,7 @@
 
 <h1 align="center">Clara</h1>
 <p align="center"><strong>You make great things. Let’s tell the world.</strong></p>
-<p align="center">The product website for Clara, an AI content teammate that turns product knowledge into articles, social posts, and campaigns.</p>
+<p align="center">The product website for Clara, an AI marketing team with Agents, Workflows, and configurable autonomy—from suggestions to automatic publishing.</p>
 
 ---
 

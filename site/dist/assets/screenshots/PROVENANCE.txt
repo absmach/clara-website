@@ -1,13 +1,40 @@
-Clara application screenshots — gradient refresh, 9 November 2026
+Clara application screenshots — Agents, Workflows, and Autonomy refresh
+Captured for the website update on 13 November 2026 (user task date).
 
-Captured from the actual Phoenix application in /home/drasko/ideas/clara, served for this capture at http://127.0.0.1:4003. Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
+Source: the running Clara Phoenix application at http://127.0.0.1:4000.
+The adjacent app checkout was at commit 3dbe94ad during capture; the running
+process's exact build revision was not independently verified. The current UI
+was inspected directly and shows separate Agents and Workflows navigation.
 
-plays.png: /fieldnotes-bloom-demo/plays — live content-play catalog.
-linkedin.png: the same route with the real LinkedIn play dialog open and a fictional Fieldnotes brief entered. The play was not submitted.
-brand.png: /fieldnotes-bloom-demo/brand — saved fictional brand voice, audience, and writing guidelines.
+Chromium, 1440 x 1000 CSS pixels, light theme, device scale factor 1.
+All captures use the existing fictional fieldnotes-bloom-demo workspace and
+its demo account. No personal workspace or real customer content is shown.
 
-Captured from a fresh instance of app commit a0606185 (Add bloom-inspired gradients to Clara screens), after rebuilding its assets with mix assets.build. The served app stylesheet was verified byte-for-byte against the compiled CSS from /home/drasko/ideas/clara; the previous instance on port 4002 served a different stylesheet and was not used. The running app uses the approved In bloom logo and a violet, coral, and yellow radial-gradient canvas. The sidebar logo and all three gradient colors, sizes, and positions were verified in the computed dashboard styles before every capture: violet at 0% 0% (70% × 75%), coral at 105% 35% (55% × 70%), and yellow at 65% 105% (75% × 55%). Screenshots were taken directly through Playwright with no DOM substitutions or image edits.
+agents.png: /fieldnotes-bloom-demo/agents/library — the current Agent library,
+including each role and its jobs.
+workflows.png (refreshed 14 November 2026): the actual Workflows canvas at
+/fieldnotes-bloom-demo/workflows/65b7515a-a759-405b-b6a6-db5afbf39526?tab=design.
+Captured at 1920 x 1100. A dedicated fictional "Fieldnotes · Release to
+campaign" standalone draft was created through Clara's normal UI, with seven
+nodes and seven connections: Trigger → Research & angle → two Generate
+content branches → individual Human review steps → Notify team. This is the
+full editor with its Workflow tab, canvas controls, and node properties, not
+an agent template preview. The workflow was saved but never activated or run.
 
-The capture instance used the separate local PostgreSQL database clara_website_screenshots, with background queues disabled. A normal demo-account login and a dedicated fictional Fieldnotes workspace were used. Existing fictional brand settings were reused; no settings changes, generation, or publishing were run during this refresh. Existing application source was not modified for this capture.
+chat.png (added 14 November 2026): /fieldnotes-bloom-demo/home — actual chat
+composer with a fictional Fieldnotes launch brief entered but not sent.
 
-Temporary capture scripts and browser sessions are not included in the website. These images contain only demo workspace information.
+autonomy.png: /organizations/fieldnotes-bloom-demo/settings/autonomy — the
+three presets, pause control, and per-action settings. Existing Co-pilot
+selection preserved; no autonomy settings were changed.
+brand.png: /fieldnotes-bloom-demo/brand — existing fictional brand guidelines.
+plays.png: /fieldnotes-bloom-demo/plays — current content-play catalog.
+linkedin.png: the real LinkedIn play dialog with an illustrative Fieldnotes
+brief entered. The play was not submitted.
+
+Screenshots were taken directly with Playwright. No DOM substitutions or
+image edits were used. No agents were created or activated, no workflows were
+run, and no content was generated or published. One standalone demonstration
+workflow was created and saved as an inactive draft for the canvas capture.
+Existing workspace settings and brand content were not modified. Credentials and browser state are not
+included in the website.
