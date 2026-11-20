@@ -1,0 +1,66 @@
+name: Website deployment
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: website-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: ${{ github.event_name == 'pull_request' && format('preview-pr-{0}', github.event.number) || 'production' }}
+      url: ${{ steps.publish.outputs.url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check
+      - name: Fail if site/dist is stale
+        run: git diff --exit-code -- site/dist
+      - name: Publish production or PR preview
+        id: publish
+        # Fork PRs get no secrets, so they are built and checked but not published.
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: node scripts/deploy.mjs "$DEPLOYMENT_KIND"
+        env:
+          DEPLOYMENT_KIND: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          PULL_REQUEST_NUMBER: ${{ github.event.number }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_SEND_TELEMETRY: "false"
+
+  cleanup-preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Remove this PR's preview
+        run: node scripts/deploy.mjs cleanup
+        env:
+          PULL_REQUEST_NUMBER: ${{ github.event.number }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_SEND_TELEMETRY: "false"
