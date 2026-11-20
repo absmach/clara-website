@@ -10,7 +10,7 @@
 
 ## Run locally
 
-Requires **Node.js 22+**. No dependencies to install.
+Requires **Node.js 22+**. Building and previewing need no dependencies; deploying does (see [Deploy](#deploy)).
 
 ```sh
 npm run dev
@@ -58,14 +58,28 @@ Clara’s **In bloom** mark pairs violet petals with a coral accent and a sunshi
 - App screenshots are captured from the real Clara application using a fictional **Fieldnotes** workspace. See [capture provenance](site/src/assets/screenshots/PROVENANCE.txt).
 - Hero illustrations and sample content are illustrative; they are separate from the real app screenshots.
 
-## Build for hosting
+## Deploy
+
+The site is hosted on **Cloudflare Workers** at **[claragtm.com](https://claragtm.com)**. It's an assets-only Worker named `clara-website`. It serves `site/dist/` and runs no server code. `cloudflare.config.ts` holds the configuration, and the [`cf` CLI](https://developers.cloudflare.com/cf/) deploys it. `cf` is pinned in the root `package.json` and needs Node.js 22.18 or newer (CI uses `.nvmrc`).
+
+| Trigger | Result |
+| --- | --- |
+| Pull request opened or updated | Builds, checks, and publishes a preview at `https://pr-<number>-clara-website.absmach.workers.dev`. The PR's **View deployment** link opens it. Preview URLs are not indexed. |
+| Pull request closed or merged | Deletes that PR's preview |
+| Push to `main` | Builds, checks, and deploys production |
+
+CI also fails when the committed `site/dist/` doesn't match a fresh build, so commit regenerated files with their source changes. PRs from forks are built and checked but not published. The workflow is `.github/workflows/deploy.yml`, and it uses the repository secret `CLOUDFLARE_API_TOKEN`.
+
+To deploy by hand, sign in once with `npx cf auth login` (using the Cloudflare account that owns claragtm.com) and run:
 
 ```sh
-npm run build
-npm run check
+npm install
+npm run deploy:check     # build, check, and validate without uploading
+npm run deploy:preview   # publish a preview of the current branch
+npm run deploy           # publish production to claragtm.com
 ```
 
-Serve **`site/dist/`** with a static host that supports directory index pages. Use `404.html` as the not-found page. The build and preview commands do not publish the site.
+`www.claragtm.com` redirects to `claragtm.com` (301) through a zone Redirect Rule, and the zone redirects HTTP to HTTPS. Unknown paths return `404.html` with a 404 status, and `/docs` redirects to `/docs/`.
 
 Early-access inquiries currently open an email draft to **info@absmach.eu**. The visitor must send the email; the website does not submit or store it.
 

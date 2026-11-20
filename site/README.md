@@ -47,7 +47,7 @@ The earlier logo studies remain at `/logo-directions/` and `/logo-directions/blo
 
 Run the build and static checks. Preview visual changes at desktop and mobile sizes, and exercise any interactions you changed. Static checks cover local links, fragments, assets, IDs, metadata, and accessible references; they do not replace browser review.
 
-Deploy `dist/` to static hosting. Preserve directory URLs such as `/docs/` and configure `404.html` for missing pages. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
+Pull requests get a Cloudflare preview link, and merges to `main` deploy to claragtm.com. See [Deploy](../README.md#deploy) in the root README. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
 
 The early-access form prepares an email to `info@absmach.eu`, with a copy fallback. Changing it to collect submissions requires an inquiry service. No inquiry storage or analytics is currently configured.
 
