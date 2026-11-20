@@ -43,6 +43,16 @@ The separate Fieldnotes content examples are prewritten samples. They do not cal
 
 The earlier logo studies remain at `/logo-directions/` and `/logo-directions/bloom/`. They are built into `dist/`, but are not linked from the marketing navigation; they are not access-controlled.
 
+## Social share image
+
+Every page sets `og:image` and a large Twitter/X card to `src/assets/og-image.png` (1200×630). Slack, LinkedIn, and X use it for link previews. The card combines the homepage headline with the hero illustration. Its layout is in `scripts/og-card.html`. After changing the hero or the card, regenerate it with headless Chrome (set `CHROME` if `google-chrome` isn't on your PATH):
+
+```sh
+npm run build && npm --prefix site run og-image && npm run build
+```
+
+Pages also set a canonical URL on `https://claragtm.com`. Link-preview services cache images, so a changed card can take a while to appear where the link was shared before.
+
 ## Before publishing
 
 Run the build and static checks. Preview visual changes at desktop and mobile sizes, and exercise any interactions you changed. Static checks cover local links, fragments, assets, IDs, metadata, and accessible references; they do not replace browser review.
