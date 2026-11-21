@@ -13,7 +13,7 @@ For setup and an overview, see the [repository README](../README.md).
 | Layout, colors, responsive styles | `src/styles.css` |
 | Gallery, navigation, dialogs, sample interactions | `src/site.js` |
 | Logo and favicon | `src/assets/clara-bloom.svg`, `src/assets/clara-favicon-bloom.svg` |
-| How it works illustrations | `src/assets/guide/` (seven SVG diagrams) |
+| How it works illustrations | `src/assets/guide/` (SVG diagrams; autonomy uses HTML level cards instead) |
 | Real app screenshots | `src/assets/screenshots/` |
 
 From either the repository root or this directory:
@@ -29,7 +29,7 @@ The preview serves `dist/` at [localhost:4173](http://localhost:4173). Rebuild a
 
 The homepage has one animated product tour: chat, content Plays, the LinkedIn brief dialog, and brand guidelines. The gallery reserves a stable frame and caption area. Screenshots fill the frame and align to the top-left; the full-size link opens the complete original capture. Without JavaScript, the tour shows its first screenshot.
 
-How it works uses seven illustrated sections and four agent role cards. Detailed Agent library and workflow canvas screenshots live in `/docs/agents-and-workflows/`. Old `/automation/` links redirect to the corresponding How it works sections; the former screenshot anchors remain as section aliases.
+How it works has a step index and seven sections: six illustrated with SVG diagrams, and autonomy shown as three level cards. Agents include four role cards. Detailed Agent library and workflow canvas screenshots live in `/docs/agents-and-workflows/`. Old `/automation/` links redirect to the corresponding How it works sections; the former screenshot anchors remain as section aliases.
 
 The homepage gallery advances every three seconds while visible. Visitors can pause it or select a tab; manual selection pauses playback. Keyboard focus, a hidden browser tab, and leaving the viewport suspend playback. Reduced-motion preferences disable automatic playback by default. Capture screenshots from the running Clara app using fictional demo data, then update [PROVENANCE.txt](src/assets/screenshots/PROVENANCE.txt). Preserve authentic interface content and capture the logo from the app itself.
 

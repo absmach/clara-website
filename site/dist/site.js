@@ -90,59 +90,14 @@ document.querySelectorAll('[data-access-form]').forEach(form => {
   });
 });
 
-const samples = {
-  linkedin: `<div class="sample-meta"><span class="avatar">f.</span><div><strong>Fieldnotes</strong><small>LinkedIn post · Sample draft</small></div></div><h3>Make room for<br/>the work that matters.</h3><p>Another status meeting. Another scattered update. Another day spent looking for the work instead of doing it.</p><p>We thought there could be a calmer way.</p><p>Meet Fieldnotes: one shared space for your projects, decisions, and next steps. Built for small teams who would rather make things than chase them.</p><p class="sample-signoff">Less busywork. More good work. ↗</p>`,
-  blog: `<p class="sample-kicker">THE FIELDNOTES JOURNAL · SAMPLE DRAFT</p><h3>A little less noise.<br/>A lot more good work.</h3><p>Small teams don’t need another place to be busy. They need a place to see what matters.</p><p>That’s why we built Fieldnotes: a shared home for the projects you’re moving forward, the decisions you’ve made, and the next steps that keep everyone aligned.</p><p>Start with one project. Bring the context together. Give every next step a clear owner. Then get back to the work you wanted to do in the first place.</p><p class="sample-signoff">A calmer workspace starts with a clearer picture.</p>`,
-  release: `<p class="sample-kicker">FIELDNOTES / LAUNCH EDITION · SAMPLE DRAFT</p><h3>Your team’s next chapter,<br/>all in one place.</h3><p>Introducing Fieldnotes, a shared project space for small teams.</p><ul><li><strong>Projects:</strong> keep the work and its context together.</li><li><strong>Decisions:</strong> record the why, so it doesn’t get lost.</li><li><strong>Next steps:</strong> make it clear who’s doing what.</li></ul><p>Built around a simple idea: less time piecing updates together, more time moving the work forward.</p><p class="sample-signoff">Welcome to a little more breathing room.</p>`
-};
-const tabs = [...document.querySelectorAll('[data-demo]')];
-const panel = document.querySelector('#sample-panel');
-function selectSample(key, focus = false) {
-  if (!panel || !Object.hasOwn(samples, key)) return;
-  for (const tab of tabs) {
-    const selected = tab.dataset.demo === key;
-    tab.setAttribute('aria-selected', String(selected));
-    tab.tabIndex = selected ? 0 : -1;
-    if (selected && focus) tab.focus();
-  }
-  panel.innerHTML = samples[key];
-  panel.setAttribute('aria-labelledby', `tab-${key}`);
-  document.querySelector('#copy-status').textContent = '';
+// Example agent week: switch between approval-first and Autopilot outcomes.
+for (const board of document.querySelectorAll('[data-autonomy-demo]')) {
+  const buttons = [...board.querySelectorAll('button[data-mode]')];
+  buttons.forEach(button => button.addEventListener('click', () => {
+    board.dataset.mode = button.dataset.mode;
+    for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
+  }));
 }
-tabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => selectSample(tab.dataset.demo));
-  tab.addEventListener('keydown', event => {
-    let next;
-    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-    if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
-    if (event.key === 'Home') next = 0;
-    if (event.key === 'End') next = tabs.length - 1;
-    if (next === undefined) return;
-    event.preventDefault();
-    selectSample(tabs[next].dataset.demo, true);
-  });
-});
-document.querySelectorAll('[data-show-example]').forEach(button => {
-  button.addEventListener('click', () => {
-    selectSample(button.dataset.showExample);
-    document.querySelector('#examples').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-    tabs.find(tab => tab.dataset.demo === button.dataset.showExample)?.focus({ preventScroll: true });
-  });
-});
-document.querySelector('#copy-sample')?.addEventListener('click', async () => {
-  const status = document.querySelector('#copy-status');
-  try {
-    await copyText(panel.innerText);
-    status.textContent = 'Sample copied. Make it your own.';
-  } catch {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(panel);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    status.textContent = 'Sample selected. Use your browser’s Copy command.';
-  }
-});
 
 const screenDetails = {
   workflows: {
