@@ -90,13 +90,14 @@ document.querySelectorAll('[data-access-form]').forEach(form => {
   });
 });
 
-// Example agent week: switch between approval-first and Autopilot outcomes.
+// Example agent week: switch Autopilot on or off.
 for (const board of document.querySelectorAll('[data-autonomy-demo]')) {
-  const buttons = [...board.querySelectorAll('button[data-mode]')];
-  buttons.forEach(button => button.addEventListener('click', () => {
-    board.dataset.mode = button.dataset.mode;
-    for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
-  }));
+  const toggle = board.querySelector('[data-autopilot-toggle]');
+  toggle?.addEventListener('click', () => {
+    const on = toggle.getAttribute('aria-checked') !== 'true';
+    toggle.setAttribute('aria-checked', String(on));
+    board.dataset.mode = on ? 'autopilot' : 'approve';
+  });
 }
 
 const screenDetails = {

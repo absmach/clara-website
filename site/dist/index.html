@@ -124,10 +124,7 @@
     <div class="team-board" data-autonomy-demo data-mode="approve">
       <div class="board-top">
         <span class="board-title">An example week</span>
-        <div class="mode-switch" role="group" aria-label="How much Clara does on its own">
-          <button type="button" data-mode="approve" aria-pressed="true">Approve first</button>
-          <button type="button" data-mode="autopilot" aria-pressed="false">Autopilot</button>
-        </div>
+        <button type="button" class="autopilot-switch" role="switch" aria-checked="false" data-autopilot-toggle><span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>Autopilot</button>
       </div>
       <ul class="board-list">
         <li>
@@ -148,7 +145,7 @@
         <li>
           <span class="agent-symbol tone-pink" aria-hidden="true">⌕</span>
           <div class="board-copy"><strong>Competitor Analyst</strong><span class="board-when">Fridays, 15:00</span><p>Wrote the weekly digest of competitor moves.</p></div>
-          <span class="board-status"><span class="is-done">Shared with the team</span></span>
+          <span class="board-status"><span class="is-go">Shared with the team</span></span>
         </li>
       </ul>
       <p class="board-note" aria-live="polite"><span data-show="approve">Drafts and plans are ready. Nothing goes out until you approve it.</span><span data-show="autopilot">Permitted work runs on its own. Posting limits, quiet hours, and pause still apply.</span></p>
