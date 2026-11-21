@@ -599,9 +599,8 @@ dialog .dialog-intro{font-size:17px;margin-top:14px}
   .footer-bottom{font-size:14px}
 
   .page-hero h1{font-size:clamp(42px,11.5vw,52px)}
-  .step-index{flex-wrap:nowrap;overflow-x:auto;margin:36px -20px 0;padding:0 20px 6px;scrollbar-width:none}
-  .step-index::-webkit-scrollbar{display:none}
-  .step-index a{flex-shrink:0}
+  .step-index{gap:8px;margin-top:32px}
+  .step-index a{min-height:44px;padding:6px 14px 6px 11px;font-size:15px;gap:7px}
   .step-label{font-size:13px;gap:12px}
   .step-art img{max-width:100%}
   .points{margin-top:32px}
@@ -632,5 +631,4 @@ dialog .dialog-intro{font-size:17px;margin-top:14px}
   .header-actions .button-small{display:none}
   .hero-actions .button{font-size:16px;padding-inline:22px;gap:14px}
   .hero-actions .quiet-link{font-size:16px;gap:10px}
-  .step-index{margin-inline:-16px;padding-inline:16px}
 }
