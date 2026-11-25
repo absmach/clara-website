@@ -41,7 +41,7 @@ const contactForm = `<form class="access-form" data-form="contact" data-endpoint
   <label for="contact-message">Message<textarea id="contact-message" name="message" rows="6" required maxlength="5000" placeholder="How can we help?"></textarea></label>
   ${formTail('Send message', 'Your message goes to the Abstract Machines team inbox. We use it only to reply to you.')}
 </form>
-${formSuccess('Message sent.', 'Thanks for getting in touch. We’ll reply to the email address you gave us.')}`;
+${formSuccess('Message sent.', 'Thanks for getting in touch. We’ve emailed you a confirmation, and we’ll reply to the address you gave us.')}`;
 const navigation = [['Meet Clara', '/'], ['How it works', '/how-it-works/'], ['Docs', '/docs/'], ['Blog', '/blog/'], ['About', '/about/']];
 const navLinks = (route) => navigation.map(([label, href]) => `<a href="${href}"${href === `/${route}${route ? '/' : ''}` ? ' aria-current="page"' : route.startsWith(href.slice(1)) && href !== '/' ? ' aria-current="true"' : ''}>${label}</a>`).join('');
 const header = (route) => `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="container header-inner"><a href="/" class="brand" aria-label="Clara home">${brand}</a><nav class="desktop-nav" aria-label="Main navigation">${navLinks(route)}</nav><div class="header-actions"><a class="button button-small" href="/early-access/" data-access>Get early access ${arrow}</a><button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><span></span><span></span></button></div></div><nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden>${navLinks(route)}<a href="/early-access/" data-access>Get early access ↗</a></nav></header>`;

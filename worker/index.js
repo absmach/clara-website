@@ -4,8 +4,12 @@
 //   POST /api/early-access  Turnstile check, then a Listmonk subscriber on the
 //                           Clara early-access list and a thank-you email.
 //   POST /api/contact       Turnstile check, then a Listmonk transactional email
-//                           to the team inbox with Reply-To set to the visitor.
+//                           to the team inbox with Reply-To set to the visitor,
+//                           and a "we got your message" email to the visitor.
 //                           The visitor is not stored as a subscriber.
+//
+// Contact emails use the transactional API's external mode (Listmonk 6.0+),
+// which sends to an address without looking up or creating a subscriber.
 
 import { CONTACT_TOPICS, NOTICE_VERSION } from "./forms.js";
 
@@ -53,7 +57,7 @@ async function earlyAccess(request, env, ctx) {
   return json({ ok: true });
 }
 
-async function contact(request, env) {
+async function contact(request, env, ctx) {
   const templateId = Number(env.LISTMONK_CONTACT_TEMPLATE_ID);
   if (!env.TURNSTILE_SECRET || !env.LISTMONK_API_TOKEN || !(templateId > 0) || !env.LISTMONK_CONTACT_EMAIL) {
     console.error("contact is missing configuration");
@@ -72,7 +76,8 @@ async function contact(request, env) {
   }
 
   const sent = await sendTx(env, {
-    subscriber_email: env.LISTMONK_CONTACT_EMAIL,
+    subscriber_mode: "external",
+    subscriber_emails: [env.LISTMONK_CONTACT_EMAIL],
     template_id: templateId,
     // Replies from the inbox go straight to the visitor. The address is
     // validated by EMAIL_RE, which rejects whitespace and line breaks.
@@ -80,6 +85,7 @@ async function contact(request, env) {
     data: message,
   });
   if (!sent) return json({ error: "We couldn’t send your message. Please try again." }, 502);
+  ctx.waitUntil(sendContactReceipt(message, env));
   return json({ ok: true });
 }
 
@@ -233,6 +239,22 @@ async function sendThanks(email, env) {
   const templateId = Number(env.LISTMONK_WELCOME_TEMPLATE_ID);
   if (!(templateId > 0)) return;
   await sendTx(env, { subscriber_email: email, template_id: templateId });
+}
+
+// Best effort, and skipped until a template ID is configured. It carries only
+// the topic: anything the visitor typed stays out of a message sent to an
+// address the form can't verify, so the form can't relay text to strangers.
+async function sendContactReceipt({ email, topic }, env) {
+  const templateId = Number(env.LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID);
+  if (!(templateId > 0)) return;
+  await sendTx(env, {
+    subscriber_mode: "external",
+    subscriber_emails: [email],
+    template_id: templateId,
+    // Replies from the visitor reach the team inbox.
+    headers: [{ "Reply-To": env.LISTMONK_CONTACT_EMAIL }],
+    data: { topic },
+  });
 }
 
 async function sendTx(env, message) {

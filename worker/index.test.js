@@ -10,6 +10,7 @@ const env = {
   LISTMONK_LIST_ID: "12",
   LISTMONK_WELCOME_TEMPLATE_ID: "5",
   LISTMONK_CONTACT_TEMPLATE_ID: "6",
+  LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID: "7",
   LISTMONK_CONTACT_EMAIL: "inbox@example.com",
   LISTMONK_FROM_EMAIL: "Clara <hello@example.com>",
   TURNSTILE_SECRET: "turnstile-secret",
@@ -149,7 +150,7 @@ test("a Turnstile test-key result passes only on an allowed hostname", async () 
   const testResult = { success: true, hostname: "example.com", metadata: { result_with_testing_key: true } };
   responders.push(reply(testResult));
   assert.equal((await post("/api/contact", message)).status, 403);
-  responders.push(reply(testResult), reply({ data: true }));
+  responders.push(reply(testResult), reply({ data: true }), reply({ data: true }));
   const local = { ...env, TURNSTILE_HOSTNAMES: "example.com" };
   assert.equal((await post("/api/contact", message, { config: local })).status, 200);
 });
@@ -286,18 +287,44 @@ test("contact rejects invalid answers before calling any service", async () => {
 });
 
 test("a contact message is emailed to the inbox with Reply-To and no subscriber is created", async () => {
-  responders.push(turnstile("contact"), reply({ data: true }));
+  responders.push(turnstile("contact"), reply({ data: true }), reply({ data: true }));
   assert.equal((await post("/api/contact", message)).status, 200);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
+  assert.ok(calls.every((c) => !c.url.includes("/subscribers")));
   const tx = calls[1];
   assert.equal(tx.url, "https://mail.example/api/tx");
-  assert.equal(tx.body.subscriber_email, "inbox@example.com");
+  assert.equal(tx.body.subscriber_mode, "external");
+  assert.deepEqual(tx.body.subscriber_emails, ["inbox@example.com"]);
   assert.equal(tx.body.template_id, 6);
   assert.equal(tx.body.from_email, "Clara <hello@example.com>");
   assert.deepEqual(tx.body.headers, [{ "Reply-To": "ada@example.com" }]);
   assert.equal(tx.body.data.topic, "Partnerships");
   assert.equal(tx.body.data.message, "Could we talk about a partnership?");
   assert.equal(tx.body.data.company, "Fieldnotes");
+});
+
+test("the visitor gets a receipt that carries none of their own text", async () => {
+  responders.push(turnstile("contact"), reply({ data: true }), reply({ data: true }));
+  await post("/api/contact", { ...message, name: "Visit spam.example", message: "Buy now" });
+  const receipt = calls[2];
+  assert.equal(receipt.url, "https://mail.example/api/tx");
+  assert.equal(receipt.body.subscriber_mode, "external");
+  assert.deepEqual(receipt.body.subscriber_emails, ["ada@example.com"]);
+  assert.equal(receipt.body.template_id, 7);
+  assert.deepEqual(receipt.body.data, { topic: "Partnerships" });
+  assert.deepEqual(receipt.body.headers, [{ "Reply-To": "inbox@example.com" }]);
+});
+
+test("no receipt is sent until its template is configured", async () => {
+  responders.push(turnstile("contact"), reply({ data: true }));
+  const res = await post("/api/contact", message, { config: { ...env, LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID: "0" } });
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 2);
+});
+
+test("a failed receipt doesn't fail the message", async () => {
+  responders.push(turnstile("contact"), reply({ data: true }), reply({}, 500));
+  assert.equal((await post("/api/contact", message)).status, 200);
 });
 
 test("a contact token issued for the signup form is rejected", async () => {
@@ -308,4 +335,5 @@ test("a contact token issued for the signup form is rejected", async () => {
 test("a failed contact email is reported so the visitor can retry", async () => {
   responders.push(turnstile("contact"), reply({}, 500));
   assert.equal((await post("/api/contact", message)).status, 502);
+  assert.equal(calls.length, 2);
 });

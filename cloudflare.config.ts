@@ -2,14 +2,16 @@ import { bindings, defineConfig, defineWorker } from "cf/config";
 
 // IDs from Listmonk (mailer.absmach.eu). "0" turns that part off: no list makes
 // /api/early-access answer 503, no thank-you template saves signups without an
-// email, and no contact template makes /api/contact answer 503.
+// email, no contact template makes /api/contact answer 503, and no receipt
+// template sends contact messages without a confirmation to the visitor.
 const LISTMONK_IDS = {
   list: "0", // "Clara early access" list
   welcomeTemplate: "0", // transactional template: early-access thank-you
   contactTemplate: "0", // transactional template: contact notification to the inbox
+  contactReceiptTemplate: "0", // transactional template: "we got your message" to the visitor
 };
 // PR previews never write to the production list or email the team inbox.
-const OFF = { list: "0", welcomeTemplate: "0", contactTemplate: "0" };
+const OFF = { list: "0", welcomeTemplate: "0", contactTemplate: "0", contactReceiptTemplate: "0" };
 
 // Static site plus a small Worker for the forms. Cloudflare serves site/dist
 // from its edge (the directory is set in wrangler.config.ts) and runs
@@ -41,6 +43,7 @@ export default defineConfig(({ isPreview, mode }) => {
         LISTMONK_LIST_ID: bindings.text(ids.list),
         LISTMONK_WELCOME_TEMPLATE_ID: bindings.text(ids.welcomeTemplate),
         LISTMONK_CONTACT_TEMPLATE_ID: bindings.text(ids.contactTemplate),
+        LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID: bindings.text(ids.contactReceiptTemplate),
         LISTMONK_CONTACT_EMAIL: bindings.text("info@absmach.eu"),
         LISTMONK_FROM_EMAIL: bindings.text("Clara <hello@claragtm.com>"),
         // Hostnames a Turnstile token must have been issued on.
