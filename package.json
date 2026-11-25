@@ -6,9 +6,7 @@
     "build": "npm --prefix site run build",
     "check": "npm --prefix site run check && node --test \"worker/*.test.js\"",
     "dev:worker": "npm run build && cf dev",
-    "deploy": "npm run build && npm run check && node scripts/deploy.mjs production",
-    "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run",
-    "deploy:preview": "npm run build && npm run check && cf previews deploy --mode preview"
+    "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2",

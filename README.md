@@ -10,7 +10,7 @@
 
 ## Run locally
 
-Requires **Node.js 22+**. Building and previewing need no dependencies; deploying does (see [Deploy](#deploy)).
+Requires **Node.js 22+**. Building and previewing need no dependencies; running the Worker locally does (`npm install`, Node.js 22.18+).
 
 ```sh
 npm run dev
@@ -64,22 +64,16 @@ Clara’s **In bloom** mark pairs violet petals with a coral accent and a sunshi
 
 The site is hosted on **Cloudflare Workers** at **[claragtm.com](https://claragtm.com)**, as a Worker named `clara-website`. It serves `site/dist/` as static assets and runs `worker/index.js` only for `/api/*`. `cloudflare.config.ts` holds the Worker configuration, and `wrangler.config.ts` points the build at `site/dist`. The [`cf` CLI](https://developers.cloudflare.com/cf/) deploys it and hands the build to Wrangler. Both are pinned in the root `package.json`. They need Node.js 22.18 or newer (CI uses `.nvmrc`).
 
+**Cloudflare Workers Builds** deploys it. The Worker is connected to this repository in the Cloudflare dashboard (Workers & Pages → clara-website → Settings → Builds), and Cloudflare builds each push with its own access, so the repository holds no Cloudflare credentials.
+
 | Trigger | Result |
 | --- | --- |
-| Pull request opened or updated | Builds, checks, and publishes a preview at `https://pr-<number>-clara-website.absmach.workers.dev`. The PR's **View deployment** link opens it. Preview URLs are not indexed. |
-| Pull request closed or merged | Deletes that PR's preview |
-| Push to `main` | Builds, checks, and deploys production |
+| Push to any other branch | Builds and publishes a Preview at `https://<branch>-clara-website.absmach.workers.dev`, plus one per commit. The Cloudflare bot comments the links on the pull request. Previews build with the preview settings in `cloudflare.config.ts`, so both forms answer 503 there. |
+| Push to `main` | Builds and deploys production to claragtm.com |
 
-CI also fails when the committed `site/dist/` doesn't match a fresh build, so commit regenerated files with their source changes. PRs from forks are built and checked but not published. The workflow is `.github/workflows/deploy.yml`, and it uses the repository secret `CLOUDFLARE_API_TOKEN`.
+GitHub Actions (`.github/workflows/checks.yml`) checks every pull request and push to `main`: it builds the site, runs `npm run check` (static checks and Worker tests), fails when the committed `site/dist/` doesn't match a fresh build, and dry-runs the Cloudflare build. Commit regenerated `site/dist/` files with their source changes. Workers Builds doesn't wait for these checks, so merge only when they pass.
 
-To deploy by hand, sign in once with `npx cf auth login` (using the Cloudflare account that owns claragtm.com) and run:
-
-```sh
-npm install
-npm run deploy:check     # build, check, and validate without uploading
-npm run deploy:preview   # publish a preview of the current branch
-npm run deploy           # publish production to claragtm.com
-```
+To validate a deploy locally without uploading, run `npm run deploy:check`. To deploy by hand in an emergency, sign in with `npx cf auth login` (using the Cloudflare account that owns claragtm.com) and run `npm run build && npx cf deploy --mode production`.
 
 `www.claragtm.com` redirects to `claragtm.com` (301) through a zone Redirect Rule, and the zone redirects HTTP to HTTPS. Unknown paths return `404.html` with a 404 status, and `/docs` redirects to `/docs/`.
 

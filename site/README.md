@@ -58,7 +58,7 @@ Pages also set a canonical URL on `https://claragtm.com`. Link-preview services 
 
 Run the build and static checks. Preview visual changes at desktop and mobile sizes, and exercise any interactions you changed. Static checks cover local links, fragments, assets, IDs, metadata, and accessible references; they do not replace browser review.
 
-Pull requests get a Cloudflare preview link, and merges to `main` deploy to claragtm.com. See [Deploy](../README.md#deploy) in the root README. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
+Every branch gets a Cloudflare preview link from Workers Builds, and merges to `main` deploy to claragtm.com. See [Deploy](../README.md#deploy) in the root README. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
 
 The early-access and contact forms post to the Worker in `../worker/` (see [Forms](../README.md#forms) in the root README). `src/site.js` submits them and loads Cloudflare Turnstile when someone starts filling one in. Its public site key is `TURNSTILE_SITEKEY` there. The Worker accepts only the field names the forms send, so change both together. No analytics is configured.
 
