@@ -7,7 +7,8 @@ For setup and an overview, see the [repository README](../README.md).
 | Change | Source |
 | --- | --- |
 | Homepage and content examples | `src/home.html` |
-| How it works, About, early access, privacy | Corresponding HTML files in `src/` |
+| How it works, About, early access, contact, privacy | Corresponding HTML files in `src/` |
+| Early-access and contact form fields | `accessForm` and `contactForm` in `scripts/build.mjs`; topics and notice version in `../worker/forms.js` |
 | Docs and Blog | `scripts/resource-pages.mjs` |
 | Header, footer, metadata, shared inquiry form | `scripts/build.mjs` |
 | Layout, colors, responsive styles | `src/styles.css` |
@@ -57,9 +58,9 @@ Pages also set a canonical URL on `https://claragtm.com`. Link-preview services 
 
 Run the build and static checks. Preview visual changes at desktop and mobile sizes, and exercise any interactions you changed. Static checks cover local links, fragments, assets, IDs, metadata, and accessible references; they do not replace browser review.
 
-Pull requests get a Cloudflare preview link, and merges to `main` deploy to claragtm.com. See [Deploy](../README.md#deploy) in the root README. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
+Every branch gets a Cloudflare preview link from Workers Builds, and merges to `main` deploy to claragtm.com. See [Deploy](../README.md#deploy) in the root README. The old `/what-you-can-make/` route redirects to the homepage’s formats section.
 
-The early-access form prepares an email to `info@absmach.eu`, with a copy fallback. Changing it to collect submissions requires an inquiry service. No inquiry storage or analytics is currently configured.
+The early-access and contact forms post to the Worker in `../worker/` (see [Forms](../README.md#forms) in the root README). `src/site.js` submits them and loads Cloudflare Turnstile when someone starts filling one in. Its public site key is `TURNSTILE_SITEKEY` there. The Worker accepts only the field names the forms send, so change both together. No analytics is configured.
 
 ## Source and integration copy
 

@@ -2,3 +2,5 @@ node_modules/
 .cloudflare/
 .env*
 .dev.vars*
+.wrangler/
+!.dev.vars.example

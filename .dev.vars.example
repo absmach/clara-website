@@ -1,0 +1,13 @@
+# Local values for `npm run dev:worker`. Copy to .dev.vars (gitignored).
+# Cloudflare's Turnstile test secret always passes; its results report the
+# hostname example.com. site/src/site.js uses the matching test site key on
+# localhost.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+TURNSTILE_HOSTNAMES=example.com
+# A Listmonk API token for a test instance or a test list. Leave the IDs at 0
+# to check the forms without writing anywhere (the endpoints then answer 503).
+LISTMONK_API_TOKEN=
+LISTMONK_LIST_ID=0
+LISTMONK_WELCOME_TEMPLATE_ID=0
+LISTMONK_CONTACT_TEMPLATE_ID=0
+LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID=0
