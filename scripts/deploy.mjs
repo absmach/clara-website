@@ -1,4 +1,5 @@
-// Publishes site/dist to Cloudflare Workers with the project's pinned cf CLI.
+// Publishes the site (site/dist plus worker/) to Cloudflare Workers with the
+// project's pinned cf CLI, which builds the Worker with Wrangler first.
 //   node scripts/deploy.mjs production   -> claragtm.com
 //   node scripts/deploy.mjs preview      -> pr-<PULL_REQUEST_NUMBER> Preview URL
 //   node scripts/deploy.mjs cleanup      -> deletes that PR's Preview
@@ -9,7 +10,6 @@ import { fileURLToPath } from "node:url";
 
 const WORKER = "clara-website";
 const SITE_URL = "https://claragtm.com";
-const ASSETS_DIR = "./site/dist";
 
 const kind = process.argv[2];
 if (!["production", "preview", "cleanup"].includes(kind)) {
@@ -21,9 +21,9 @@ if (kind !== "production" && !/^\d+$/.test(number || "")) {
 }
 const previewName = `pr-${number}`;
 const args = kind === "production"
-  ? ["deploy", ASSETS_DIR, "--mode", "production"]
+  ? ["deploy", "--mode", "production"]
   : kind === "preview"
-    ? ["previews", "deploy", ASSETS_DIR, "--mode", "preview", "--preview-name", previewName]
+    ? ["previews", "deploy", "--mode", "preview", "--preview-name", previewName]
     : ["previews", "delete", previewName, "--worker", WORKER, "--mode", "preview", "--force"];
 
 let output = "";

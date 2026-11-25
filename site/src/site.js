@@ -32,63 +32,113 @@ accessDialog.addEventListener('click', event => {
   if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) accessDialog.close();
 });
 
-async function copyText(text) {
-  if (navigator.clipboard && window.isSecureContext) {
-    try { await navigator.clipboard.writeText(text); return; } catch { /* Try the selection fallback. */ }
-  }
-  const input = document.createElement('textarea');
-  input.value = text;
-  input.setAttribute('aria-label', 'Text to copy');
-  input.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;opacity:0';
-  (document.querySelector('dialog[open]') || document.body).append(input);
-  input.select();
-  let success = false;
-  try { success = document.execCommand('copy'); } finally { input.remove(); }
-  if (!success) throw new Error('Clipboard unavailable');
+// Early-access and contact forms. Each posts JSON to the Worker in worker/,
+// which checks a Cloudflare Turnstile token. Turnstile's script loads only when
+// someone starts filling in a form, so pages that aren't used don't fetch it.
+// Public site key (not a secret). Local runs use Cloudflare's always-pass test key.
+const TURNSTILE_SITEKEY = '';
+const TURNSTILE_TEST_SITEKEY = '1x00000000000000000000AA';
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+const localHost = ['localhost', '127.0.0.1'].includes(location.hostname);
+const sitekey = localHost ? TURNSTILE_TEST_SITEKEY : TURNSTILE_SITEKEY;
+let turnstileReady;
+
+function loadTurnstile() {
+  turnstileReady ??= new Promise((resolve, reject) => {
+    if (!sitekey) { reject(new Error('Turnstile site key missing')); return; }
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    script.async = true;
+    script.onload = () => resolve(window.turnstile);
+    script.onerror = () => reject(new Error('Turnstile failed to load'));
+    document.head.append(script);
+  });
+  turnstileReady.catch(() => { turnstileReady = undefined; });
+  return turnstileReady;
 }
 
-document.querySelectorAll('[data-access-form]').forEach(form => {
-  const prepareButton = form.querySelector('[data-prepare-email]');
-  prepareButton.type = 'submit';
-  prepareButton.hidden = false;
-  let emailDraft = '';
-  const fallback = form.querySelector('.email-fallback');
-  const copyButton = form.querySelector('[data-copy-email]');
-  form.addEventListener('submit', event => {
+for (const form of document.querySelectorAll('form[data-form]')) {
+  const slot = form.querySelector('[data-turnstile]');
+  const status = form.querySelector('[data-form-status]');
+  const button = form.querySelector('button[type="submit"]');
+  const success = form.nextElementSibling?.matches('[data-form-success]') ? form.nextElementSibling : null;
+  let widget = null;
+  let preparing;
+  let token = '';
+  let failed = false;
+  let waiting = [];
+
+  const settle = value => { token = value; for (const resolve of waiting) resolve(value); waiting = []; };
+  const showStatus = text => { status.textContent = text; status.hidden = !text; };
+
+  // Renders this form's Turnstile widget once; a failed load can be retried.
+  function prepare() {
+    preparing ??= loadTurnstile().then(turnstile => {
+      widget = turnstile.render(slot, {
+        sitekey,
+        action: form.dataset.turnstileAction,
+        appearance: 'interaction-only',
+        callback: value => { failed = false; settle(value); },
+        'expired-callback': () => { token = ''; },
+        'error-callback': () => { failed = true; settle(''); return true; },
+      });
+    }).catch(() => { preparing = undefined; });
+    return preparing;
+  }
+  form.addEventListener('focusin', prepare, { once: true });
+
+  // Waits for Turnstile to finish its check; most visitors never see it.
+  function getToken() {
+    if (token) return Promise.resolve(token);
+    if (failed) { failed = false; window.turnstile.reset(widget); }
+    return new Promise(resolve => {
+      waiting.push(resolve);
+      setTimeout(() => resolve(''), 30000);
+    });
+  }
+
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    const data = new FormData(form);
-    const name = String(data.get('name') || '').trim();
-    const product = String(data.get('product') || '').trim();
-    const goal = String(data.get('goal') || '').trim();
-    for (const field of ['name', 'product']) {
-      const input = form.elements.namedItem(field);
-      input.setCustomValidity(input.value.trim() ? '' : 'Please fill out this field.');
+    for (const field of form.querySelectorAll('input[required], textarea[required]')) {
+      field.setCustomValidity(field.value.trim() ? '' : 'Please fill out this field.');
     }
     if (!form.reportValidity()) return;
-    const subject = `Clara early access — ${product}`;
-    const body = `Hello Clara team,\n\nI’d like to discuss early access to Clara.\n\nName: ${name}\nProduct / company: ${product}\n\nWhat I’d like help with:\n${goal || 'I’d like to explore how Clara could help our team.'}\n\nThanks,\n${name}`;
-    emailDraft = `To: info@absmach.eu\nSubject: ${subject}\n\n${body}`;
-    fallback.hidden = false;
-    fallback.querySelector('[role="status"]').textContent = 'Your email draft is ready. If your email app didn’t open, copy the draft and send it to info@absmach.eu.';
-    fallback.querySelector('.draft-text').value = emailDraft;
-    copyButton.textContent = 'Copy email draft ↗';
-    window.location.href = `mailto:info@absmach.eu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
-  form.addEventListener('input', event => event.target.setCustomValidity?.(''));
-  copyButton.addEventListener('click', async () => {
+
+    showStatus('');
+    button.disabled = true;
+    form.setAttribute('aria-busy', 'true');
     try {
-      await copyText(emailDraft);
-      copyButton.textContent = 'Copied ✓';
-      fallback.querySelector('[role="status"]').textContent = 'Copied. Paste the draft into your email app and send it to info@absmach.eu.';
-    } catch {
-      const draft = fallback.querySelector('.draft-text');
-      draft.hidden = false;
-      draft.focus();
-      draft.select();
-      fallback.querySelector('[role="status"]').textContent = 'Select and copy the draft below, then send it to info@absmach.eu.';
+      await prepare();
+      if (widget === null) throw new Error('This form isn’t available right now. Please try again later, or email info@absmach.eu.');
+      const turnstileToken = await getToken();
+      if (!turnstileToken) throw new Error('We couldn’t confirm you’re not a bot. Please try again.');
+
+      const data = Object.fromEntries(new FormData(form));
+      delete data['cf-turnstile-response'];
+      const params = new URLSearchParams(location.search);
+      for (const key of UTM_KEYS) if (params.get(key)) data[key] = params.get(key);
+      const response = await fetch(form.dataset.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, noticeVersion: form.dataset.noticeVersion, turnstileToken }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Something went wrong. Please try again.');
+
+      form.hidden = true;
+      if (success) { success.hidden = false; success.focus(); }
+    } catch (error) {
+      showStatus(error.message);
+      // Tokens are single-use, so every attempt gets a fresh one.
+      token = '';
+      if (widget !== null) window.turnstile.reset(widget);
+    } finally {
+      button.disabled = false;
+      form.removeAttribute('aria-busy');
     }
   });
-});
+  form.addEventListener('input', event => event.target.setCustomValidity?.(''));
+}
 
 // Example agent week: switch Autopilot on or off.
 for (const board of document.querySelectorAll('[data-autonomy-demo]')) {
