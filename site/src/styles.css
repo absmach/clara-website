@@ -644,3 +644,19 @@ dialog .dialog-intro{font-size:17px;margin-top:14px}
 .contact-points li::before{content:none}
 .contact-points strong{display:block;margin-bottom:4px}
 .contact-points a{color:var(--accent);text-decoration:underline}
+
+/* Early-access dialog: the body scrolls inside the rounded frame, so the close
+   button stays put and no browser scrollbar sits on the dialog's edge. */
+dialog{padding:0;overflow:hidden}
+dialog[open]{display:flex;flex-direction:column}
+.dialog-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:36px 40px 30px;scrollbar-width:thin;scrollbar-color:var(--tint-strong) transparent}
+.dialog-body::-webkit-scrollbar{width:10px}
+.dialog-body::-webkit-scrollbar-track{background:transparent;margin-block:16px}
+.dialog-body::-webkit-scrollbar-thumb{background:var(--tint-strong);border-radius:999px;border:3px solid var(--paper)}
+dialog h2{margin-top:0;padding-right:48px}
+dialog .dialog-intro{margin-top:10px}
+dialog .access-form{margin-top:22px;gap:14px}
+dialog .access-form input,dialog .access-form textarea{padding-block:10px}
+dialog .access-form textarea{min-height:76px}
+dialog .form-success{margin-top:22px}
+@media(max-width:650px){.dialog-body{padding:28px 22px 22px}}
