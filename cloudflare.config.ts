@@ -5,10 +5,10 @@ import { bindings, defineConfig, defineWorker } from "cf/config";
 // email, no contact template makes /api/contact answer 503, and no receipt
 // template sends contact messages without a confirmation to the visitor.
 const LISTMONK_IDS = {
-  list: "0", // "Clara early access" list
-  welcomeTemplate: "0", // transactional template: early-access thank-you
-  contactTemplate: "0", // transactional template: contact notification to the inbox
-  contactReceiptTemplate: "0", // transactional template: "we got your message" to the visitor
+  list: "11", // "Clara early access" list
+  welcomeTemplate: "9", // transactional template: early-access thank-you
+  contactTemplate: "10", // transactional template: contact notification to the inbox
+  contactReceiptTemplate: "11", // transactional template: "we got your message" to the visitor
 };
 // PR previews never write to the production list or email the team inbox.
 const OFF = { list: "0", welcomeTemplate: "0", contactTemplate: "0", contactReceiptTemplate: "0" };
@@ -45,7 +45,8 @@ export default defineConfig(({ isPreview, mode }) => {
         LISTMONK_CONTACT_TEMPLATE_ID: bindings.text(ids.contactTemplate),
         LISTMONK_CONTACT_RECEIPT_TEMPLATE_ID: bindings.text(ids.contactReceiptTemplate),
         LISTMONK_CONTACT_EMAIL: bindings.text("info@absmach.eu"),
-        LISTMONK_FROM_EMAIL: bindings.text("Clara <hello@claragtm.com>"),
+        // Switch to a claragtm.com address once its SPF, DKIM and DMARC are set up.
+        LISTMONK_FROM_EMAIL: bindings.text("Clara <noreply@absmach.eu>"),
         // Hostnames a Turnstile token must have been issued on.
         TURNSTILE_HOSTNAMES: bindings.text(preview ? "" : "claragtm.com,www.claragtm.com"),
         // Set in the dashboard or with `npx cf workers secrets update <NAME>`,

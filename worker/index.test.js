@@ -187,6 +187,7 @@ test("a new signup is saved under Clara's own attributes and thanked", async () 
     { email: thanks.body.subscriber_email, template: thanks.body.template_id, from: thanks.body.from_email },
     { email: "ada@example.com", template: 5, from: "Clara <hello@example.com>" },
   );
+  assert.deepEqual(thanks.body.headers, [{ "Reply-To": "inbox@example.com" }]);
 });
 
 test("no thank-you email is sent until its template is configured", async () => {

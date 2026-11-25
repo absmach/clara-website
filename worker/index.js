@@ -238,7 +238,12 @@ async function updateExisting(email, attribs, listId, env) {
 async function sendThanks(email, env) {
   const templateId = Number(env.LISTMONK_WELCOME_TEMPLATE_ID);
   if (!(templateId > 0)) return;
-  await sendTx(env, { subscriber_email: email, template_id: templateId });
+  await sendTx(env, {
+    subscriber_email: email,
+    template_id: templateId,
+    // The email invites replies, which reach the team inbox.
+    headers: [{ "Reply-To": env.LISTMONK_CONTACT_EMAIL }],
+  });
 }
 
 // Best effort, and skipped until a template ID is configured. It carries only
