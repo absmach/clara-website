@@ -36,7 +36,7 @@ accessDialog.addEventListener('click', event => {
 // which checks a Cloudflare Turnstile token. Turnstile's script loads only when
 // someone starts filling in a form, so pages that aren't used don't fetch it.
 // Public site key (not a secret). Local runs use Cloudflare's always-pass test key.
-const TURNSTILE_SITEKEY = '';
+const TURNSTILE_SITEKEY = '0x4AAAAAAGSdgDL7TiPzf8Dm';
 const TURNSTILE_TEST_SITEKEY = '1x00000000000000000000AA';
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
 const localHost = ['localhost', '127.0.0.1'].includes(location.hostname);
