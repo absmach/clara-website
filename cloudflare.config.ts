@@ -49,10 +49,12 @@ export default defineConfig(({ isPreview, mode }) => {
         LISTMONK_FROM_EMAIL: bindings.text("Clara <noreply@absmach.eu>"),
         // Hostnames a Turnstile token must have been issued on.
         TURNSTILE_HOSTNAMES: bindings.text(preview ? "" : "claragtm.com,www.claragtm.com"),
-        // Set in the dashboard or with `npx cf workers secrets update <NAME>`,
-        // and in .dev.vars for local runs.
-        LISTMONK_API_TOKEN: bindings.secret(),
-        TURNSTILE_SECRET: bindings.secret(),
+        // Secrets LISTMONK_API_TOKEN and TURNSTILE_SECRET are set on the Worker
+        // in the dashboard (Settings → Runtime variables and secrets) and in
+        // .dev.vars for local runs. They aren't declared here yet: a declared
+        // secret makes `cf deploy` refuse to run until it exists, and the
+        // dashboard only accepts runtime secrets once the Worker has code.
+        // Declare them with bindings.secret() once they are set.
       },
     }),
   };
