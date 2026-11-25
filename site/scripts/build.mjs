@@ -21,7 +21,7 @@ const formTail = (submitLabel, note) => `<div class="form-honeypot" aria-hidden=
   <div class="turnstile-slot" data-turnstile></div>
   <button class="button" type="submit">${submitLabel} ${arrow}</button>
   <p class="form-status" role="alert" data-form-status hidden></p>
-  <p class="form-note">${note} Protected by Cloudflare Turnstile. See <a href="/privacy/">website privacy</a>.</p>
+  <p class="form-note">${note} See <a href="/privacy/">website privacy</a>.</p>
   <noscript><p class="form-note form-noscript">This form needs JavaScript. You can also write to the team at info@absmach.eu.</p></noscript>`;
 const formSuccess = (heading, text) => `<div class="form-success" data-form-success tabindex="-1" hidden><h3>${heading}</h3><p>${text}</p></div>`;
 const accessForm = (prefix) => `<form class="access-form" data-form="early-access" data-endpoint="/api/early-access" data-turnstile-action="early_access" data-notice-version="${noticeVersion}" novalidate>
