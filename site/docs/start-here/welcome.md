@@ -1,57 +1,68 @@
 ---
 title: Welcome to Clara
-description: Clara is an AI marketing team that drafts on-brand content from your own knowledge, in chat and through plays, while you stay in control of what gets published.
+description: Clara is your autonomous marketing department. You hand it your marketing work, and agents run it, from research to drafts to publishing, while you decide how much it does on its own.
 order: 1
 ---
 # Welcome to Clara
 
-<video src="/assets/docs/start-here/welcome-home-tour.mp4" poster="/assets/docs/start-here/welcome-home-tour.jpg" autoplay muted loop playsinline aria-label="A tour of Clara's Home page: the cursor moves over the message box, the three quick cards and the sidebar"></video>
+<video src="/assets/docs/start-here/welcome-agents-at-work.mp4" poster="/assets/docs/start-here/welcome-agents-at-work.jpg" autoplay muted loop playsinline aria-label="Setting up a Content Writer agent from the Agent library: choosing the Acme Analytics product and a weekly schedule, creating and activating the agent, starting a run, watching its Activity until the run waits for review, then opening the article draft it wrote"></video>
 
-Clara helps a marketing team get from an idea to a first draft. You describe what you need, and Clara writes it: a LinkedIn post, a blog article, release notes, a campaign. You review it, ask for changes and decide what happens next.
+Clara is your autonomous marketing department. You hand it your marketing work, and agents run that work for you. They start on a schedule or when something happens, such as a competitor posting or changing a page, or a post going live. They research, draft, schedule and publish across your channels, and they report back on what they did.
 
-Clara doesn't write from a blank page. It works from what you give it: your brand guidelines, the websites and files you add as knowledge sources, and the products you sell. That is why a draft sounds like your company and talks about your real features.
+Clara works from what you give it: your brand guidelines, the websites and files you add as knowledge sources, and the products you sell, so everything it makes is in your voice and accurate about what you offer. You can also talk to Clara in **New chat**, or start a ready-made job from **Plays**, whenever you want to direct or hand off one piece of work.
 
-You can work with Clara in two ways. Talk to it in **New chat**, or pick a ready-made job from **Plays**. Either way, a person approves a draft before it goes anywhere. You decide how much Clara may do on its own.
+You decide how much Clara does alone. New workspaces start on Co-pilot. With **Assistant**, Clara suggests and you act. With **Co-pilot**, Clara does internal work on its own and asks before anything external. With **Autopilot**, Clara can carry work through to publishing where you allow it. You can step in at any point through approvals and chat.
 
-## Who Clara is for
+## What Clara does for you
 
-- **Small marketing teams** that need more drafts than they have time to write.
-- **Founders and product teams** who do their own marketing and want a first draft to edit, not a blank page.
-- **Agencies and teams with several products**, where each product has its own voice and sources.
+Clara runs ongoing marketing work through agents. Each agent has a role and one or more jobs, and each job is a workflow with its own triggers. In the **Agent library** you can start from roles such as these:
+
+- **Content Writer** writes articles for you, and **Release Notes Writer** turns product changes into customer-focused release notes. It needs a connected GitHub repository.
+- **Social Manager** plans the week's posts, fills gaps in your calendar and repurposes what you publish.
+- **Competitor Analyst** finds your competitors, reacts to their moves and sends a weekly digest.
+- **Search Visibility** checks your website every week and looks for content gaps.
+- **Community Manager** replies to comments, once a connected social account lets Clara read them.
+
+Each agent also writes a weekly report on its work, and Clara can send reports and notifications to Slack. See [Build your marketing team](/docs/automate/agents).
+
+For example, Acme Corp publishes a post about Acme Analytics. That can start a job that repurposes it into social posts, which wait in **Calendar** for the approval you require.
+
+## How you work with Clara
+
+1. **Set up your team.** Open **Agents** and choose roles from the **Agent library**, or use **Set up your marketing team**. Tailor the instructions to your product and choose how each job starts.
+2. **Hand off one-off work.** Describe it in **New chat**, or pick a format in **Plays**. See [Home and New chat](/docs/chat/new-chat) and [From a brief to a first draft](/docs/create/plays).
+3. **Review.** Drafts and their statuses are in **My work**. Anything waiting for a decision appears under **Needs your attention** on Home. See [Review and share your work](/docs/publish/review-and-approvals).
+4. **Stay informed.** Notifications and each agent's **Activity** tab show what Clara finished, what failed and what needs you. See [Notifications](/docs/chat/notifications).
 
 ## What you can make
 
-Clara writes in many formats. For example:
+Clara writes in the formats on the **Plays** page:
 
 - Blog posts, release notes and newsletters
 - Posts for LinkedIn, X, Facebook Page, Threads, Bluesky, Mastodon and Instagram, and X threads
 - Carousels
 - Videos, including short-form video posts
 - Campaigns: one brief turned into a set of related drafts
-- Images to go with your posts
 - Competitor and positioning research
-- Website visibility: what to fix so people and AI assistants can find your site
-
-For example, you can ask for "a LinkedIn post announcing the new dashboard in Acme Analytics" and get a draft in your brand's voice. See [From a brief to a first draft](/docs/create/plays).
-
-## How Clara works with your team
-
-- **Organizations.** Everything in Clara belongs to an organization, such as Acme Corp. You can belong to more than one and switch between them from the menu at the top of the sidebar.
-- **Members and roles.** People join an organization by invitation. What each person can do depends on their role.
-- **Products.** Each product can have its own voice, sources and people.
-- **Sharing.** Your chats are private until you share them. You can give a teammate access to a chat as a **Viewer** or a **Manager**, and anyone with access to a product can open the chats tagged with it. See [Chat history and sharing](/docs/chat/chats).
-
-Your drafts land in **My work**, where you can see the status of each one.
 
 ## You stay in control
 
-Clara drafts, and people approve. Nothing is published unless someone says so.
+Clara does only what your settings allow.
 
-- You review every draft, and you can ask Clara to change it.
+- In **Settings** → **Autonomy** you choose a preset: **Assistant** (Clara suggests, and nothing runs on its own), **Co-pilot** (Clara does internal work on its own and asks before external or irreversible actions such as publishing) or **Autopilot** (every action is automatic unless you set an action, channel or product to **Needs approval**).
+- You can keep **Needs approval** on a specific action, channel or product. For example, let routine social posts go out and hold one product's posts for review.
+- Guardrails limit posting frequency and quiet hours, and **Pause autopilot** holds automatic actions at any time.
 - **Approve** records that your team approved a draft.
-- In **Settings** → **Autonomy** you choose how much Clara does without asking: **Assistant** (Clara suggests, and nothing runs on its own), **Co-pilot** (Clara does internal work on its own and asks before anything external) or **Autopilot** (Clara does everything, including publishing).
 
-See [Choose your level of autonomy](/docs/automate/autonomy) and [Review and share your work](/docs/publish/review-and-approvals).
+New agents can start with approval required, even when your workspace uses Autopilot. See [Choose your level of autonomy](/docs/automate/autonomy).
+
+## Who Clara is for
+
+Clara is for small marketing teams, founders and product teams who do their own marketing, and agencies or teams with several products, where each product has its own voice and sources.
+
+## Your team in Clara
+
+Everything belongs to an organization, such as Acme Corp. People join by invitation, and what each person can do depends on their role. Chats are private until you share them. See [Chat history and sharing](/docs/chat/chats).
 
 ## Get help
 
@@ -59,15 +70,18 @@ Need a hand? [Contact us](/contact/) and we will help you get set up.
 
 ## FAQ
 
-**Does Clara publish by itself?** Not by default. Clara drafts, and a person approves before anything is scheduled or published. Your autonomy setting can change this, and you choose it.
+**What does an agent do?** An agent is a role you give Clara, such as Social Manager. It has a goal and one or more jobs. Each job runs on a schedule, when you ask, or when something happens, and its results and reports appear in Clara.
+
+**Does Clara publish by itself?** It can, if you allow it. By default, on Assistant and Co-pilot a person approves before anything is published. You can still let specific actions or channels run automatically, and agents can be set to require approval even on Autopilot.
 
 **Where does Clara get its information about my company?** From your **Brand guidelines**, your **Sources** (websites and files you add) and your **Products**. Clara can also search the web when the **Web** switch is on in the message box.
 
+**Can Clara make mistakes?** Yes. Home reminds you: "Clara is AI and can make mistakes. Review before publishing." Check claims in drafts, and keep approval on what matters.
+
 **Who can see what I make?** Only you, until you share the chat or tag it with a product. A private chat's drafts stay private too.
 
-**Can Clara make mistakes?** Yes. Home reminds you: "Clara is AI and can make mistakes. Review before publishing." Read every draft before you use it.
-
 ## Next steps
+- [Build your marketing team](/docs/automate/agents)
+- [Choose your level of autonomy](/docs/automate/autonomy)
 - [Quickstart](/docs/start-here/quickstart)
 - [Core concepts](/docs/start-here/concepts)
-- [Home and New chat](/docs/chat/new-chat)
