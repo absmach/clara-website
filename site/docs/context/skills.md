@@ -5,7 +5,7 @@ order: 7
 ---
 # Skills
 
-A skill is a set of reusable instructions, such as "write release notes the way we do". Plays, chats and workflow steps can run a skill. Saving a skill makes it live at once. Your brand guidelines are always included on top. Agents use skills too: an agent's jobs can run the skills you save here.
+A skill is a set of reusable instructions, such as "write release notes the way we do". Plays, chats and workflow steps can run a skill. Saving a skill makes it live at once. Your brand guidelines are always included on top. Agents can use skills too: add a skill step to an agent's job in the workflow builder. The ready-made agents don't use your skills until you add one.
 
 **Where to find it:** sidebar → **Brand & knowledge** → **Skills**
 
