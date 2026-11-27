@@ -4,6 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { Marked } from 'marked';
+import { applyManifest } from './media.mjs';
 
 export const docsRoot = fileURLToPath(new URL('../docs/', import.meta.url));
 export const siteUrl = 'https://claragtm.com';
@@ -100,7 +101,7 @@ export function referenceProblems(page, pageKeys, redirectKeys, exists) {
     for (const [kind, url] of [['clip', src], ['poster', poster]]) {
       if (!url) continue;
       if (!url.startsWith('/assets/docs/')) problems.push(`${where}: ${kind} ${url} must live under /assets/docs/`);
-      else if (!exists(url)) problems.push(`${where}: ${kind} ${url} not found in site/src${url}`);
+      else if (!exists(url)) problems.push(`${where}: ${kind} ${url} isn't in docs/media.json (put the file in media/docs/ and run pnpm run media:upload)`);
     }
   }
   return problems;
@@ -287,16 +288,16 @@ function shell({ sections, current, main, head = '', sidebarSearch, mobileSearch
   return `<div class="container docs-shell"><aside class="docs-sidebar">${sidebarSearch || ''}<nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us</a></aside><div class="docs-main">${head}${mobileSearch || ''}<details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(mobileLabel)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details>${main}</div></div>`;
 }
 
-export function docPage({ page, sections, pages }) {
+export function docPage({ page, sections, pages, media = {} }) {
   const i = pages.indexOf(page);
   const prev = pages[i - 1];
   const next = pages[i + 1];
   const pager = link => (link ? `<a href="/${link.route}/"><span>${link === prev ? 'Previous' : 'Next'}</span><strong>${escapeHtml(link.title)}</strong></a>` : '<span></span>');
-  const main = `<article class="docs-article"><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${renderMarkdown(page.body, page)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav></article>`;
+  const main = `<article class="docs-article"><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${applyManifest(renderMarkdown(page.body, page), media)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav></article>`;
   return shell({ sections, current: page, main, sidebarSearch: searchBox('sb'), mobileSearch: searchBox('mb'), mobileLabel: page.sectionTitle });
 }
 
-export function docsIndex({ sections, pages }) {
+export function docsIndex({ sections, pages, media = {} }) {
   const byRoute = new Map(pages.map(p => [p.route, p]));
   const start = GET_STARTED.map(item => ({ ...item, page: byRoute.get(item.route) })).filter(item => item.page);
   const startCards = start.map(({ page, poster }, n) => `<li><a class="docs-card docs-start-card" href="/${page.route}/">${poster ? `<img class="docs-start-thumb" src="${poster.src}" width="${poster.width}" height="${poster.height}" alt="" loading="lazy" decoding="async"/>` : ''}<span class="docs-start-copy"><span class="docs-start-head"><span class="docs-step" aria-hidden="true">${n + 1}</span><strong>${escapeHtml(page.title)}</strong></span><span>${escapeHtml(page.description)}</span><span class="docs-start-go" aria-hidden="true">${icon('chevron', 18)}</span></span></a></li>`).join('');
@@ -311,7 +312,7 @@ export function docsIndex({ sections, pages }) {
   }).join('');
   const head = `<header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>`;
   const main = `<div class="docs-home">${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
-  return shell({ sections, current: null, main, head, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id });
+  return applyManifest(shell({ sections, current: null, main, head, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id }), media);
 }
 
 export function llmsTxt({ sections }) {
@@ -327,9 +328,9 @@ export function llmsTxt({ sections }) {
 // Root-relative links and clips become absolute, for copies read away from the site.
 export const absoluteLinks = md => mapProse(md, text => text.replace(/\]\(\/(?!\/)/g, `](${siteUrl}/`).replace(/(?<![\w-])(href|src|poster)="\/(?!\/)/g, `$1="${siteUrl}/`));
 
-export function llmsFullTxt({ pages }) {
+export function llmsFullTxt({ pages }, media = {}) {
   const intro = '# Clara user guide\n\nEvery page of the Clara user guide, in reading order. Each page starts with its address.\n';
-  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(p.body.trim())}\n`)].join('\n');
+  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(applyManifest(p.body.trim(), media))}\n`)].join('\n');
 }
 
 export const REDIRECT_TARGET = /^\/docs\/[a-z0-9/-]+\/$/;

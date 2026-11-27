@@ -41,7 +41,7 @@ test('links and clips must resolve', () => {
   assert.deepEqual(referenceProblems(page({ body: `${body}\n${clip}` }), keys, new Set(), exists), []);
   const bad = referenceProblems(page({ body: `${body}\n[x](/docs/nope/page)\n<video src="/assets/docs/create/gone.mp4"></video>` }), keys, new Set(), exists);
   assert.equal(bad.filter(p => p.includes('/docs/nope/page')).length, 1);
-  assert.ok(bad.some(p => p.includes('gone.mp4') && p.includes('not found')));
+  assert.ok(bad.some(p => p.includes('gone.mp4') && p.includes('media.json')));
   assert.ok(bad.some(p => p.includes('needs a poster')));
   assert.ok(bad.some(p => p.includes('aria-label')));
   assert.deepEqual(referenceProblems(page({ body: '[md](/docs/create/campaigns.md#x) [t](/docs/create/campaigns "A title")' }), keys, new Set(), exists), []);

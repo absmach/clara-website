@@ -60,9 +60,20 @@ The docs home lists up to seven pages under **Popular tasks**. Add `popular: <nu
 
 ## Clips
 
-Embed a clip with a plain `<video>` tag, as in the template. Keep the `aria-label`: it is the clip's text description. Clips live in `site/src/assets/docs/<section>/<name>.mp4` (or `.webm`) next to a `<name>.jpg` poster frame. Reference them as `/assets/docs/<section>/<name>.mp4`.
+Embed a clip with a plain `<video>` tag, as in the template. Keep the `aria-label`: it is the clip's text description. Reference clips and posters as `/assets/docs/<section>/<name>.mp4` and `.jpg`.
 
-On the site the clips start playing on their own, muted and looping. Visitors who prefer reduced motion, and visitors without JavaScript, see the poster and play controls instead. `pnpm run check` fails when a clip or poster file is missing, or when the poster or `aria-label` is missing.
+Clips are not stored in git. They are hosted on a public bucket (a DigitalOcean Space) and the build swaps each `/assets/docs/...` path for its address there. See "Add a clip" below.
+
+On the site each clip has a control bar (play and pause, back and forward 5 seconds, a scrubber and the time). Clips that may autoplay start on their own, muted and looping, while they are on screen. Visitors who prefer reduced motion see the poster and use the control bar. Visitors without JavaScript get the browser's own controls. `pnpm run check` fails when a clip or poster isn't in `site/docs/media.json`, or when the poster or `aria-label` is missing.
+
+### Add a clip
+
+1. Put the clip and its poster in `media/docs/<section>/`, for example `media/docs/create/plays.mp4` and `media/docs/create/plays.jpg`. The `media/` folder is ignored by git.
+2. Put your Space keys in `.env.media` at the repo root (`DO_SPACES_KEY`, `DO_SPACES_SECRET`). It is ignored by git. Never paste the keys anywhere else.
+3. Run `pnpm run media:upload`. It hashes each file, skips the ones the Space already has, uploads the rest as public, long-cached files named `docs/<section>/<name>.<hash>.<ext>`, and rewrites `site/docs/media.json`. Use `pnpm run media:upload --dry-run` to see what would be uploaded.
+4. Commit `site/docs/media.json`. Don't commit the clips.
+
+Changing a clip gives it a new hash, so the old address keeps working for pages that are already cached. CI never needs the Space: `build` and `check` read `media.json` only.
 
 ## Recording guide
 
@@ -70,5 +81,5 @@ On the site the clips start playing on their own, muted and looping. Visitors wh
 - Use a 1440×900 browser window, light theme, 100% zoom and a visible cursor. Hide personal bookmarks and extensions.
 - Each clip is 5–20 seconds long, silent, and loops cleanly. Export it at 1280px wide as H.264 MP4, under 2 MB. WebM is optional. Add a poster frame.
 - Cut out waiting time (generation, syncing) instead of showing spinners.
-- Name files after the task, for example `create/plays.mp4` and `create/plays.jpg`.
+- Name files after the task, for example `create/plays.mp4` and `create/plays.jpg`, and keep them in `media/docs/`.
 - Clara's own walkthrough capture (**Videos → Captures**) can record clips.
