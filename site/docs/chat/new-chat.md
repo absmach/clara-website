@@ -46,7 +46,11 @@ On Home, a panel under the message box shows **Brand guidelines** with the text 
 3. To add a web page, click **+**, then **Add a link**, paste the address into the field that says "https://..." and click **Add**. Click **Cancel** to close the field.
 4. Type your message and send it. Wait for uploads to finish first.
 
-<!-- TODO clip: new-chat-attach-file after the attachment fix -->
+<video src="/assets/docs/chat/new-chat-attach-file.mp4" poster="/assets/docs/chat/new-chat-attach-file.jpg" autoplay muted loop playsinline aria-label="Clicking + then Upload from computer, choosing a PDF of release notes, typing a request and sending it; the chat opens with the message and the file, shows Reading your files while Clara reads it, then Clara replies and starts a draft"></video>
+
+**You should see:** the chat opens right away with your message and the file names, and the line "Reading your files…" while Clara reads them. The message box is locked until she's done. Long documents can take a little while. Then Clara replies.
+
+> **Note:** If you leave the chat while Clara is still reading your files, the message isn't sent. Clara tells you so and puts your text back in the message box when it's empty. Attach the files again and send it once more.
 
 > **Note:** You can attach up to 6 files at a time, and up to 5 links per message. Documents can be up to 10 MB. Images, audio and video have their own limits, and the message box tells you the limits when a file is too large. If a file type isn't supported, you see "That file type isn't supported. Try a document, PNG, JPG, WebP, GIF, audio or video file."
 
