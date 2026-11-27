@@ -9,7 +9,7 @@ order: 1
 
 Clara is your autonomous marketing department. You hand it your marketing work, and agents run that work for you. They start on a schedule or when something happens, such as a competitor posting or changing a page, or a post going live. They research, draft, schedule and publish across your channels, and they report back on what they did.
 
-Clara works from what you give it: your brand guidelines, the websites and files you add as knowledge sources, and the products you sell. That is why the work sounds like your company and talks about your real features. You can also talk to Clara in **New chat**, or start a ready-made job from **Plays**, whenever you want to direct or hand off one piece of work.
+Clara works from what you give it: your brand guidelines, the websites and files you add as knowledge sources, and the products you sell, so everything it makes is in your voice and accurate about what you offer. You can also talk to Clara in **New chat**, or start a ready-made job from **Plays**, whenever you want to direct or hand off one piece of work.
 
 You decide how much Clara does alone. New workspaces start on Co-pilot. With **Assistant**, Clara suggests and you act. With **Co-pilot**, Clara does internal work on its own and asks before anything external. With **Autopilot**, Clara can carry work through to publishing where you allow it. You can step in at any point through approvals and chat.
 
