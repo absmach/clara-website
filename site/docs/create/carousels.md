@@ -34,7 +34,7 @@ The **Carousel studio** says "One story, in each channel's format." and "Shape y
 5. Under **Brand and post caption**, set **Carousel title**, **Brand name**, **Accent color**, **Typography** (**Modern sans**, **Editorial serif** or **Technical mono**) and the **Post caption** for each channel.
 6. Click **Save changes**.
 
-<!-- CLIP: create/carousel-edit — Carousel studio: switch LinkedIn · PDF and Instagram · JPEGs, edit slide 1 headline, Save changes -->
+<video src="/assets/docs/create/carousel-edit.mp4" poster="/assets/docs/create/carousel-edit.jpg" autoplay muted loop playsinline aria-label="In the Carousel studio, switching between Instagram · JPEGs and LinkedIn · PDF, picking slides, editing the slide 1 headline and clicking Save changes"></video>
 
 > **Note:** **Generated illustration** only appears where image generation is on.
 

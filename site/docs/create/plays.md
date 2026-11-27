@@ -30,7 +30,7 @@ Each card shows its action: **Start play**, **Open** or **Open studio**.
 6. Optional: open **More options · Skills & guidance** to add skills for this run and use **Anything else to keep in mind?**
 7. Click **Run now**.
 
-<!-- CLIP: create/plays-run — Plays: search "linkedin", open LinkedIn post, choose Acme Analytics, type the brief, Run now, the chat opens -->
+<video src="/assets/docs/create/plays-run.mp4" poster="/assets/docs/create/plays-run.jpg" autoplay muted loop playsinline aria-label="Searching Plays for linkedin, opening the LinkedIn post play, choosing Acme Analytics, typing the brief and clicking Run now; the chat opens and the draft appears in Draft preview"></video>
 
 **You should see:** a chat named after the play opens, and the draft appears in the **Draft preview** panel when it is ready. It is also listed in [My work](/docs/create/my-work).
 

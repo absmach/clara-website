@@ -58,7 +58,7 @@ Open the menu "Actions for" a piece to see:
 3. Under "What should it cover?", write what the piece should say and who it is for.
 4. Click **Add draft**.
 
-<!-- CLIP: create/campaign-add-draft — Campaign page: Add a draft, choose LinkedIn post, describe it, Add draft -->
+<video src="/assets/docs/create/campaign-add-draft.mp4" poster="/assets/docs/create/campaign-add-draft.jpg" autoplay muted loop playsinline aria-label="On a campaign, clicking Add a draft, choosing LinkedIn post, describing it and clicking Add draft; the new piece appears in Campaign work as Writing"></video>
 
 The campaign's brief, goal and audience are applied automatically.
 

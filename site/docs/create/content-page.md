@@ -24,26 +24,35 @@ On the side:
 
 ## Ask Clara for a change
 
-1. Find **Edit with Clara**. It says "Ask for changes where this draft began, with the whole conversation in view."
-2. Click the box ("Describe a change, or paste a reference image…") and describe the change, for example "Make the opening shorter."
-3. Optional: click **Attach reference** to add a reference image. It is used to explain your idea and isn't added to the post.
-4. Click **Send**. Enter sends, Shift+Enter starts a new line, and the up and down arrows bring back earlier requests.
+**Edit with Clara** on the side works in one of two ways, depending on where the draft came from.
 
-<!-- CLIP: create/content-edit-with-clara — Edit with Clara: type "Make the opening shorter.", Send, the draft text updates -->
+**A draft made in a chat** ("Ask for changes where this draft began, with the whole conversation in view."):
 
-**You should see:** Clara answers in the panel and the draft text changes.
+1. Click **Open conversation**. The chat opens with the draft in **Draft preview**.
+2. In "Ask Clara to refine this draft…" describe the change, for example "Make the opening shorter."
+3. Press Enter or click the send button.
 
-If Clara is still writing, you see "Clara is still writing this draft. You can ask for changes once it's ready." If the draft came out of a conversation you can't open, you see "This draft came out of a conversation that isn't available to you". **Open conversation** appears when you can open it.
+<video src="/assets/docs/create/content-edit-with-clara.mp4" poster="/assets/docs/create/content-edit-with-clara.jpg" autoplay muted loop playsinline aria-label="On a draft, clicking Open conversation under Edit with Clara, asking Clara to make the opening shorter, and the draft in Draft preview updating"></video>
+
+**You should see:** Clara says what she will change, and the draft in **Draft preview** updates.
+
+**A draft from a play run without a chat, a workflow or a campaign** ("Tell me what to change. You can attach a reference image to explain your idea."):
+
+1. Click the box ("Describe a change, or paste a reference image…") and describe the change.
+2. Optional: click **Attach reference** to add a reference image. It is used to explain your idea and isn't added to the post.
+3. Click **Send**. Enter sends, Shift+Enter starts a new line, and the up and down arrows bring back earlier requests.
+
+If Clara is still writing, you see "Clara is still writing this draft. You can ask for changes once it's ready." If the draft came out of a conversation you can't open, you see "This draft came out of a conversation that isn't available to you".
 
 ## Edit it yourself
 
 1. Click **Edit draft** (**Edit** on a report).
 2. Change the text under **Draft (Markdown)**. Newsletters also have **Subject line** and **Preview text**, and video posts have **Video title**.
-3. Click **Save changes**. The status shows **Unsaved changes** until you do.
+3. Click **Save changes**. The status shows **Unsaved changes** until you do. **Discard edits and reload** throws your changes away and loads the saved version.
 
-<!-- CLIP: create/content-edit-save — Edit draft: change a sentence in Draft (Markdown), Save changes -->
+<video src="/assets/docs/create/content-edit-save.mp4" poster="/assets/docs/create/content-edit-save.jpg" autoplay muted loop playsinline aria-label="Clicking Edit draft, replacing the first sentence in Draft (Markdown), seeing Unsaved changes, then clicking Save changes; the preview shows the new sentence"></video>
 
-> **Note:** If someone changes the draft while you are editing, you see "This draft changed elsewhere. Your edits are preserved here. Copy them before loading the latest version." Click **Discard edits and reload** to load the latest version.
+> **Note:** If someone changes the draft while you are editing, you see "This draft changed elsewhere. Your edits are preserved here. Copy them before loading the latest version." Copy your edits, then click **Discard edits and reload** to load the latest version.
 
 ## Check the claims
 

@@ -18,7 +18,7 @@ When a draft fails, you can look at what happened and try again with feedback. F
 5. Optional: write feedback in **Retry comments**, for example to use a different angle, remove unsupported claims or shorten the draft.
 6. Click **Retry generation**.
 
-<!-- CLIP: create/generation-retry — Failed draft: View details and retry, type a comment in Retry comments, Retry generation -->
+<video src="/assets/docs/create/generation-retry.mp4" poster="/assets/docs/create/generation-retry.jpg" autoplay muted loop playsinline aria-label="On a failed draft, clicking View details and retry, typing feedback in Retry comments and clicking Retry generation; Clara starts working on it again"></video>
 
 **You should see:** "Generation retry queued." and "Clara is working on this generation" while it runs. When it finishes, **Open generated content** takes you to the draft.
 

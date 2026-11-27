@@ -19,7 +19,7 @@ The page says "Good ideas, taking shape." **Create something** takes you to [Pla
 4. Use **Filter by status** (see below).
 5. Switch between **Cards** and **Table**. The table has the columns Title, Product, Status and Updated.
 
-<!-- CLIP: create/my-work-filters — My work: Filter by product (Acme Analytics), Filter by status > Needs approval, switch to Table -->
+<video src="/assets/docs/create/my-work-filters.mp4" poster="/assets/docs/create/my-work-filters.jpg" autoplay muted loop playsinline aria-label="On My work, choosing Acme Analytics in Filter by product and Needs approval in Filter by status, then switching from Cards to Table"></video>
 
 ## Statuses
 
@@ -43,7 +43,7 @@ While a draft is being made, its badge says **Writing** or **Queued**. These two
 2. Choose **Markdown (.md)**, **Microsoft Word (.docx)** or **PDF (.pdf)** to download the draft. Word and PDF only appear when the service can produce them.
 3. Choose **Delete** and confirm "Delete this content? This can't be undone."
 
-<!-- CLIP: create/my-work-download — Content actions menu on a card: Microsoft Word (.docx) -->
+<video src="/assets/docs/create/my-work-download.mp4" poster="/assets/docs/create/my-work-download.jpg" autoplay muted loop playsinline aria-label="Opening the Content actions menu on a card in My work and choosing Microsoft Word (.docx)"></video>
 
 Deleting needs the Editor role or an organization admin. It also removes the draft's images and what Clara remembered from it. Website items from **Improve website visibility** have **Website actions** with **Delete**, which removes the website's reports, history and schedule.
 

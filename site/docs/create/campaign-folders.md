@@ -14,7 +14,7 @@ A folder groups campaigns so you can share all of them with a teammate in one st
 ## Create a folder and add campaigns
 
 1. Open **Campaigns** and click **Manage folders**. The page is called "Campaign folders."
-2. Type a name in **New folder** and click the plus button next to it.
+2. Type a name in **New folder** and click **Create**.
 3. Select the folder in the **Folders** list.
 4. Under **Campaigns in this folder**, choose a campaign in **Add a campaign** and click **Add**.
 
@@ -27,7 +27,7 @@ To take a campaign out of a folder, click **Remove** next to it. A new folder sa
 3. Under **Role**, choose **Viewer** or **Manager**.
 4. Click **Grant access**.
 
-<!-- CLIP: create/campaign-folder-share — Campaign folders: New folder, add a campaign, grant Jane Doe access -->
+<video src="/assets/docs/create/campaign-folder-share.mp4" poster="/assets/docs/create/campaign-folder-share.jpg" autoplay muted loop playsinline aria-label="On Campaign folders, creating a folder named Launches, adding the Acme Analytics launch campaign and granting Jane Doe Viewer access"></video>
 
 Use **Remove** to take access away.
 
