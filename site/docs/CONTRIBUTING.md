@@ -44,6 +44,12 @@ order: 2
 
 Front matter has `title`, `description` and `order` (a number), plus the optional `tag`, `popular` and `task`. Each page has one `#` heading and ends with a `## Next steps` list that links to at least one other docs page. Link to other pages as `/docs/<section>/<slug>`, without a trailing slash. `pnpm run check` fails when a link doesn't resolve.
 
+## FAQ sections
+
+Write each question as a bold line that ends with a question mark, followed by its answer: `**Does Clara publish by itself?** Not by default.` The site shows the `## FAQ` section as accordions. The Markdown and `llms` files stay plain text. `pnpm run check` fails when a FAQ entry doesn't start with a bold question or has no answer.
+
+Every page's description is shown as the intro under its title. Pages with two or more headings also get an "On this page" list on wide screens.
+
 ## Popular tasks on the docs home
 
 The docs home lists up to seven pages under **Popular tasks**. Add `popular: <number>` to a page's front matter to put it there. Lower numbers come first. `task` is an optional short, verb-first label for the link, such as `task: Write your first draft`. Without it the page title is used, so leave it out when the title already starts with a verb. `task` only works together with `popular`. `pnpm run check` fails when `popular` isn't a number or `task` is empty.

@@ -775,26 +775,49 @@ a.docs-card:hover{border-color:#b2a5e2;box-shadow:0 10px 28px #2723340f}
 .docs-start-card:hover .docs-start-go{color:var(--accent);transform:translateX(3px)}
 .docs-step{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--tint);color:var(--accent);font-size:13px;font-weight:650}
 .docs-start-card:hover strong{color:var(--accent)}
-.docs-tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}
-.docs-tasks a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:12px 4px;border-bottom:1px solid var(--line);font-size:16px;line-height:1.4}
-.docs-tasks a .docs-icon{color:var(--muted);transition:transform .15s,color .15s}
-.docs-tasks a:hover{color:var(--accent)}
-.docs-tasks a:hover .docs-icon{color:var(--accent);transform:translateX(3px)}
+.docs-tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.docs-task{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:12px 18px;font-size:16px;line-height:1.4}
+.docs-task .docs-icon{color:var(--muted);transition:transform .15s,color .15s}
+.docs-task:hover{color:var(--accent)}
+.docs-task:hover .docs-icon{color:var(--accent);transform:translateX(3px)}
 .docs-topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.docs-topic{display:flex;flex-direction:column;padding:22px;scroll-margin-top:100px}
-.docs-topic-icon{display:grid;place-items:center;width:40px;height:40px;margin-bottom:14px;border-radius:8px;background:var(--tint);color:var(--accent)}
+.docs-topics>li{display:flex}
+.docs-topic{position:relative;display:flex;flex-direction:column;gap:14px;width:100%;padding:20px;scroll-margin-top:100px}
+.docs-topic::after{content:'';position:absolute;top:24px;right:22px;width:8px;height:8px;border-top:2px solid var(--muted);border-right:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s,border-color .15s}
+.docs-topic:hover::after{border-color:var(--accent);transform:translateX(3px) rotate(45deg)}
+.docs-topic-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:8px;background:var(--tint);color:var(--accent)}
 .docs-topic h3{font-size:18px;line-height:1.3;margin-bottom:6px}
-.docs-topic>p{font-size:15px;line-height:1.55;color:var(--muted);margin-bottom:14px}
-.docs-topic>ul{margin-bottom:8px}
-.docs-topic ul a{display:block;padding:9px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.4;min-height:40px}
-.docs-topic ul a:hover{color:var(--accent)}
-.docs-topic-more{margin-top:auto}
-.docs-topic-more>summary{cursor:pointer;list-style:none;display:flex;align-items:center;min-height:40px;font-size:15px;font-weight:600;color:var(--accent)}
-.docs-topic-more>summary::-webkit-details-marker{display:none}
-.docs-topic-more>summary::after{content:'+';margin-left:6px;font-weight:400}
-.docs-topic-more[open]>summary::after{content:'−'}
-.docs-topic-more>summary:hover{color:var(--accent-dark);text-decoration:underline;text-underline-offset:3px}
-.docs-topic-more ul{margin:0}
+.docs-topic p{font-size:15px;line-height:1.55;color:var(--muted)}
+.docs-topic:hover h3{color:var(--accent)}
+.docs-topic-meta{margin-top:auto;font-size:14px;color:var(--muted)}
+@media(min-width:1100px){.docs-topics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* Page header and contents */
+.docs-lede{margin:0 0 28px;max-width:60ch;font-size:clamp(18px,2vw,21px);line-height:1.55;color:var(--muted)}
+.docs-page{display:block}
+.docs-toc{display:none}
+@media(min-width:1200px){
+  .docs-page.has-toc{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:40px;align-items:start}
+  .docs-toc{display:block;position:sticky;top:100px;max-height:calc(100vh - 140px);overflow-y:auto}
+}
+.docs-toc-title{margin-bottom:10px;font-size:14px;font-weight:650;color:var(--ink)}
+.docs-toc ul{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+.docs-toc a{display:block;margin-left:-1px;padding:6px 12px;border-left:2px solid transparent;font-size:14px;line-height:1.4;color:var(--muted)}
+.docs-toc .docs-toc-sub a{padding-left:26px}
+.docs-toc a:hover{color:var(--ink)}
+.docs-toc a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:600}
+.docs-toc a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px}
+/* FAQ accordions */
+.docs-faq{margin:0 0 24px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.docs-faq-item+.docs-faq-item{border-top:1px solid var(--line)}
+.docs-faq-item>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:14px 18px;font-size:17px;font-weight:600;line-height:1.4}
+.docs-faq-item>summary::-webkit-details-marker{display:none}
+.docs-faq-item>summary::after{content:'';flex:none;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+.docs-faq-item[open]>summary::after{transform:rotate(-135deg)}
+.docs-faq-item>summary:hover{background:var(--tint);color:var(--accent)}
+.docs-faq-item>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.docs-faq-answer{padding:2px 18px 16px;font-size:17px;line-height:1.65}
+.docs-faq-answer>:last-child{margin-bottom:0}
+@media(prefers-reduced-motion:reduce){.docs-faq-item>summary::after,.docs-topic::after,.docs-task .docs-icon{transition:none}}
 .docs-help-card{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 26px;background:var(--tint);border-color:var(--tint-strong)}
 .docs-home .docs-help-card h2{margin-bottom:4px}
 .docs-help-card p{font-size:16px;color:var(--tint-ink)}
@@ -837,6 +860,7 @@ a.docs-card:hover{border-color:#b2a5e2;box-shadow:0 10px 28px #2723340f}
 }
 @media(max-width:650px){
   .docs-start-grid,.docs-tasks,.docs-topics{grid-template-columns:1fr}
+  .docs-faq-item>summary{font-size:16px}
   .docs-start-grid>li:first-child{grid-row:auto}
   .docs-home{gap:36px}
   .docs-help-card{flex-direction:column;align-items:flex-start}

@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { activeIndex, tocHtml } from '../src/docs-toc.js';
 import { search, stem } from '../src/docs-search.js';
-import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, popularTasks, searchIndex, excerpt, docsIndex, docPage, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
+import { faqAccordions, faqProblems, pageHeadings, parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, popularTasks, searchIndex, excerpt, docsIndex, docPage, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
 
 const body = '# Plays\n\nText.\n\n## Next steps\n- [Other](/docs/create/campaigns)\n';
 const page = (extra = {}) => ({ section: 'create', slug: 'plays', route: 'docs/create/plays', title: 'Plays', description: 'Pick a play.', order: 1, tag: '', body, ...extra });
@@ -200,8 +201,6 @@ test('the docs home and articles show nothing meant for assistants', () => {
   assert.match(index, /class="docs-sidebar"/);
   assert.match(index, /Browse the docs/);
   assert.match(index, /href="\/contact\/"/);
-  assert.match(index, /<summary>See all 4 pages<\/summary>/);
-  assert.doesNotMatch(index, /All \d+ pages? </);
   assert.match(index, /<details class="docs-group" open><summary>Start here/);
   // Small screens: heading and intro first, then search, then the menu.
   assert.match(index, /<div class="docs-main"><header class="docs-home-head"><h1>[\s\S]*?<\/header><div class="docs-search"[^>]*data-docs-search[\s\S]*?<details class="docs-mobile-nav">/);
@@ -250,11 +249,6 @@ test('the search script shows results as text, never as HTML', async () => {
   assert.match(script, /textContent = /);
 });
 
-test('topic cards list all pages in place only when there are more than three', () => {
-  const docs = home();
-  docs.sections[0].pages.splice(3);
-  assert.doesNotMatch(docsIndex(docs), /See all/);
-});
 
 test('short words, stopwords and partial stems do not over-match', () => {
   assert.equal(stem('notes'), 'note');
@@ -264,4 +258,73 @@ test('short words, stopwords and partial stems do not over-match', () => {
   assert.deepEqual(titles('i'), []);
   assert.deepEqual(titles('the share'), titles('share'));
   assert.deepEqual(titles('how do I share'), titles('share'));
+});
+
+const faqMd = '# T\n\n## FAQ\n\n**Is it free?** Yes. It is.\n\n**Who sees it?** Only you.\n\n- A list in that answer.\n\n## Next steps\n- [x](/docs/a/b)\n';
+
+test('the FAQ section becomes accordions, and the Markdown stays plain', () => {
+  const html = renderMarkdown(faqMd);
+  assert.match(html, /<h2 id="faq">FAQ<\/h2><div class="docs-faq">/);
+  assert.equal((html.match(/<details class="docs-faq-item">/g) || []).length, 2);
+  assert.match(html, /<summary>Is it free\?<\/summary><div class="docs-faq-answer"><p>Yes\. It is\.<\/p><\/div>/);
+  assert.match(html, /<summary>Who sees it\?<\/summary><div class="docs-faq-answer"><p>Only you\.<\/p>\s*<ul>/);
+  assert.match(html, /<section class="docs-next-steps"/);
+  assert.match(llmsFullTxt({ pages: [page({ body: faqMd })] }), /\*\*Is it free\?\*\* Yes\./);
+  assert.equal(faqAccordions('<h2 id="x">Other</h2><p>text</p>'), '<h2 id="x">Other</h2><p>text</p>');
+});
+
+test('a malformed FAQ is reported', () => {
+  assert.deepEqual(faqProblems(faqMd), []);
+  assert.deepEqual(faqProblems('# T\n\nNo FAQ here.'), []);
+  assert.ok(faqProblems('## FAQ\n\nJust a paragraph.\n').some(p => p.includes('bold question')));
+  assert.ok(faqProblems('## FAQ\n\n**Is it free?**\n\n**Next?** Yes.\n').some(p => p.includes('no answer')));
+  assert.ok(faqProblems('## FAQ\n\n**Is it free?**\n').some(p => p.includes('no answer')));
+  assert.ok(faqProblems('## FAQ\n\n**Is it free** Yes.\n').some(p => p.includes('question mark')));
+  assert.ok(pageProblems(page({ body: '# A\n\n## FAQ\n\nOops.\n\n## Next steps\n- [x](/docs/a/b)\n' })).some(p => p.includes('FAQ')));
+});
+
+test('an article shows its description, a contents list and the FAQ accordions', () => {
+  const docs = home();
+  const p = { ...docs.pages[0], body: '# T\n\nIntro.\n\n## One\n\n### Sub\n\n## FAQ\n\n**Q?** A.\n\n## Next steps\n- [x](/docs/a/b)\n' };
+  const html = docPage({ page: p, sections: docs.sections, pages: [p] });
+  assert.match(html, /<h1 id="t">T<\/h1>\s*<p class="docs-lede">Pick a play\.<\/p>/);
+  assert.match(html, /<aside class="docs-toc"><nav aria-labelledby="docs-toc-title">/);
+  assert.match(html, /<li><a href="#one">One<\/a><\/li><li class="docs-toc-sub"><a href="#sub">Sub<\/a><\/li><li><a href="#faq">FAQ<\/a><\/li>/);
+  assert.equal((html.match(/href="#faq"/g) || []).length, 1);
+  assert.match(html, /class="docs-page has-toc"/);
+});
+
+test('contents lists need two headings and the active one follows the scroll', () => {
+  assert.equal(tocHtml([]), '');
+  assert.equal(tocHtml([{ level: 2, id: 'a', text: 'A' }]), '');
+  assert.match(tocHtml([{ level: 2, id: 'a', text: 'A & B' }, { level: 3, id: 'b', text: 'B' }]), /A &amp; B/);
+  assert.equal(activeIndex([300, 900, 1500]), -1);
+  assert.equal(activeIndex([-400, 100, 900]), 1);
+  assert.equal(activeIndex([-900, -400, -50]), 2);
+  const docs = home();
+  const html = docPage({ page: { ...docs.pages[0], body: '# T\n\n## Only one\n\n## Next steps\n- [x](/docs/a/b)\n' }, sections: docs.sections, pages: [docs.pages[0]] });
+  assert.match(html, /<aside class="docs-toc">/);
+  const single = docPage({ page: { ...docs.pages[0], body: '# T\n\nText only.\n' }, sections: docs.sections, pages: [docs.pages[0]] });
+  assert.doesNotMatch(single, /docs-toc|has-toc/);
+  assert.equal(pageHeadings('<h2 id="a">A</h2><h3 id="b">B <code>x</code></h3>').length, 2);
+});
+
+test('topic cards are whole-card links with no page lists', () => {
+  const index = docsIndex(home());
+  const card = /<li><a class="docs-card docs-topic" href="\/docs\/start-here\/quickstart\/" id="topic-start-here">[\s\S]*?<\/a><\/li>/.exec(index)?.[0];
+  assert.ok(card, 'one card, linking to the first page');
+  assert.match(card, /<h3>Start here<\/h3>/);
+  assert.match(card, /4 pages/);
+  assert.doesNotMatch(card, /<ul|<details|See all/);
+  const one = home();
+  one.sections[0].pages.splice(1);
+  assert.match(docsIndex(one), /1 page</);
+});
+
+test('the Welcome page has no "Where to find it" line, task pages keep theirs', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const welcome = await readFile(new URL('../docs/start-here/welcome.md', import.meta.url), 'utf8');
+  const chats = await readFile(new URL('../docs/chat/chats.md', import.meta.url), 'utf8');
+  assert.doesNotMatch(welcome, /Where to find it/);
+  assert.match(chats, /Where to find it/);
 });

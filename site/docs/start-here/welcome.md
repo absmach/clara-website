@@ -9,8 +9,6 @@ Clara is an AI marketing team you work with in chat and through ready-made jobs 
 
 <video src="/assets/docs/start-here/welcome-home-tour.mp4" poster="/assets/docs/start-here/welcome-home-tour.jpg" autoplay muted loop playsinline aria-label="A tour of Clara's Home page: the cursor moves over the message box, the three quick cards and the sidebar"></video>
 
-**Where to find it:** sidebar → **New chat**
-
 ## What you see on Home
 
 When you sign in, Clara opens on Home. It greets you by first name ("Hi John, how can I help you today?") and shows the line "A fresh thought. A first draft. Your next big thing."
