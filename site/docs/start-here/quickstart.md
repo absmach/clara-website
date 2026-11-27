@@ -91,9 +91,9 @@ Nothing is published until you click. For content Clara can't publish itself, su
 1. On the draft's page, check the text and any claims Clara flags.
 2. Click **Approve**.
 
-<video src="/assets/docs/start-here/quickstart-approve.mp4" poster="/assets/docs/start-here/quickstart-approve.jpg" autoplay muted loop playsinline aria-label="On a release announcement draft page, clicking Approve shows an Approved notice and the line Approved by John Doe replaces the button"></video>
+<video src="/assets/docs/start-here/quickstart-approve.mp4" poster="/assets/docs/start-here/quickstart-approve.jpg" autoplay muted loop playsinline aria-label="On a release announcement draft page, clicking Approve replaces the button with the line Approved by John Doe replaces the button"></video>
 
-**You should see:** an "Approved." notice, and the line "Approved by" followed by your name and the date in place of the button.
+**You should see:** the line "Approved by" followed by your name and the date in place of the button.
 
 > **Note:** **Approve** records that your team approved the draft. It does not publish or schedule anything. For more, see [Review and share your work](/docs/publish/review-and-approvals).
 
