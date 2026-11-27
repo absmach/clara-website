@@ -36,7 +36,7 @@ Only organization admins can add products.
 
 - In **New chat**, open the **Product** menu in the message box and pick the product. The default, **Organization** (no product), means the chat isn't about one product. Clara then uses that product's voice and sources.
 - In a play, choose the product in the play's dialog.
-- Agents and workflows work from your products and sources too.
+- Agents use products too. An agent tied to a product writes from that product's sources and voice.
 
 ## Share or delete a product
 

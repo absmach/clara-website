@@ -32,7 +32,7 @@ If nothing has been read yet, Clara says so and points to the **Sources** tab. I
 Organization admins see three buttons on each passage: **Pin**, **Correct** and **Exclude**.
 
 - **Pin** keeps a passage visible even when a relevance floor would hide it. The passage shows **Pinned**, and the button becomes **Unpin**. A passage that comes from Memory can't be pinned.
-- **Correct** lets you replace the text. Write what the passage should say under "Write what this should say", then click **Save correction**. The passage shows **Corrected by you**, and your text replaces the original everywhere Clara reads. The source itself isn't changed.
+- **Correct** lets you replace the text. Write what the passage should say under "Write what this should say", then click **Save correction**. The passage shows **Corrected by you** and **Pinned**, and your text replaces the original everywhere Clara reads. The source itself isn't changed.
 - **Exclude** stops Clara using the passage.
 
 <video src="/assets/docs/context/search-correct.mp4" poster="/assets/docs/context/search-correct.jpg" autoplay muted loop playsinline aria-label="Clicking Correct on a Find information result, replacing the text with a corrected sentence and clicking Save correction; the passage shows the new text with Corrected by you and Pinned"></video>
@@ -40,6 +40,8 @@ Organization admins see three buttons on each passage: **Pin**, **Correct** and 
 Memory results are labelled "Memory ·" followed by the kind. You can exclude them, but not pin or correct them.
 
 > **Note:** Pinning, correcting and excluding are for organization admins. Everyone else can search and read.
+
+> **Note:** Exclude and Correct can't be undone from the app yet. Check the passage before you change it.
 
 ## FAQ
 

@@ -25,7 +25,7 @@ The header shows the product name and "Product context · " followed by your org
 1. Open the **Sources** tab and click **Add source**. Add the product's website, docs, a GitHub repository or a file. See [Knowledge sources](/docs/context/knowledge-sources).
 2. When the sources are ready, go back to **Overview** and click **Read the full understanding** (or **Open understanding**).
 3. In the dialog, open **Review and edit** and click **Generate from evidence**. Clara writes the understanding from the product's sources.
-4. Read it. The dialog lists **Capabilities**, **Who it helps**, **What we should not claim**, **Limitations**, **What sets it apart** and **Competitors**. Fix anything wrong in the form, then click **Save draft**.
+4. Read it. The dialog shows **Capabilities**, **Who it helps**, **What we should not claim**, **Limitations**, **What sets it apart** and **Competitors**. To fix something, edit the form under **Review and edit**: **Category**, **Evidence-backed summary**, **Capabilities**, **Limitations**, **Supported use cases**, **Unsupported use cases**, **Differentiators** and **Competitors**, one statement per line. Then click **Save draft**.
 5. When it is accurate, click **Verify profile**. The badge changes to **Reviewed context**.
 
 <video src="/assets/docs/context/product-understanding.mp4" poster="/assets/docs/context/product-understanding.jpg" autoplay muted loop playsinline aria-label="On the Acme Analytics Overview, opening the understanding, clicking Generate from evidence, reviewing the filled-in form, clicking Save draft and then Verify profile; the product shows Reviewed context"></video>

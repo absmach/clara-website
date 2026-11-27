@@ -35,7 +35,7 @@ Below them, each source that needs attention explains the problem in words. When
 The **Actions** column shows what applies to the source:
 
 - **Cancel** stops a sync that is running.
-- **Resync** reads the source again. You see "Resync queued."
+- **Resync** reads the source again. The state changes to **Working**, and when it finishes the **Synced** time updates. A source that keeps failing stays in **Needs attention** with its reason.
 - **Embed** prepares passages that are missing their embeddings, so meaning search works. You see "Embedding queued."
 - **Rebuild graph** builds the knowledge graph again after a failure. You see "Knowledge graph build queued."
 

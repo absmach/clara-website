@@ -5,7 +5,7 @@ order: 7
 ---
 # Skills
 
-A skill is a set of reusable instructions, such as "write release notes the way we do". Plays, chats and workflow steps can run a skill. Saving a skill makes it live at once. Your brand guidelines are always included on top.
+A skill is a set of reusable instructions, such as "write release notes the way we do". Plays, chats and workflow steps can run a skill. Saving a skill makes it live at once. Your brand guidelines are always included on top. Agents use skills too: an agent's jobs can run the skills you save here.
 
 **Where to find it:** sidebar → **Brand & knowledge** → **Skills**
 
@@ -21,15 +21,12 @@ Status can be **Live**, **Archived**, **Rejected** or **Not live**. The risk bad
 
 **You should see:** "Skill saved and live." The skill now appears on the **Skills** tab.
 
-## Upload or import a skill
+## Import a skill from GitHub
 
-1. Click **New skill**, then **Upload a skill** or **Import from GitHub**.
-2. To upload, drop a .zip or .md file (up to 50 MB) in the box, or click to browse. The package must include SKILL.md. Click **Upload**.
-3. To import, paste a public GitHub directory URL, or a SKILL.md file URL, for example https://github.com/owner/repo/tree/main/path/to/skill.
-4. In **Review before saving**, check **Name**, **Description** and **Instructions**. Optionally set **Drafts this content type (optional)**, **Tags / capabilities (optional)** and **Allowed tools / connectors**.
-5. Click **Save skill**, or **Discard draft**.
-
-<!-- CLIP: context/skills-upload — New skill > Upload a skill: drop a .zip, Upload, Review before saving, Save skill -->
+1. Click **New skill**, then **Import from GitHub**.
+2. Paste a public GitHub directory URL, or a SKILL.md file URL, for example https://github.com/owner/repo/tree/main/path/to/skill.
+3. In **Review before saving**, check **Name**, **Description** and **Instructions**. Optionally set **Drafts this content type (optional)**, **Tags / capabilities (optional)** and **Allowed tools / connectors**.
+4. Click **Save skill**, or **Discard draft**.
 
 Nothing is saved until you click **Save skill**.
 
@@ -43,7 +40,7 @@ Nothing is saved until you click **Save skill**.
 Open a skill with **View instructions**. The page shows its status, version, source and how often it ran, with **Skill details -- full instructions**, tags and allowed tools.
 
 - **Export .zip** downloads the skill as a package. Anyone who can open the skill can do this.
-- People who manage the skill can also **Edit / create version**, **Upload new version**, **Import new version from GitHub**, **Archive** and **Delete version** or **Delete skill**. An archived version can be restored with **Restore**.
+- People who manage the skill can also **Edit / create version**, **Import new version from GitHub**, **Archive** and **Delete version** or **Delete skill**. An archived version can be restored with **Restore**.
 - **Version history** lists every version. **Execution audit** lists when workflows ran the skill (Version, Status, Content piece, Actor, When). Until then it says "Not run by a workflow yet."
 
 ## Share a skill
