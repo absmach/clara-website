@@ -1,53 +1,71 @@
 ---
 title: Welcome to Clara
-description: What Clara is, what it can make, and the three ways to work with it.
+description: Clara is an AI marketing team that drafts on-brand content from your own knowledge, in chat and through plays, while you stay in control of what gets published.
 order: 1
 ---
 # Welcome to Clara
 
-Clara is an AI marketing team you work with in chat and through ready-made jobs called plays. It writes drafts that are grounded in your brand and your knowledge. Nothing is published without your approval.
-
 <video src="/assets/docs/start-here/welcome-home-tour.mp4" poster="/assets/docs/start-here/welcome-home-tour.jpg" autoplay muted loop playsinline aria-label="A tour of Clara's Home page: the cursor moves over the message box, the three quick cards and the sidebar"></video>
 
-## What you see on Home
+Clara helps a marketing team get from an idea to a first draft. You describe what you need, and Clara writes it: a LinkedIn post, a blog article, release notes, a campaign. You review it, ask for changes and decide what happens next.
 
-When you sign in, Clara opens on Home. It greets you by first name ("Hi John, how can I help you today?") and shows the line "A fresh thought. A first draft. Your next big thing."
+Clara doesn't write from a blank page. It works from what you give it: your brand guidelines, the websites and files you add as knowledge sources, and the products you sell. That is why a draft sounds like your company and talks about your real features.
 
-Under the message box, a standing note reminds you: "Clara is AI and can make mistakes. Review before publishing." Read every draft before you use it.
+You can work with Clara in two ways. Talk to it in **New chat**, or pick a ready-made job from **Plays**. Either way, a person approves a draft before it goes anywhere. You decide how much Clara may do on its own.
 
-## What Clara can make
+## Who Clara is for
 
-Clara writes in the formats listed on the **Plays** page:
+- **Small marketing teams** that need more drafts than they have time to write.
+- **Founders and product teams** who do their own marketing and want a first draft to edit, not a blank page.
+- **Agencies and teams with several products**, where each product has its own voice and sources.
+
+## What you can make
+
+Clara writes in the formats on the **Plays** page:
 
 - Blog posts, release notes and newsletters
-- Posts for LinkedIn, X, Facebook Page, Threads, Bluesky, Mastodon and Instagram
-- X threads and carousels
-- Videos
+- Posts for LinkedIn, X, Facebook Page, Threads, Bluesky, Mastodon and Instagram, and X threads
+- Carousels
+- Videos, including short-form video posts
 - Campaigns: one brief turned into a set of related drafts
 - Competitor and positioning research
 
-## Three ways to work
+For example, you can ask for "a LinkedIn post announcing the new dashboard in Acme Analytics" and get a draft in your brand's voice. See [From a brief to a first draft](/docs/create/plays).
 
-1. **Chat.** Describe what you want in **New chat** and Clara replies, asks questions and makes drafts. See [Home and New chat](/docs/chat/new-chat).
-2. **Plays.** Open **Plays**, pick a format, give Clara a brief and review the draft. See [From a brief to a first draft](/docs/create/plays).
-3. **Automation.** Give Clara a role in **Agents**, with jobs that run on their own. These jobs are built from steps you can see in **Workflows**. See [Build your marketing team](/docs/automate/agents).
+## How Clara works with your team
 
-## Where your work and context live
+- **Organizations.** Everything in Clara belongs to an organization, such as Acme Corp. You can belong to more than one and switch between them from the menu at the top of the sidebar.
+- **Members and roles.** People join an organization by invitation. What each person can do depends on their role.
+- **Products.** Each product can have its own voice, sources and people.
+- **Sharing.** Your chats are private until you share them. You can give a teammate access to a chat as a **Viewer** or a **Manager**, and anyone with access to a product can open the chats tagged with it. See [Chat history and sharing](/docs/chat/chats).
 
-- Everything Clara drafts lands in **My work**, with a status on each piece.
-- What Clara knows about your company lives in **Brand & knowledge** and **Products**. See [Give Clara your context](/docs/context/brand).
+Your drafts land in **My work**, where you can see the status of each one.
 
-> **Note:** Human approval is the default for anything that goes outside Clara. You can loosen this in **Settings** → **Autonomy**. See [Choose your level of autonomy](/docs/automate/autonomy).
+## You stay in control
+
+Clara drafts, and people approve. Nothing is published unless someone says so.
+
+- You review every draft, and you can ask Clara to change it.
+- **Approve** records that your team approved a draft.
+- In **Settings** → **Autonomy** you choose how much Clara does without asking: **Assistant** (Clara suggests, and nothing runs on its own), **Co-pilot** (Clara does internal work on its own and asks before anything external) or **Autopilot** (Clara does everything, including publishing).
+
+See [Choose your level of autonomy](/docs/automate/autonomy) and [Review and share your work](/docs/publish/review-and-approvals).
+
+## Get help
+
+Need a hand? [Contact us](/contact/) and we will help you get set up.
 
 ## FAQ
 
-**Does Clara publish by itself?** Not by default. Clara drafts, and a person approves before anything is scheduled or published. Autonomy settings can change this, and you choose them.
+**Does Clara publish by itself?** Not by default. Clara drafts, and a person approves before anything is scheduled or published. Your autonomy setting can change this, and you choose it.
 
 **Where does Clara get its information about my company?** From your **Brand guidelines**, your **Sources** (websites and files you add) and your **Products**. Clara can also search the web when the **Web** switch is on in the message box.
 
-**Who can see what I make?** Drafts made in a private chat are visible only to you until you share the chat or tag it with a product. See [Chat history and sharing](/docs/chat/chats).
+**Who can see what I make?** Only you, until you share the chat or tag it with a product. A private chat's drafts stay private too.
+
+**Can Clara make mistakes?** Yes. Home reminds you: "Clara is AI and can make mistakes. Review before publishing." Read every draft before you use it.
 
 ## Next steps
-- [Core concepts](/docs/start-here/concepts)
 - [Quickstart](/docs/start-here/quickstart)
+- [Core concepts](/docs/start-here/concepts)
 - [Home and New chat](/docs/chat/new-chat)
