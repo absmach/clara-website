@@ -119,6 +119,6 @@ If someone invited you to a workspace, the first chat starts with the invitation
 
 ## Next steps
 - [Home and New chat](/docs/chat/new-chat)
-- [Give Clara your context](/docs/context/brand)
+- [Brand guidelines](/docs/context/brand)
 - [From a brief to a first draft](/docs/create/plays)
 - [Review and share your work](/docs/publish/review-and-approvals)

@@ -32,5 +32,5 @@ For a launch or release, use a campaign play to organize related pieces. Keep th
 Carousels turn an idea into a sequence of slides. Video studio works from a brief and supplied footage, images or audio, with preview and revision before export. See [Explore carousels and video](/#visuals).
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
+- [Brand guidelines](/docs/context/brand)
 - [Review and share your work](/docs/publish/review-and-approvals)

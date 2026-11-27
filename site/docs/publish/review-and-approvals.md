@@ -38,5 +38,5 @@ Use the publishing integrations available to your workspace, or export a support
 When feedback shows a recurring preference, add it to your brand guidelines or reusable instructions. When it shows a factual gap, update the product sources. The next brief then starts with clearer context.
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
+- [Brand guidelines](/docs/context/brand)
 - [Choose your level of autonomy](/docs/automate/autonomy)
