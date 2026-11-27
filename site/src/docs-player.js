@@ -47,7 +47,7 @@ const btn = (name, label) => `<button type="button" class="docs-player-btn" aria
 // Without JavaScript the bar is hidden (see the <noscript> style) and the native controls stay.
 // `label` is the text of the clip's aria-label attribute, as written in the page.
 export function playerHtml(videoTag, label) {
-  return `<div class="docs-player" role="group" aria-label="Video player: ${label || 'clip'}">${videoTag}<div class="docs-player-bar">${btn('play', 'Play')}${btn('back', `Back ${STEP} seconds`)}${btn('forward', `Forward ${STEP} seconds`)}<div class="docs-player-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00 of 0:00"><div class="docs-player-rail"><div class="docs-player-fill"></div></div></div><span class="docs-player-time">0:00 / 0:00</span>${btn('expand', 'Full screen')}</div></div>`;
+  return `<div class="docs-player" role="group" aria-label="Video player: ${label || 'clip'}">${videoTag}<div class="docs-player-bar">${btn('play', 'Play')}${btn('back', `Back ${STEP} seconds`)}${btn('forward', `Forward ${STEP} seconds`)}<div class="docs-player-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00 of 0:00"><div class="docs-player-rail"><div class="docs-player-fill"></div></div></div><span class="docs-player-time"><span class="docs-player-cur">0:00</span><span class="docs-player-total"> / 0:00</span></span>${btn('expand', 'Full screen')}</div></div>`;
 }
 
 // Wires up one player written by playerHtml(). `video` is the <video> inside it.
@@ -87,7 +87,8 @@ export function mountPlayer(video) {
   const track = wrap.querySelector('.docs-player-track');
   track.tabIndex = 0;
   const fill = wrap.querySelector('.docs-player-fill');
-  const time = wrap.querySelector('.docs-player-time');
+  const cur = wrap.querySelector('.docs-player-cur');
+  const total = wrap.querySelector('.docs-player-total');
 
   const duration = () => (Number.isFinite(video.duration) ? video.duration : 0);
   // A clip the reader paused stays paused when it scrolls back into view (see docs.js).
@@ -103,7 +104,8 @@ export function mountPlayer(video) {
     track.setAttribute('aria-valuenow', String(Math.floor(c)));
     track.setAttribute('aria-valuetext', valueText(c, d));
     fill.style.width = d ? `${(c / d) * 100}%` : '0%';
-    time.textContent = `${formatTime(c)} / ${formatTime(d)}`;
+    cur.textContent = formatTime(c);
+    total.textContent = ` / ${formatTime(d)}`;
   };
   const state = () => {
     const playing = !video.paused;

@@ -54,7 +54,7 @@ test('a failed player import hides the built-in bar and keeps native controls', 
 
 test('the player markup ends with a full-screen button that starts disabled', () => {
   const html = playerHtml('<video src="/a.mp4"></video>', 'A clip');
-  assert.match(html, /<span class="docs-player-time">0:00 \/ 0:00<\/span><button type="button" class="docs-player-btn" aria-label="Full screen" disabled>/);
+  assert.match(html, /<span class="docs-player-time"><span class="docs-player-cur">0:00<\/span><span class="docs-player-total"> \/ 0:00<\/span><\/span><button type="button" class="docs-player-btn" aria-label="Full screen" disabled>/);
   assert.equal((html.match(/class="docs-player-btn"/g) || []).length, 4);
 });
 
