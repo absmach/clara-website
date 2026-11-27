@@ -23,8 +23,8 @@ For setup and an overview, see the [repository README](../README.md).
 From either the repository root or this directory:
 
 ```sh
-npm run build
-npm run check
+pnpm run build
+pnpm run check
 ```
 
 The preview serves `dist/` at [localhost:4173](http://localhost:4173). Rebuild and refresh after edits. `dist/` is generated and not committed; Cloudflare builds it on every deploy.
@@ -52,7 +52,7 @@ The earlier logo studies remain at `/logo-directions/` and `/logo-directions/blo
 Every page sets `og:image` and a large Twitter/X card to `src/assets/og-image.png` (1200×630). Slack, LinkedIn, and X use it for link previews. The card combines the homepage headline with the hero illustration. Its layout is in `scripts/og-card.html`. After changing the hero or the card, regenerate it with headless Chrome (set `CHROME` if `google-chrome` isn't on your PATH):
 
 ```sh
-npm run build && npm --prefix site run og-image && npm run build
+pnpm run build && pnpm --dir site run og-image && pnpm run build
 ```
 
 Pages also set a canonical URL on `https://claragtm.com`. Link-preview services cache images, so a changed card can take a while to appear where the link was shared before.

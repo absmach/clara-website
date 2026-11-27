@@ -1,5 +1,5 @@
 // Renders the social share card (src/assets/og-image.png, 1200x630) with headless Chrome.
-// Run `npm run build` first; then `npm run og-image` and rebuild to copy it into dist/.
+// Run `pnpm run build` first; then `pnpm run og-image` and rebuild to copy it into dist/.
 // Set CHROME to a Chrome/Chromium binary if `google-chrome` is not on PATH.
 import http from 'node:http';
 import { execFile } from 'node:child_process';

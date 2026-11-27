@@ -2,13 +2,13 @@
 
 This file is for people who write docs. It isn't rendered as a page on the site.
 
-The guide is plain Markdown. Assistants, tools and people read the same files. `npm run build` turns them into HTML pages, a raw `.md` copy of each page, `/llms.txt` and `/llms-full.txt`.
+The guide is plain Markdown. Assistants, tools and people read the same files. `pnpm run build` turns them into HTML pages, a raw `.md` copy of each page, `/llms.txt` and `/llms-full.txt`.
 
 ## Add a page
 
 1. Pick a section folder from `site/docs/sections.json`. Create `site/docs/<section>/<slug>.md`. The slug becomes the address: `/docs/<section>/<slug>/`.
 2. Copy the page template below.
-3. Run `npm run build && npm run check`, then open the page with `npm run dev`.
+3. Run `pnpm run build && pnpm run check`, then open the page with `pnpm run dev`.
 4. Commit the regenerated `site/dist/` with your page.
 
 To add a section, add it to `sections.json` and create its folder. A section with no pages doesn't appear on the site. To move or rename a page, add its old address to `site/docs/redirects.json`.
@@ -42,7 +42,7 @@ order: 2
 - [Related page](/docs/create/campaigns)
 ````
 
-Front matter has `title`, `description` and `order` (a number), plus the optional `tag`. Each page has one `#` heading and ends with a `## Next steps` list that links to at least one other docs page. Link to other pages as `/docs/<section>/<slug>`, without a trailing slash. `npm run check` fails when a link doesn't resolve.
+Front matter has `title`, `description` and `order` (a number), plus the optional `tag`. Each page has one `#` heading and ends with a `## Next steps` list that links to at least one other docs page. Link to other pages as `/docs/<section>/<slug>`, without a trailing slash. `pnpm run check` fails when a link doesn't resolve.
 
 ## Writing rules
 
@@ -58,7 +58,7 @@ Front matter has `title`, `description` and `order` (a number), plus the optiona
 
 Embed a clip with a plain `<video>` tag, as in the template. Keep the `aria-label`: it is the clip's text description. Clips live in `site/src/assets/docs/<section>/<name>.mp4` (or `.webm`) next to a `<name>.jpg` poster frame. Reference them as `/assets/docs/<section>/<name>.mp4`.
 
-On the site the clips start playing on their own, muted and looping. Visitors who prefer reduced motion, and visitors without JavaScript, see the poster and play controls instead. `npm run check` fails when a clip or poster file is missing, or when the poster or `aria-label` is missing.
+On the site the clips start playing on their own, muted and looping. Visitors who prefer reduced motion, and visitors without JavaScript, see the poster and play controls instead. `pnpm run check` fails when a clip or poster file is missing, or when the poster or `aria-label` is missing.
 
 ## Recording guide
 

@@ -1,4 +1,4 @@
-# Local values for `npm run dev:worker`. Copy to .dev.vars (gitignored).
+# Local values for `pnpm run dev:worker`. Copy to .dev.vars (gitignored).
 # Cloudflare's Turnstile test secret always passes; its results report the
 # hostname example.com. site/src/site.js uses the matching test site key on
 # localhost.

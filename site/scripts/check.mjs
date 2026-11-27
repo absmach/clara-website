@@ -61,8 +61,8 @@ const problems = [];
 const clipExists = url => files.includes(path.resolve(root, '.' + url));
 for (const page of docs.pages) {
   problems.push(...referenceProblems(page, keys, redirects, clipExists));
-  if (!files.includes(path.join(root, page.route, 'index.html'))) problems.push(`${page.route}: no HTML page in dist (run npm run build)`);
-  if (!files.includes(path.join(root, `${page.route}.md`))) problems.push(`${page.route}.md: not in dist (run npm run build)`);
+  if (!files.includes(path.join(root, page.route, 'index.html'))) problems.push(`${page.route}: no HTML page in dist (run pnpm run build)`);
+  if (!files.includes(path.join(root, `${page.route}.md`))) problems.push(`${page.route}.md: not in dist (run pnpm run build)`);
   const html = pages.get(path.join(root, page.route, 'index.html'))?.html ?? '';
   if (!html.includes('rel="alternate" type="text/markdown"')) problems.push(`${page.route}: missing the Markdown alternate link`);
 }
