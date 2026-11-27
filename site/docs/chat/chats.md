@@ -53,7 +53,7 @@ To bring back an archived chat:
 
 <video src="/assets/docs/chat/chats-share.mp4" poster="/assets/docs/chat/chats-share.jpg" autoplay muted loop playsinline aria-label="Clicking Share conversation, Add a person, choosing Jane Doe as a Viewer and clicking Grant access so she appears in the list"></video>
 
-**You should see:** "Access granted." and Jane Doe in the list with the role **Viewer**. The visibility link now reads "Shared with 1 person".
+**You should see:** Jane Doe in the list as "Can read" with the role **Viewer** and a **Remove** button. The visibility link now reads "Shared with 1 person".
 
 To change a person's role, click **Remove** next to their name, then add them again with the other role. To stop sharing with someone, click **Remove**. Click **Done** to close the dialog.
 

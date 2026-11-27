@@ -46,7 +46,7 @@ On Home, a panel under the message box shows **Brand guidelines** with the text 
 3. To add a web page, click **+**, then **Add a link**, paste the address into the field that says "https://..." and click **Add**. Click **Cancel** to close the field.
 4. Type your message and send it. Wait for uploads to finish first.
 
-<video src="/assets/docs/chat/new-chat-attach-file.mp4" poster="/assets/docs/chat/new-chat-attach-file.jpg" autoplay muted loop playsinline aria-label="Opening the plus menu, choosing Upload from computer, picking a PDF so a chip appears above the message box, then sending the message"></video>
+<!-- TODO clip: new-chat-attach-file after the attachment fix -->
 
 > **Note:** You can attach up to 6 files at a time, and up to 5 links per message. Documents can be up to 10 MB. Images, audio and video have their own limits, and the message box tells you the limits when a file is too large. If a file type isn't supported, you see "That file type isn't supported. Try a document, PNG, JPG, WebP, GIF, audio or video file."
 
@@ -56,14 +56,14 @@ You don't need a setup dialog. Describe what you want, for example "Write a Link
 
 When Clara has what it needs, one of two things happens:
 
-- It starts straight away and says "Starting" followed by the play name.
+- It starts straight away. Clara says "Started" followed by the play name and "I'll show the draft here when it is ready."
 - It waits for you. You see "Waiting for your go-ahead:" followed by the play name, with **Go ahead** and **Cancel**.
 
 To continue, click **Go ahead**. Typing a short "yes" does the same. Click **Cancel** to drop the request.
 
-<video src="/assets/docs/chat/new-chat-go-ahead.mp4" poster="/assets/docs/chat/new-chat-go-ahead.jpg" autoplay muted loop playsinline aria-label="Clara shows Waiting for your go-ahead, the cursor clicks Go ahead, and the draft opens in the Draft preview panel"></video>
+<!-- TODO clip: new-chat-go-ahead (Clara only proposes a go-ahead for work she suggests herself) -->
 
-The draft appears in the **Draft preview** panel beside the conversation. On a narrow screen, switch between **Conversation** and **Draft preview** at the top.
+The **Draft preview** panel opens beside the conversation. It shows "Preparing your draft…" and then "Draft ready", with **Open editor**, **Download** and a copy button. On a narrow screen, switch between **Conversation** and **Draft preview** at the top.
 
 > **Note:** Clara waits for your go-ahead when you didn't ask for the work, or when your autonomy setting asks for approval first. See [Choose your level of autonomy](/docs/automate/autonomy). A request that waits is dropped after half an hour.
 

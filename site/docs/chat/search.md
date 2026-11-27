@@ -14,7 +14,7 @@ The search box at the top of every page finds pages, plays, settings and your ow
 1. Click the search box, or press **Ctrl K** (Cmd K on a Mac) or **/**.
 2. Before you type, you see **Recent** (the results you opened last) and **Suggested** pages.
 3. Type a few letters. For example, "Acme Analytics".
-4. Press the down arrow to move to a result, then press Enter to open it.
+4. The first result is already highlighted. Press Enter to open it, or click the result you want. Use the arrow keys to highlight a different one.
 5. Press **Esc** to close search without opening anything.
 
 <video src="/assets/docs/chat/search-open-product.mp4" poster="/assets/docs/chat/search-open-product.jpg" autoplay muted loop playsinline aria-label="Pressing Ctrl K, typing the product name Acme Analytics and pressing Enter to open the product page"></video>
@@ -37,8 +37,7 @@ Results are grouped in this order: **Pages**, **Plays**, **Settings**, **Product
 The last row is always **Ask Clara**. After you type, it reads **Ask Clara —** followed by your text, with "Start a chat with this" on the right.
 
 1. Type a question, for example "What should I post about our new dashboard?".
-2. Press the down arrow until the **Ask Clara** row is selected, or click it.
-3. Press Enter.
+2. Pick the **Ask Clara** row by clicking it. If it is already highlighted, press Enter. Use the arrow keys to move to it otherwise.
 
 <video src="/assets/docs/chat/search-ask-clara.mp4" poster="/assets/docs/chat/search-ask-clara.jpg" autoplay muted loop playsinline aria-label="Typing a question into search, selecting the Ask Clara row and a new chat opens with the question already sent"></video>
 

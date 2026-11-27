@@ -12,13 +12,12 @@ This page takes you from a new account to your first approved draft. It takes ab
 ## 1. Sign up
 
 1. Open the sign-up page.
-2. Fill in **Full Name**, **Username**, **Email**, **Password** and **Confirm Password**. The username is 3 to 32 characters: lowercase letters, numbers, dashes and underscores. Capital letters are saved as lowercase. The form shows the minimum password length under the password field.
+2. Fill in **Full Name**, **Username**, **Email**, **Password** and **Confirm Password**. The username is 3 to 32 characters: lowercase letters, numbers, dashes and underscores. Capital letters are saved as lowercase. The password needs at least 10 characters.
 3. Click **Sign up**.
 
 <video src="/assets/docs/start-here/quickstart-sign-up.mp4" poster="/assets/docs/start-here/quickstart-sign-up.jpg" autoplay muted loop playsinline aria-label="Filling in the sign-up form as John Doe and clicking Sign up, then the first chat with Clara appears"></video>
 
-<!-- VERIFY: the sign-up flash "Welcome! Check your email to verify your account." is set before two redirects (/dashboard, then /onboarding). Confirm the banner is still visible on the first-run chat. -->
-**You should see:** a banner that says "Welcome! Check your email to verify your account.", and then a chat with Clara. You can start using Clara before you verify your email.
+**You should see:** the first-run chat with Clara, with the notice "Welcome! Check your email to verify your account." You can start using Clara before you verify your email.
 
 Already have an account? Open the log-in page, enter your email or username and password, and click **Log in**. When it is shown, **Sign in with Google** also works.
 
@@ -70,7 +69,7 @@ After the last question, Clara recaps your answers and shows a card called **Wha
 
 <video src="/assets/docs/start-here/quickstart-first-draft.mp4" poster="/assets/docs/start-here/quickstart-first-draft.jpg" autoplay muted loop playsinline aria-label="Typing a LinkedIn post request on Home and sending it, then the finished draft appears in the preview panel beside the chat"></video>
 
-**You should see:** the chat opens, Clara works on your request, and the draft appears in the **Draft preview** panel beside the conversation.
+**You should see:** the chat opens and Clara replies "Started **LinkedIn post**. I'll show the draft here when it is ready." The **Draft preview** panel beside the conversation shows "Preparing your draft…", then "Draft ready" with **Open editor**, **Download** and a copy button.
 
 You can also start from **Plays**: pick a play, fill in the dialog and click **Run now**. See [From a brief to a first draft](/docs/create/plays).
 
