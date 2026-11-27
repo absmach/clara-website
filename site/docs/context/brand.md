@@ -1,41 +1,68 @@
 ---
-title: Give Clara your context
-description: A recognizable voice starts with clear guidelines and useful sources.
-order: 1
+title: Brand guidelines
+description: Set the voice, audience, writing rules, logo and colours that Clara applies to everything it makes.
+order: 3
 ---
-# Give Clara your context
+# Brand guidelines
 
-Clara writes from what you tell it and what you give it to read. Clear guidelines and current sources make the first draft sound like your team and keep it accurate.
+Brand guidelines tell Clara how your company sounds and looks. Chats, plays, agents and workflows all apply them automatically, so drafts stay on brand without you repeating yourself.
 
-**Where to find it:** sidebar → **Brand & knowledge**
+**Where to find it:** sidebar → **Brand & knowledge** → **Brand guidelines**
 
-## Define your brand voice
+**Brand & knowledge** is one sidebar entry. Its page is titled "A little more you. In everything." and has five tabs: **Brand guidelines**, **Sources**, **Skills**, **Find information** and **Diagnostics**.
 
-1. Open **Brand & knowledge → Brand guidelines**.
-2. Describe how your team writes.
+## Describe how you sound
 
-Be specific enough to guide an edit. "Clear, warm, and practical; explain the benefit before the technical detail" gives more direction than "professional."
+1. Open **Brand guidelines**. The first card is **How you sound**: "Give Clara a voice that feels like yours."
+2. Fill in **Brand voice**, for example "Clear, warm and confident. Expert without the jargon."
+3. Fill in **Who you're speaking to**: who they are, what they care about and what they are trying to do.
+4. Add **Writing guidelines**: preferences, words to avoid, or a short example of writing you love.
+5. Optional: choose a **Video narration voice**. It is the voice agents use when they make a video without asking you. The default is "Let Clara choose".
+6. Optional: describe **How you write email**. Clara uses it for outreach and follow-up drafts. If Gmail is connected, **Learn from my sent mail** fills it in from your recent sent mail. Clara keeps only the summary, never the emails.
+7. Click **Save guidelines**.
 
-## Name the audience
+<video src="/assets/docs/context/brand-edit-save.mp4" poster="/assets/docs/context/brand-edit-save.jpg" autoplay muted loop playsinline aria-label="Typing a brand voice and who you're speaking to on the Brand guidelines page; the status shows Unsaved changes, then after Save guidelines it shows Your shared brand guidelines"></video>
 
-Describe the person you're helping, what they already know, and what they need from the content. A tutorial for a developer and a launch post for a team lead may use the same product facts but need different explanations.
+**You should see:** "Brand guidelines updated." The status under the form changes from "Unsaved changes" to "Your shared brand guidelines".
 
-## Add writing guidelines
+## Add your logo and colours
 
-Capture terminology, preferred spelling, formatting, and things to avoid. Include rules your editor would otherwise repeat: explain acronyms, use concrete examples, and don't make claims that the sources can't support.
+1. In the card **How you look** ("Your visual identity, ready for creative work."), find **Brand logo**.
+2. Click **Upload logo** (or **Replace logo**), or drag a file onto it. Use a PNG, JPEG or SVG up to 1 MB. Clara uses it in generated images and carousels.
+3. Under **Color palette**, click **Choose colors** (or **Edit colors**).
+4. In "Your brand colors", enter hex codes for **Primary**, **Secondary**, **Accent**, **Background** and **Text**, for example #F15B42. Click **Clear** to empty one, then **Done**.
+5. Click **Save guidelines**. Colour changes apply after you save.
 
-## Bring in product sources
+## Refine with Clara
 
-1. Open **Sources** to manage the material behind your work.
-2. Add documentation, repositories, websites or files. Available connections depend on your workspace setup.
-3. Check that the source has been processed before you rely on it in a brief.
+1. Click **Refine with Clara**. A panel opens beside the form.
+2. Describe your brand, or ask for a change, for example "Help me define our brand voice". Clara can see the current form.
+3. Clara answers with **Suggested changes**. Click **Apply to form** to put them in the form, or **Dismiss**.
+4. Click **Save guidelines** when you are happy.
 
-Keep sources focused and current. If a feature or limit has changed, update the underlying material instead of asking every new draft to work around outdated information.
+<video src="/assets/docs/context/brand-refine.mp4" poster="/assets/docs/context/brand-refine.jpg" autoplay muted loop playsinline aria-label="Clicking Refine with Clara, asking it to make the voice a bit more playful, reading the Suggested changes, clicking Apply to form and then Save guidelines"></video>
 
-## Reuse the way your team works
+> **Note:** Nothing is saved until you click **Save guidelines**. Suggested changes only change the form.
 
-**Skills** capture repeatable instructions and methods. Use them for an approach you want to apply again, such as a tutorial structure or a release-writing checklist. Keep product facts in sources and editorial methods in your instructions.
+## Brand guidelines and products
+
+Every product uses these guidelines unless it sets its own. To give one product a different voice, open the product and choose **Customize**. See [Product page and product access](/docs/context/product-page). Fonts are only set per product: the organization guidelines have a logo and colours but no font fields.
+
+In the message box on Home, the **Brand guidelines** panel reads "Organization default · Applied automatically", and links to **View guidelines**.
+
+> **Note:** Only organization admins can edit brand guidelines. Other people can read them, and the form is disabled for them.
+
+## FAQ
+
+**Why can't I edit the guidelines?** Editing is for organization admins. Ask an admin to make the change.
+
+**What file types work for the logo?** PNG, JPEG or SVG, up to 1 MB.
+
+**Does this change drafts I already made?** No. New drafts use the saved guidelines. Existing drafts stay as they are.
+
+**How do I give one product a different voice?** Open the product and choose **Customize for** the product. See [Product page and product access](/docs/context/product-page).
 
 ## Next steps
-- [From a brief to a first draft](/docs/create/plays)
-- [Your first steps with Clara](/docs/start-here/quickstart)
+- [Knowledge sources](/docs/context/knowledge-sources)
+- [Products](/docs/context/products)
+- [Skills](/docs/context/skills)

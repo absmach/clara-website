@@ -97,4 +97,4 @@ At the top of a chat you see the title, **Copy conversation** and **Share conver
 - [Chat history and sharing](/docs/chat/chats)
 - [Search](/docs/chat/search)
 - [From a brief to a first draft](/docs/create/plays)
-- [Give Clara your context](/docs/context/brand)
+- [Brand guidelines](/docs/context/brand)

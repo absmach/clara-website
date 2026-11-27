@@ -12,8 +12,8 @@ These are the building blocks you meet in Clara. Each one has the same name in t
 ## The concepts
 
 - **Organization** (workspace). <!-- TODO link: /docs/account/organizations --> The account everything belongs to. Switch between organizations, or add one with **Create organization**, from the organization menu at the top of the sidebar. Members, connections and autonomy are set in **Settings**. If you are not an admin, **Settings** opens **Connections**.
-- **Products.** <!-- TODO link: /docs/context/products --> What you sell. Each product can have its own voice, sources and people. Sidebar → **Products**.
-- [**Brand & knowledge**](/docs/context/brand). Where Clara learns about you: **Brand guidelines** (voice, audience, writing rules, logo, colours), **Sources** (what Clara reads) and **Skills** (reusable instructions). Sidebar → **Brand & knowledge**. See [Give Clara your context](/docs/context/brand).
+- [**Products**](/docs/context/products). What you sell. Each product can have its own voice, sources and people. Sidebar → **Products**.
+- [**Brand & knowledge**](/docs/context/brand). Where Clara learns about you: **Brand guidelines** (voice, audience, writing rules, logo, colours), **Sources** (what Clara reads) and **Skills** (reusable instructions). Sidebar → **Brand & knowledge**. See [Brand guidelines](/docs/context/brand).
 - [**Plays**](/docs/create/plays). Ready-made jobs, such as writing a post, planning a launch or finding a new angle. Sidebar → **Plays**. See [From a brief to a first draft](/docs/create/plays).
 - **My work.** <!-- TODO link: /docs/create/my-work --> Everything Clara has drafted, with a status on each piece. Sidebar → **My work**.
 - **Campaigns.** <!-- TODO link: /docs/create/campaigns --> One brief turned into a set of related drafts. Sidebar → **Campaigns**.

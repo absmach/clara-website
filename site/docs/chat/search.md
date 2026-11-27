@@ -45,7 +45,7 @@ The last row is always **Ask Clara**. After you type, it reads **Ask Clara —**
 
 **You should see:** a new chat that has your text already sent.
 
-> **Note:** Search finds things in Clara. It doesn't search the text of your knowledge sources. To search those, use **Find information** in **Brand & knowledge**. See [Give Clara your context](/docs/context/brand).
+> **Note:** Search finds things in Clara. It doesn't search the text of your knowledge sources. To search those, use **Find information** in **Brand & knowledge**. See [Find information](/docs/context/knowledge-search).
 
 ## FAQ
 
