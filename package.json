@@ -4,12 +4,13 @@
   "scripts": {
     "dev": "npm --prefix site run dev",
     "build": "npm --prefix site run build",
-    "check": "npm --prefix site run check && node --test \"worker/*.test.js\"",
+    "check": "npm --prefix site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
     "dev:worker": "npm run build && cf dev",
     "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2",
+    "marked": "^18.3.0",
     "wrangler": "4.168.0"
   },
   "type": "module",

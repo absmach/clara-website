@@ -2,6 +2,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { loadDocs, referenceProblems, pageKeys, redirectKeys, retiredName, REDIRECT_TARGET } from './docs.mjs';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 async function walk(dir) {
@@ -21,7 +22,7 @@ for (const file of files.filter(file => file.endsWith('.html'))) {
   assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One h1 required: ${file}`);
   assert.match(html, /<title>[^<]+<\/title>/, `Missing title: ${file}`);
   assert.match(html, /<meta name="description" content="[^"]+"/, `Missing description: ${file}`);
-  assert.doesNotMatch(html, /\bMotif\b/i, `Retired brand: ${file}`);
+  assert.doesNotMatch(html, retiredName, `Retired brand: ${file}`);
   for (const image of html.matchAll(/<img\b[^>]*>/g)) {
     assert.match(image[0], /\balt="[^"]*"/, `Missing image alt: ${file}`);
     assert.match(image[0], /\bwidth="\d+"/, `Missing image width: ${file}`);
@@ -35,7 +36,9 @@ for (const [file, { html, ids }] of pages) {
     if (/^(https?:|mailto:)/.test(href)) continue;
     const [pathname, fragment] = href.split('#');
     let target = pathname ? path.resolve(root, '.' + pathname) : file;
-    if ((await stat(target)).isDirectory()) target = path.join(target, 'index.html');
+    const info = await stat(target).catch(() => null);
+    assert.ok(info, `Missing local resource ${href} in ${file}`);
+    if (info.isDirectory()) target = path.join(target, 'index.html');
     assert.ok(files.includes(target), `Missing local resource ${href} in ${file}`);
     if (fragment) assert.ok(pages.get(target)?.ids.includes(fragment), `Missing fragment ${href} in ${file}`);
   }
@@ -49,4 +52,31 @@ for (const file of files.filter(file => file.endsWith('.css'))) {
     assert.ok(files.includes(path.resolve(root, '.' + match[1])), `Missing CSS asset: ${match[1]}`);
   }
 }
-console.log(`Checked ${pages.size} pages: local links, fragments, assets, IDs, metadata, accessible references, and Clara branding.`);
+
+// User guide: front matter, template, links, clips, raw Markdown and llms files.
+const docs = await loadDocs().catch(error => assert.fail(error.message));
+const keys = pageKeys(docs.pages);
+const redirects = redirectKeys(docs.redirects);
+const problems = [];
+const clipExists = url => files.includes(path.resolve(root, '.' + url));
+for (const page of docs.pages) {
+  problems.push(...referenceProblems(page, keys, redirects, clipExists));
+  if (!files.includes(path.join(root, page.route, 'index.html'))) problems.push(`${page.route}: no HTML page in dist (run npm run build)`);
+  if (!files.includes(path.join(root, `${page.route}.md`))) problems.push(`${page.route}.md: not in dist (run npm run build)`);
+  const html = pages.get(path.join(root, page.route, 'index.html'))?.html ?? '';
+  if (!html.includes('rel="alternate" type="text/markdown"')) problems.push(`${page.route}: missing the Markdown alternate link`);
+}
+for (const [from, to] of Object.entries(docs.redirects)) {
+  if (!files.includes(path.join(root, from, 'index.html'))) problems.push(`${from}: redirect page missing from dist`);
+  if (!REDIRECT_TARGET.test(to)) problems.push(`${from}: redirect target ${to} must look like /docs/section/page/`);
+  if (!keys.has(to.replace(/\/+$/, ''))) problems.push(`${from}: redirects to ${to}, which is not a docs page`);
+}
+for (const name of ['llms.txt', 'llms-full.txt']) if (!files.includes(path.join(root, name))) problems.push(`${name} missing from dist`);
+const llms = files.includes(path.join(root, 'llms.txt')) ? await readFile(path.join(root, 'llms.txt'), 'utf8') : '';
+for (const page of docs.pages) if (!llms.includes(`/${page.route}.md`)) problems.push(`llms.txt doesn't list ${page.route}`);
+assert.deepEqual(problems, [], `Docs problems:\n  - ${problems.join('\n  - ')}`);
+const contributing = await readFile(new URL('../docs/CONTRIBUTING.md', import.meta.url), 'utf8');
+assert.doesNotMatch(contributing, retiredName, 'Retired brand: docs/CONTRIBUTING.md');
+assert.ok(!files.some(file => file.endsWith('CONTRIBUTING.md')), 'CONTRIBUTING.md must not be published');
+
+console.log(`Checked ${pages.size} pages: local links, fragments, assets, IDs, metadata, accessible references, and Clara branding. Docs: ${docs.pages.length} pages with front matter, links, clips and llms files.`);

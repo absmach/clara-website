@@ -1,0 +1,13 @@
+[
+  { "id": "start-here", "title": "Start here", "description": "What Clara is, how to sign up and how to make your first draft." },
+  { "id": "chat", "title": "Chat", "description": "Work with Clara in conversation, and find your chats, search and notifications." },
+  { "id": "context", "title": "Context", "description": "Products, brand guidelines, knowledge sources and skills that Clara writes from." },
+  { "id": "create", "title": "Create", "description": "Plays, campaigns and the drafts in My work." },
+  { "id": "video", "title": "Video studio", "description": "Plan, edit and approve videos." },
+  { "id": "grow", "title": "Grow", "description": "Website visibility, competitors and positioning." },
+  { "id": "publish", "title": "Publish and engage", "description": "Review, schedule and publish, and answer comments." },
+  { "id": "automate", "title": "Automate", "description": "Agents, workflows and how much Clara may do on its own." },
+  { "id": "connections", "title": "Connections", "description": "Connect the accounts and tools Clara works with." },
+  { "id": "account", "title": "Account and workspace", "description": "Sign-in, people, organizations and developer access." },
+  { "id": "help", "title": "Help", "description": "Fixes for common problems." }
+]

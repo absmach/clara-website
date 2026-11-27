@@ -1,0 +1,281 @@
+# Clara user guide
+
+Every page of the Clara user guide, in reading order. Each page starts with its address.
+
+---
+
+Source: https://claragtm.com/docs/start-here/quickstart/
+
+# Your first steps with Clara
+
+This page takes you from a new workspace to your first draft. You need access to a Clara workspace. If you're new here, [request early access](https://claragtm.com/early-access/).
+
+**Where to find it:** sidebar → **Products**, **Brand & knowledge**, **Plays**
+
+## Bring one product into focus
+
+1. Open **Products** and choose the product you're working on.
+2. Write a clear description: what it does, who uses it, and the problem it helps them solve.
+
+Keep your first task focused on one product and one audience.
+
+## Give Clara something to work from
+
+1. Open **Brand & knowledge**.
+2. Add your voice, audience and writing guidelines.
+3. Bring in relevant product sources. A current overview and a specific release note make a good start.
+
+See [Give Clara your context](https://claragtm.com/docs/context/brand) for the details.
+
+## Make a first draft
+
+1. Open **Plays** and choose a format, such as a LinkedIn post or blog article.
+2. Give Clara a short brief about what changed and why it matters.
+
+You can also start a conversation through **New chat**. For example:
+
+> Write a LinkedIn post about our new shared project view. Speak to small product teams. Explain how it helps them see the next step, using the attached release notes.
+
+## Meet Agents and Workflows
+
+After your first draft, open **Agents** for recurring marketing roles and **Workflows** for the jobs behind them. Choose how independently they run in **Settings → Autonomy**. See [Build your marketing team](https://claragtm.com/docs/automate/agents).
+
+## Review before you share
+
+Open the resulting work and check its claims against your sources. Refine the wording. A finished generation is a draft to assess. Check the destination and any connected publishing action before you approve it.
+
+## Next steps
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)
+
+---
+
+Source: https://claragtm.com/docs/context/brand/
+
+# Give Clara your context
+
+Clara writes from what you tell it and what you give it to read. Clear guidelines and current sources make the first draft sound like your team and keep it accurate.
+
+**Where to find it:** sidebar → **Brand & knowledge**
+
+## Define your brand voice
+
+1. Open **Brand & knowledge → Brand guidelines**.
+2. Describe how your team writes.
+
+Be specific enough to guide an edit. "Clear, warm, and practical; explain the benefit before the technical detail" gives more direction than "professional."
+
+## Name the audience
+
+Describe the person you're helping, what they already know, and what they need from the content. A tutorial for a developer and a launch post for a team lead may use the same product facts but need different explanations.
+
+## Add writing guidelines
+
+Capture terminology, preferred spelling, formatting, and things to avoid. Include rules your editor would otherwise repeat: explain acronyms, use concrete examples, and don't make claims that the sources can't support.
+
+## Bring in product sources
+
+1. Open **Sources** to manage the material behind your work.
+2. Add documentation, repositories, websites or files. Available connections depend on your workspace setup.
+3. Check that the source has been processed before you rely on it in a brief.
+
+Keep sources focused and current. If a feature or limit has changed, update the underlying material instead of asking every new draft to work around outdated information.
+
+## Reuse the way your team works
+
+**Skills** capture repeatable instructions and methods. Use them for an approach you want to apply again, such as a tutorial structure or a release-writing checklist. Keep product facts in sources and editorial methods in your instructions.
+
+## Next steps
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+- [Your first steps with Clara](https://claragtm.com/docs/start-here/quickstart)
+
+---
+
+Source: https://claragtm.com/docs/create/plays/
+
+# From a brief to a first draft
+
+Plays are ready-made jobs for common formats. Pick one, give Clara a brief and review the draft it returns.
+
+**Where to find it:** sidebar → **Plays**
+
+## Choose a starting point
+
+Open **Plays** to browse the available formats. Clara includes starting points for articles, social posts, threads, release notes and carousels. Choose the format for the reader and the channel, not just the length of the idea.
+
+## Write the brief
+
+Give Clara four things: the topic, the audience, the intended format and the takeaway. Point to the relevant product context and mention any constraints. A useful brief says what the reader should understand or do after reading.
+
+> Create a short article for existing users explaining the new project overview. Use the release notes. Show one everyday example, include the current limitations, and finish with the first step to try it.
+
+## Review the result in context
+
+Read the draft alongside the material it draws on. Check names, feature availability, links and examples. Ask for a specific revision, such as shortening the opening or explaining a technical term, instead of asking for "better" copy.
+
+## Build a connected campaign
+
+For a launch or release, use a campaign play to organize related pieces. Keep the central facts consistent while adapting each piece to its channel. A social post can introduce the change, an article can explain it, and release notes can give users the precise details.
+
+## Explore visual formats
+
+Carousels turn an idea into a sequence of slides. Video studio works from a brief and supplied footage, images or audio, with preview and revision before export. See [Explore carousels and video](https://claragtm.com/#visuals).
+
+## Next steps
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)
+
+---
+
+Source: https://claragtm.com/docs/publish/review-and-approvals/
+
+# Review and share your work
+
+A finished draft is something to check, not something that has already gone out. This page covers what to review and what approval can trigger.
+
+**Where to find it:** sidebar → **My work**
+
+## Decide what needs your review
+
+Assistant and Co-pilot ask before external or irreversible actions. Autopilot can publish automatically when your effective settings permit it. Keep any action, channel or product that needs a person's decision set to **Needs approval**. See [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy).
+
+## Start with the facts
+
+Check every product claim against a current source. Pay particular attention to numbers, dates, supported integrations and promises about what a feature does. Product context helps ground a draft, but an editor still needs to check it.
+
+## Make feedback actionable
+
+Explain the change you want and why. "Replace the opening with a concrete customer problem" gives a clearer revision target than "make it punchier." Review the revised version before you move it forward.
+
+## Check the destination before approving
+
+> **Note:** Approval can do more than change a status. Depending on your workspace and the content type, it may trigger publishing or create a pull request. Confirm the configured destination and action before you approve.
+
+For website articles, a configured GitHub repository and credentials can let Clara create a pull request for review in your existing workflow.
+
+## Share through your workflow
+
+Use the publishing integrations available to your workspace, or export a supported format for your own process. A finished draft doesn't mean an account is connected or that a post has gone live. Check the outcome in the destination service.
+
+## Keep useful context for next time
+
+When feedback shows a recurring preference, add it to your brand guidelines or reusable instructions. When it shows a factual gap, update the product sources. The next brief then starts with clearer context.
+
+## Next steps
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)
+
+---
+
+Source: https://claragtm.com/docs/automate/agents/
+
+# Build your marketing team
+
+An agent is a role you give Clara. It has a goal, standing instructions, shared learning and one or more jobs. Each job is a workflow with its own steps, triggers, versions and activity history. A workflow can also run on its own.
+
+**Where to find it:** sidebar → **Agents** and **Workflows**
+
+## Agents own the role; workflows do the jobs
+
+Use **Agents** to manage your team and **Workflows** to inspect or build the sequences behind the work. A workflow that belongs to an agent shows that relationship.
+
+## Start from the Agent library
+
+1. Open **Agents → Agent library**.
+2. Preview the jobs of Content Writer, Social Manager, Search Visibility or Competitor Analyst.
+3. Choose the jobs you need and tailor the instructions to your product.
+
+For example, Social Manager has jobs to plan the week, fill calendar gaps and repurpose published posts. Search Visibility needs a website, and social publishing needs a connected channel.
+
+You can also build your own agent or use an existing standalone workflow as its first job.
+
+## Build a standalone workflow on the canvas
+
+1. Open **Workflows → New workflow**.
+2. Name the automation, then add blocks to its canvas and connect the steps. Use research, content generation, conditions, loops, reviews and connected actions to model the process.
+3. Select a block to edit its properties. Use **Fit workflow** to see the whole graph.
+4. Save your draft before activation.
+
+Separate branches can run independently. A step that joins them waits for its dependencies. **Build with Clara** lets you describe the workflow and refine it in conversation.
+
+## Choose how each job starts
+
+In a workflow, select its **Trigger** step. Jobs can start when you ask, on a schedule, from a supported Clara event, or through a configured incoming webhook. Scheduled start rules can have their own instructions, timing and timezone.
+
+Events include a published post, a detected competitor update and a gap in the calendar. A publication can start repurposing, and a calendar gap can start a new draft. These are separate runs, each visible in **Activity**.
+
+## Test, then activate
+
+1. Inspect the steps, context, connections and approval settings.
+2. Use **Run once** on a job with a published workflow version to check the result.
+3. Activate the agent.
+
+Activating an agent makes its eligible jobs available to their automatic start rules. A job paused individually stays paused.
+
+> **Note:** A trigger starts the workflow, not the publication. Give generation and review enough time, and plan delivery through the publishing step or Calendar.
+
+## Follow the work and keep learning
+
+Use the agent's **Jobs** tab to manage its workflows and **Activity** to follow outputs and reviews. **Learning** holds editable lessons from available results and preferences from your reviews. These can inform the agent's later generation steps. Performance lessons need enough synced results to be meaningful.
+
+Pause an agent to stop future automatic starts across its jobs, or pause an individual job. Workflows that are already running may continue. Use the autonomy controls to hold automatic publication.
+
+## Choose the autonomy that fits
+
+> **Note:** New agents can start with approval restrictions even when the workspace uses Autopilot. Check the agent's autonomy summary as well as the organization settings before you expect automatic publishing.
+
+## Next steps
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+
+---
+
+Source: https://claragtm.com/docs/automate/autonomy/
+
+# Choose your level of autonomy
+
+Autonomy sets how much Clara may do without asking you first. You choose a preset for the workspace and then keep approval where it matters.
+
+**Where to find it:** **Settings → Autonomy**
+
+## Choose a preset
+
+Open **Settings → Autonomy** to choose a starting point for your workspace.
+
+- **Assistant:** suggests work. Nothing runs on its own.
+- **Co-pilot:** does internal work automatically and asks before external or irreversible actions, such as publishing.
+- **Autopilot:** makes actions automatic, including publishing, subject to your settings, guardrails, connected services and the creator's permissions.
+
+Autopilot can keep configured marketing workflows moving without a new prompt or approval at every step. It still needs active workflows and the connections their jobs require.
+
+## Keep approval where it matters
+
+Set an action, channel or product to **Needs approval** to keep a human decision. For example, allow routine social posts to go out automatically while keeping one product's posts in review.
+
+> **Note:** Agent restrictions can be stricter than workspace settings. New agents, including the team created by **Set up your marketing team**, can keep approval requirements under Autopilot. Check each agent's effective settings before you expect it to publish on its own.
+
+## Set the boundaries
+
+Use guardrails for posting frequency, spacing, quiet hours, and topics or competitors to avoid. Guardrails can hold automatic work for approval. The creator's permissions and connected account access still apply, and claim checks can also block automatic publishing.
+
+These controls let you delegate a regular marketing rhythm while keeping decisions that need your judgment in review.
+
+## Pause when plans change
+
+1. Choose **Pause autopilot** to hold automatic actions for approval.
+2. To stop future automatic job starts, also pause the agent or the job.
+
+Automatic calendar items wait until you resume and they pass the required checks. Pausing doesn't undo work that has already happened, and existing workflow runs may continue.
+
+## Check overrides after changing presets
+
+Applying a preset resets action, channel and product overrides. Guardrails, pause and agent restrictions stay. Review the confirmation and restore any exceptions you want to keep before you rely on the new preset.
+
+## FAQ
+
+**Does Clara publish by itself?** Only when your effective autonomy settings allow it. Assistant and Co-pilot ask before anything external.
+
+## Next steps
+- [Build your marketing team](https://claragtm.com/docs/automate/agents)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)
