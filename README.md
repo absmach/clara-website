@@ -23,7 +23,7 @@ Open **[localhost:4173](http://localhost:4173)**. After editing source files, ru
 | `npm run dev` | Build the site and start the local preview |
 | `npm run build` | Generate the static site in `site/dist/` |
 | `npm run check` | Check JavaScript syntax, page metadata, links, and assets, and run the Worker tests |
-| `npm run dev:worker` | Build, then run the site and the form Worker together (see [Forms](#forms)) |
+| `npm run dev:worker` | Build (without the checks), then run the site and the form Worker together (see [Forms](#forms)) |
 
 ## What’s inside
 
@@ -64,18 +64,18 @@ Clara’s **In bloom** mark pairs violet petals with a coral accent and a sunshi
 
 ## Deploy
 
-The site is hosted on **Cloudflare Workers** at **[claragtm.com](https://claragtm.com)**, as a Worker named `clara-website`. It serves `site/dist/` as static assets and runs `worker/index.js` only for `/api/*`. `cloudflare.config.ts` holds the Worker configuration, and `wrangler.config.ts` runs `npm run build` as its `build.command` and uploads `site/dist`. The [`cf` CLI](https://developers.cloudflare.com/cf/) deploys it and hands the build to Wrangler. Both are pinned in the root `package.json`. They need Node.js 22.18 or newer (CI uses `.nvmrc`).
+The site is hosted on **Cloudflare Workers** at **[claragtm.com](https://claragtm.com)**, as a Worker named `clara-website`. It serves `site/dist/` as static assets and runs `worker/index.js` only for `/api/*`. `cloudflare.config.ts` holds the Worker configuration, and `wrangler.config.ts` runs `npm run build && npm run check` as its `build.command` and uploads `site/dist`. The [`cf` CLI](https://developers.cloudflare.com/cf/) deploys it and hands the build to Wrangler. Both are pinned in the root `package.json`. They need Node.js 22.18 or newer (CI uses `.nvmrc`).
 
-**Cloudflare Workers Builds** deploys it. The Worker is connected to this repository in the Cloudflare dashboard (Workers & Pages → clara-website → Settings → Builds), and Cloudflare builds each push with its own access, so the repository holds no Cloudflare credentials. The site build runs from `wrangler.config.ts` on every deploy, production and previews alike, so the dashboard Build command isn't needed for it. Leave the dashboard Build command (Settings → Builds) as `npm run build && npm run check`: Workers Builds runs it before the deploy command (`npx cf deploy --mode production`), so a failing check blocks production (the site just builds twice). `site/dist/` is generated and not committed.
+**Cloudflare Workers Builds** deploys it. The Worker is connected to this repository in the Cloudflare dashboard (Workers & Pages → clara-website → Settings → Builds), and Cloudflare builds each push with its own access, so the repository holds no Cloudflare credentials. `wrangler.config.ts` builds the site and runs the checks on every deploy, production and previews alike, so a failing check blocks the deploy. Leave the dashboard Build command (Settings → Builds) empty, so the site isn't built twice. `site/dist/` is generated and not committed.
 
 | Trigger | Result |
 | --- | --- |
 | Push to any other branch | Builds and publishes a Preview at `https://<branch>-clara-website.absmach.workers.dev`, plus one per commit. The Cloudflare bot comments the links on the pull request. Previews build with the preview settings in `cloudflare.config.ts`, so both forms answer 503 there. |
 | Push to `main` | Builds and deploys production to claragtm.com |
 
-GitHub Actions (`.github/workflows/checks.yml`) checks every pull request and push to `main`: it builds the site, runs `npm run check` (static checks and Worker tests), and dry-runs the Cloudflare build. `site/dist/` is not committed.
+GitHub Actions (`.github/workflows/checks.yml`) checks every pull request and push to `main`: it dry-runs the Cloudflare deploy, which builds the site and runs `npm run check` (static checks and Worker tests) through `wrangler.config.ts`. `site/dist/` is not committed.
 
-To validate a deploy locally without uploading, run `npm run deploy:check`. To deploy by hand in an emergency, sign in with `npx cf auth login` (using the Cloudflare account that owns claragtm.com) and run `npm run build && npx cf deploy --mode production`.
+To validate a deploy locally without uploading, run `npm run deploy:check` (it builds and checks too). To deploy by hand in an emergency, sign in with `npx cf auth login` (using the Cloudflare account that owns claragtm.com) and run `npm run build && npx cf deploy --mode production`.
 
 `www.claragtm.com` redirects to `claragtm.com` (301) through a zone Redirect Rule, and the zone redirects HTTP to HTTPS. Unknown paths return `404.html` with a 404 status, and `/docs` redirects to `/docs/`.
 

@@ -5,8 +5,8 @@
     "dev": "npm --prefix site run dev",
     "build": "npm --prefix site run build",
     "check": "npm --prefix site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
-    "dev:worker": "cf dev",
-    "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run"
+    "dev:worker": "CLARA_SKIP_CHECK=1 cf dev",
+    "deploy:check": "cf deploy --mode production --dry-run"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2",
