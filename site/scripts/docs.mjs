@@ -42,7 +42,7 @@ export function parseFrontMatter(text) {
 }
 
 // Fenced blocks and inline code are examples, not content: leave them alone.
-const CODE = /^(```|~~~)[^\n]*\n[\s\S]*?^\1[^\n]*$|`[^`\n]+`/gm;
+const CODE = /^[ \t]*(`{3,}|~{3,})[^\n]*(?:\n[\s\S]*?^[ \t]*\1[^\n]*$|(?:\n[\s\S]*)?$)|(?<!`)(`+)(?!`)(?:(?!\n[ \t]*\n)[\s\S])*?(?<!`)\2(?!`)/gm;
 const mapProse = (md, fn) => {
   let out = '';
   let last = 0;
@@ -62,7 +62,7 @@ export function pageProblems(page) {
   if (!page.description) need('front matter needs a description');
   if (!Number.isFinite(page.order)) need('front matter needs a numeric order');
   if (page.tag && page.tag !== LIMITED) need(`unknown tag "${page.tag}" (only "${LIMITED}" is supported)`);
-  const prose = page.body.replace(/^(```|~~~)[\s\S]*?^\1/gm, '');
+  const prose = stripCode(page.body);
   if ((prose.match(/^# \S/gm) || []).length !== 1) need('needs exactly one "# " heading');
   if (!/^## Next steps\s*$/m.test(prose)) need('needs a "## Next steps" section');
   else {

@@ -137,3 +137,16 @@ test('redirect targets are plain docs paths and the script escapes angle bracket
   assert.ok(!REDIRECT_TARGET.test('/docs/</script>/'));
   assert.ok(!redirectPage('/docs/<x>/').includes('"/docs/<x>/"'));
 });
+
+test('code detection handles indented, unclosed and multi-backtick code', () => {
+  const link = '[x](/docs/x)';
+  const abs = '[x](https://claragtm.com/docs/x)';
+  const indented = `- Step\n\n  ~~~md\n  ${link}\n  ~~~\n\nAfter ${link}`;
+  assert.equal(absoluteLinks(indented), indented.replace(/After \[x\]\(\/docs\/x\)/, `After ${abs}`));
+  const unclosed = `Before ${link}\n\n\`\`\`md\n${link}\nstill code ${link}\n`;
+  assert.equal(absoluteLinks(unclosed), unclosed.replace(`Before ${link}`, `Before ${abs}`));
+  const ticks = `Use \`\`double \`tick\` ${link}\`\` and ${link}`;
+  assert.equal(absoluteLinks(ticks), ticks.replace(/and \[x\]\(\/docs\/x\)/, `and ${abs}`));
+  assert.deepEqual(pageProblems(page({ body: `${body}\n- Item\n\n  \`\`\`md\n  [x](javascript:alert(1))\n  \`\`\`\n` })).filter(p => p.includes('javascript')), []);
+  assert.deepEqual(pageProblems(page({ body: '# A\n\n```md\n# not a heading\n```\n\n## Next steps\n- [x](/docs/a/b)\n' })), []);
+});
