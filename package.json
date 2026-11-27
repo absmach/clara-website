@@ -2,11 +2,11 @@
   "name": "clara-website-workspace",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix site run dev",
-    "build": "npm --prefix site run build",
-    "check": "npm --prefix site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
-    "dev:worker": "npm run build && cf dev",
-    "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run"
+    "dev": "pnpm --dir site run dev",
+    "build": "pnpm --dir site run build",
+    "check": "pnpm --dir site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
+    "dev:worker": "cf dev",
+    "deploy:check": "cf deploy --mode production --dry-run"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2",
@@ -16,5 +16,6 @@
   "type": "module",
   "engines": {
     "node": ">=22.18"
-  }
+  },
+  "packageManager": "pnpm@12.20.0"
 }

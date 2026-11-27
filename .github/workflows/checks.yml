@@ -21,17 +21,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: Check pages and run Worker tests
-        run: npm run check
-      - name: Fail if site/dist is stale
-        run: git diff --exit-code -- site/dist
-      - name: Build the Worker as Cloudflare will
-        run: npx cf deploy --mode production --dry-run
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build, check and dry-run the deploy as Cloudflare will
+        run: pnpm exec cf deploy --mode production --dry-run
         env:
           CF_SEND_TELEMETRY: "false"
