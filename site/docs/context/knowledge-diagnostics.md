@@ -41,7 +41,7 @@ The **Actions** column shows what applies to the source:
 
 A failing source card also has **Sync again**.
 
-<video src="/assets/docs/context/diagnostics-resync.mp4" poster="/assets/docs/context/diagnostics-resync.jpg" autoplay muted loop playsinline aria-label="Clicking Resync on the failing docs.example.com source in Source health; its Synced time changes from 23 minutes ago to Just now, Last refresh shows Just now, and it stays in Needs attention with the reason Sync failed"></video>
+<video src="/assets/docs/context/diagnostics-resync.mp4" poster="/assets/docs/context/diagnostics-resync.jpg" autoplay muted loop playsinline aria-label="On Diagnostics with 3 of 4 sources ready and 1 needing attention, clicking Resync on the failing docs.example.com source in Source health; the row shows it working, then its Synced time and Last refresh change to Just now and it stays in Needs attention with the reason Sync failed"></video>
 
 For many stuck items at once, click **Repair stuck work** at the top of the page. You see "Nothing needed repair." when there was nothing to fix, or a line saying what was queued again.
 
