@@ -24,7 +24,7 @@ When there is nothing to show, the bell says "You're all caught up."
 
 ## Use the Notifications page
 
-The page says "What Clara finished, what failed and what needs you".
+The page subtitle says "What Clara finished, what failed and what needs you, in" followed by your organization's name.
 
 1. Use **All**, **Unread** and **Read** to filter the list.
 2. Click **Mark read** or **Mark unread** on a notification.
@@ -46,11 +46,9 @@ When a list is empty, you see "No notifications yet.", "No unread notifications.
 
 > **Note:** Muting a kind hides its notifications in the bell and on the page. Clara still creates them, so ticking the kind again shows them again. **Organization invitations** is always shown and can't be turned off.
 
-<!-- VERIFY: whether Clara also sends notifications by email. No email delivery was found in the app code, so this page says nothing about email. Confirm and add a line if it does. -->
-
 ## FAQ
 
-**Do I get email notifications?** Notifications appear in Clara, in the bell and on the **Notifications** page.
+**Do I get email notifications?** No. Clara doesn't email these notifications. They appear in the bell and on the **Notifications** page.
 
 **How do I stop seeing sync notifications?** Untick **Knowledge syncs** under **Which notifications to show** and click **Save preferences**.
 

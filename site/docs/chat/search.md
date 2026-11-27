@@ -17,7 +17,7 @@ The search box at the top of every page finds pages, plays, settings and your ow
 4. The first result is already highlighted. Press Enter to open it, or click the result you want. Use the arrow keys to highlight a different one.
 5. Press **Esc** to close search without opening anything.
 
-<video src="/assets/docs/chat/search-open-product.mp4" poster="/assets/docs/chat/search-open-product.jpg" autoplay muted loop playsinline aria-label="Pressing Ctrl K, typing the product name Acme Analytics and pressing Enter to open the product page"></video>
+<video src="/assets/docs/chat/search-open-product.mp4" poster="/assets/docs/chat/search-open-product.jpg" autoplay muted loop playsinline aria-label="Pressing Ctrl K, typing the product name Acme Analytics and pressing Enter on the first result to open the product page"></video>
 
 The status line under the box says "Searching", "No results", "1 result" or a number of results.
 

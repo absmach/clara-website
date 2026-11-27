@@ -27,7 +27,7 @@ Already have an account? Open the log-in page, enter your email or username and 
 
 After you sign up, you land in a chat with Clara, not a form. Clara asks short questions, one at a time:
 
-1. **Company name.** This creates your workspace and its short address. If the address is taken, Clara asks for another one, such as `acme-marketing`.
+1. **Company name.** This creates your organization (your workspace) and its short web address. If the web address is taken, Clara asks for another one, such as `acme-marketing`.
 2. **Timezone.** Click the quick reply that starts with **Use** and shows your browser's timezone, or type a city. The quick reply only appears when your browser shares its timezone.
 3. **Industry.** Click one of the quick replies: Software & SaaS, E-commerce, Financial services, Healthcare, Manufacturing, Media & entertainment, Professional services, Education, Real estate & property or Other.
 4. **Company size.** Click 1-10, 11-50, 51-200, 201-1000 or 1000+.
@@ -59,7 +59,7 @@ After the last question, Clara recaps your answers and shows a card called **Wha
 3. Use the links on the card when you want to finish setup now: **Add your first product**, **Edit company details**, **Edit brand and audience** and **Check sources**. You can also continue now and finish later.
 4. Click **Take me to Clara**.
 
-**You should see:** Home, with the message box in the middle of the page.
+**You should see:** Home, with the message box in the middle of the page. The clip in step 2 shows steps 3 and 4.
 
 ## 5. Ask for a first draft
 
@@ -76,19 +76,22 @@ You can also start from **Plays**: pick a play, fill in the dialog and click **R
 ## 6. Review the draft
 
 1. Read the draft in the **Draft preview** panel.
-2. To change something, write it in the chat. The message box now says "Ask Clara to refine this draft…". For example: "Make the opening shorter."
-3. When you're happy, click **Open editor** in the panel. You can also find the draft later in **My work**.
+2. To change something, write it in the chat. The message box says "Ask Clara to refine this draft…". For example: "Make the opening shorter."
+3. Clara replies, for example "I'll shorten the opening and leave the rest unchanged.", and the preview shows the new version.
+4. When you're happy, click **Open editor** in the panel. You can also find the draft later in **My work**.
 
-**You should see:** the draft on its own page, with its status and the **Approve** button.
+<video src="/assets/docs/start-here/quickstart-review-draft.mp4" poster="/assets/docs/start-here/quickstart-review-draft.jpg" autoplay muted loop playsinline aria-label="Asking Clara in the chat to make the opening shorter, the Draft preview updates, then clicking Open editor opens the draft's own page"></video>
 
-## 7. Approve it
+**You should see:** the draft on its own page, with the status "Draft ready". "Draft ready" means the draft is generated. It is not approved or published.
 
-1. On the draft's page, check the text and any claims Clara flags.
-2. Click **Approve**.
+## 7. Decide what happens next
 
-**You should see:** "Approved by" followed by your name and the date.
+Nothing is published until you click. What you see on the draft's page depends on the kind of content:
 
-> **Note:** **Approve** only records that your team approved the draft. It does not publish or schedule anything. To go further, see [Review and share your work](/docs/publish/review-and-approvals).
+- **Posts Clara can publish for you**, such as a LinkedIn post or an X post: **Publish now** and **Schedule post**. Both need a connected account. You can also use **Edit draft** or **Download**.
+- **Content Clara can't publish itself**, such as an article, release notes or an email: **Approve**. Click it to record that your team approved the draft. You then see "Approved by" followed by your name.
+
+> **Note:** **Approve** records that your team approved the draft. It does not publish or schedule anything. For more, see [Review and share your work](/docs/publish/review-and-approvals).
 
 > **Note:** Some actions, such as accepting an invitation, need a verified email address. If Clara says "Verify your email", check your inbox for the link.
 
@@ -102,9 +105,9 @@ If someone invited you to a workspace, the first chat starts with the invitation
 
 **I was invited. Why don't I see the company questions?** Joining an existing workspace skips them. They are for whoever creates a new workspace.
 
-**What if my organization address is taken?** Clara asks for another one. Use lowercase letters, numbers and dashes, for example `acme-marketing`.
+**What if my organization's web address is taken?** Clara asks for another web address. Use lowercase letters, numbers and dashes, for example `acme-marketing`.
 
-**Where do I change these answers later?** Company details are in **Settings**. Voice and audience are in **Brand & knowledge** → **Brand guidelines**. Websites and files are under **Sources**.
+**Where do I change these answers later?** Company details are in **Settings**. If you are not an admin, **Settings** opens **Connections** (tooltip "Personal connections and workspace preferences"). Voice and audience are in **Brand & knowledge** → **Brand guidelines**. Websites and files are under **Sources**.
 
 ## Next steps
 - [Home and New chat](/docs/chat/new-chat)

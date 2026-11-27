@@ -11,26 +11,26 @@ Short definitions, in alphabetical order. Where a term has its own page, the ter
 
 ## Terms
 
-- **Agent.** A role you give Clara, with one or more jobs that run on their own. See [Build your marketing team](/docs/automate/agents).
-- **Approval.** The step where a person says yes before a draft is scheduled or published. See [Review and share your work](/docs/publish/review-and-approvals).
-- **Authority tier.** How much Clara trusts a knowledge source: **1 · Authoritative**, **2 · Strong evidence**, **3 · Contextual** or **4 · External**. You set it when you add a source, or leave it on **Automatic**.
-- **Autonomy.** How much Clara may do without asking. The presets are **Assistant**, **Co-pilot** and **Autopilot**. See [Choose your level of autonomy](/docs/automate/autonomy).
-- **Brand guidelines.** Your voice, audience, writing rules, logo and colours. Clara applies them to every draft. See [Give Clara your context](/docs/context/brand).
-- **Campaign.** One brief turned into a set of related drafts.
-- **Claim.** A statement in a draft that Clara checks against your knowledge, such as a feature name or a number.
-- **Connection.** A link between Clara and another account or tool, such as a social account. Connections appear in the sidebar under **Connectors**.
-- **Content piece (draft).** One thing Clara has written, such as a post or an article. Drafts are listed in **My work**.
-- **Draft ready.** The status of a draft that Clara has finished and that is waiting for you.
-- **Knowledge source.** A website, file or other material that Clara reads to learn about your company. See [Give Clara your context](/docs/context/brand).
-- **Memory.** What Clara keeps from its own work, such as conversations, finished drafts and workflow run summaries, so later chats and drafts can find it.
-- **Organization.** The workspace everything belongs to: people, products, connections and work.
-- **Play.** A ready-made job for one format, such as a LinkedIn post. See [From a brief to a first draft](/docs/create/plays).
-- **Product.** Something you sell. A product can have its own voice, sources and people.
-- **Product access.** What a person can do with a product: **Viewer** can read, **Manager** can also continue the work.
-- **Skill.** A reusable set of instructions that you can attach to a chat or a play.
-- **Studio.** A play that opens its own workspace page instead of a short setup dialog, such as **Competitors**.
-- **Sync.** Clara reading a knowledge source again to pick up changes.
-- **Workflow.** A step-by-step automation. It runs behind an agent, or on its own.
+- [**Agent**](/docs/automate/agents). A role you give Clara, with one or more jobs that run on their own. See [Build your marketing team](/docs/automate/agents).
+- [**Approval**](/docs/publish/review-and-approvals). The step where a person says yes before a draft is scheduled or published. See [Review and share your work](/docs/publish/review-and-approvals).
+- **Authority tier.** <!-- TODO link: /docs/context/knowledge-sources --> How much Clara trusts a knowledge source: **1 · Authoritative**, **2 · Strong evidence**, **3 · Contextual** or **4 · External**. You set it when you add a source, or leave it on **Automatic**.
+- [**Autonomy**](/docs/automate/autonomy). How much Clara may do without asking. The presets are **Assistant**, **Co-pilot** and **Autopilot**. See [Choose your level of autonomy](/docs/automate/autonomy).
+- [**Brand guidelines**](/docs/context/brand). Your voice, audience, writing rules, logo and colours. Clara applies them to every draft. See [Give Clara your context](/docs/context/brand).
+- **Campaign.** <!-- TODO link: /docs/create/campaigns --> One brief turned into a set of related drafts.
+- [**Claim**](/docs/publish/review-and-approvals). A statement in a draft that Clara checks against your knowledge, such as a feature name or a number.
+- **Connection.** <!-- TODO link: /docs/connections/overview --> A link between Clara and another account or tool, such as a social account. Connections appear in the sidebar under **Connectors**.
+- **Content piece (draft).** <!-- TODO link: /docs/create/my-work --> One thing Clara has written, such as a post or an article. Drafts are listed in **My work**.
+- **Draft ready.** <!-- TODO link: /docs/create/my-work --> The status of a draft that Clara has finished and that is waiting for you.
+- [**Knowledge source**](/docs/context/brand). A website, file or other material that Clara reads to learn about your company. See [Give Clara your context](/docs/context/brand).
+- **Memory.** <!-- TODO link: /docs/context/memory --> What Clara keeps from its own work, such as conversations, finished drafts and workflow run summaries, so later chats and drafts can find it.
+- **Organization.** <!-- TODO link: /docs/account/organizations --> The workspace everything belongs to: people, products, connections and work.
+- [**Play**](/docs/create/plays). A ready-made job for one format, such as a LinkedIn post. See [From a brief to a first draft](/docs/create/plays).
+- **Product.** <!-- TODO link: /docs/context/products --> Something you sell. A product can have its own voice, sources and people.
+- **Product access.** <!-- TODO link: /docs/context/products --> What a person can do with a product: **Viewer** can read, **Manager** can also continue the work.
+- **Skill.** <!-- TODO link: /docs/context/skills --> A reusable set of instructions that you can attach to a chat or a play.
+- [**Studio**](/docs/create/plays). A play that opens its own workspace page instead of a short setup dialog, such as **Competitors**.
+- **Sync.** <!-- TODO link: /docs/context/knowledge-sources --> Clara reading a knowledge source again to pick up changes.
+- **Workflow.** <!-- TODO link: /docs/automate/workflows --> A step-by-step automation. It runs behind an agent, or on its own.
 
 ## Status words in My work
 

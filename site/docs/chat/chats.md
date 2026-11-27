@@ -24,7 +24,7 @@ Every conversation with Clara is saved as a chat. You can find recent chats in t
 
 <video src="/assets/docs/chat/chats-rename.mp4" poster="/assets/docs/chat/chats-rename.jpg" autoplay muted loop playsinline aria-label="Opening a chat's three-dot menu in the sidebar, clicking Rename, typing a new title and saving it so the sidebar title updates"></video>
 
-**You should see:** the new title in the sidebar and at the top of the chat.
+**You should see:** the new title in the sidebar.
 
 ## Archive, restore and delete
 
@@ -55,7 +55,7 @@ To bring back an archived chat:
 
 **You should see:** Jane Doe in the list as "Can read" with the role **Viewer** and a **Remove** button. The visibility link now reads "Shared with 1 person".
 
-To change a person's role, click **Remove** next to their name, then add them again with the other role. To stop sharing with someone, click **Remove**. Click **Done** to close the dialog.
+You can't change a role in place. To change a person's role, click **Remove** next to their name, then add them again with the other role. To stop sharing with someone, click **Remove**. Click **Done** to close the dialog.
 
 ## What sharing means
 

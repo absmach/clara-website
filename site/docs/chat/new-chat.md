@@ -12,7 +12,7 @@ Home is where you start a conversation with Clara. Describe an idea, ask a quest
 ## What Home shows
 
 - A greeting and the message box. The message box says "Describe an idea, ask a question, or make something new…".
-- Three quick cards under the message box: **Write something** ("Turn an idea into a first draft"), **Plan a launch** ("Bring a bigger story together") and **Find a new angle** ("Explore your market and ideas"). Each card opens the setup dialog of a play, where you write a short brief and click **Run now**. The link **Explore all plays** opens the full list.
+- Three quick cards under the message box: **Write something** ("Turn an idea into a first draft"), **Plan a launch** ("Bring a bigger story together") and **Find a new angle** ("Explore your market and ideas"). Each card opens a play, usually in a short setup dialog where you write a brief and click **Run now**. The link **Explore all plays** opens the full list.
 - **Needs your attention.** Drafts waiting for your review, drafts that failed, and pitches waiting for approval. Each item has **Open the draft** or **Review the pitch**. If you are allowed to review it, you can also click **Approve** or **Reject** right here, or **Review claims** when the draft has claims to check. When nothing is waiting, it says "You're up to date. Nothing needs your attention."
 - **Pick up where you left off.** Your recent work, with a **View all** link to **My work**. When there is nothing yet, it says "Nothing generated yet. Ask Clara above to get started."
 
@@ -32,7 +32,7 @@ The chat gets a title from your first message. You can rename it later. See [Cha
 The row under the message box has these controls:
 
 - **+** ("Add to this chat") opens a menu with **Upload from computer**, **Add a link** and, inside an existing chat, **Make a video**.
-- **Product** sets which product the chat is about. The default is **Organization**, which means no product. Pick a product so its voice and sources apply.
+- **Product** sets which product the chat is about. **Organization** (the default) means the chat isn't about one product. Pick a product so its voice and sources apply.
 - **Web** lets Clara search the web and read the pages it cites. Click it to switch to **Web off**, and Clara answers from your knowledge and files only.
 - **Add skills** lets you pick a skill for this chat.
 - The microphone button dictates your message when your browser supports it.
@@ -61,7 +61,7 @@ When Clara has what it needs, one of two things happens:
 
 To continue, click **Go ahead**. Typing a short "yes" does the same. Click **Cancel** to drop the request.
 
-<!-- TODO clip: new-chat-go-ahead (Clara only proposes a go-ahead for work she suggests herself) -->
+<!-- TODO clip: new-chat-go-ahead -->
 
 The **Draft preview** panel opens beside the conversation. It shows "Preparing your draft…" and then "Draft ready", with **Open editor**, **Download** and a copy button. On a narrow screen, switch between **Conversation** and **Draft preview** at the top.
 
