@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, prettyHref, llmsTxt, llmsFullTxt, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
+import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
 
 const body = '# Plays\n\nText.\n\n## Next steps\n- [Other](/docs/create/campaigns)\n';
 const page = (extra = {}) => ({ section: 'create', slug: 'plays', route: 'docs/create/plays', title: 'Plays', description: 'Pick a play.', order: 1, tag: '', body, ...extra });
@@ -119,4 +119,21 @@ test('redirect pages carry the hash over', () => {
   const html = redirectPage('/docs/a/b/');
   assert.match(html, /location\.replace\("\/docs\/a\/b\/"\+location\.hash\)/);
   assert.match(html, /http-equiv="refresh"/);
+});
+
+test('code examples are left alone and data-src is not an address', () => {
+  const md = 'Link [a](/docs/x) and `[b](/docs/y)`.\n\n```md\n[c](/docs/z)\n<video src="/a.mp4"></video>\n```\n\n<img data-src="/q.png" src="/r.png">';
+  const out = absoluteLinks(md);
+  assert.match(out, /\[a\]\(https:\/\/claragtm\.com\/docs\/x\)/);
+  assert.ok(out.includes('`[b](/docs/y)`'));
+  assert.ok(out.includes('[c](/docs/z)\n<video src="/a.mp4">'));
+  assert.ok(out.includes('data-src="/q.png" src="https://claragtm.com/r.png"'));
+  assert.deepEqual(pageProblems(page({ body: `${body}\n\`\`\`md\n[x](javascript:alert(1))\n\`\`\`\n\nUse \`href="data:x"\` carefully. <img data-src="data:x">` })), []);
+});
+
+test('redirect targets are plain docs paths and the script escapes angle brackets', () => {
+  assert.ok(REDIRECT_TARGET.test('/docs/a/b/'));
+  assert.ok(!REDIRECT_TARGET.test('/docs/a/b'));
+  assert.ok(!REDIRECT_TARGET.test('/docs/</script>/'));
+  assert.ok(!redirectPage('/docs/<x>/').includes('"/docs/<x>/"'));
 });

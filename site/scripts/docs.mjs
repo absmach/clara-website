@@ -41,7 +41,17 @@ export function parseFrontMatter(text) {
   return { data, body: text.slice(match[0].length) };
 }
 
-const UNSAFE_URL = /(?:\]\(\s*<?|\b(?:href|src|poster)\s*=\s*["']?\s*)(?:javascript|data|vbscript):/i;
+// Fenced blocks and inline code are examples, not content: leave them alone.
+const CODE = /^(```|~~~)[^\n]*\n[\s\S]*?^\1[^\n]*$|`[^`\n]+`/gm;
+const mapProse = (md, fn) => {
+  let out = '';
+  let last = 0;
+  for (const m of md.matchAll(CODE)) { out += fn(md.slice(last, m.index)) + m[0]; last = m.index + m[0].length; }
+  return out + fn(md.slice(last));
+};
+const stripCode = md => md.replace(CODE, '');
+
+const UNSAFE_URL = /(?:\]\(\s*<?|(?<![\w-])(?:href|src|poster)\s*=\s*["']?\s*)(?:javascript|data|vbscript):/i;
 
 // Problems with one page's own content. Returns a list of messages.
 export function pageProblems(page) {
@@ -60,7 +70,7 @@ export function pageProblems(page) {
     if (/^## /m.test(tail)) need('"Next steps" must be the last "## " section');
     if (!/\]\(\/docs\//.test(tail)) need('"Next steps" needs at least one link to another docs page');
   }
-  if (UNSAFE_URL.test(page.body)) need('links and clips can\'t use javascript:, data: or vbscript: addresses');
+  if (UNSAFE_URL.test(stripCode(page.body))) need('links and clips can\'t use javascript:, data: or vbscript: addresses');
   if (retiredName.test(`${page.title} ${page.description} ${page.body}`)) need('uses the retired product name; the product is Clara');
   return problems;
 }
@@ -222,14 +232,16 @@ export function llmsTxt({ sections }) {
 }
 
 // Root-relative links and clips become absolute, for copies read away from the site.
-export const absoluteLinks = md => md.replace(/\]\(\/(?!\/)/g, `](${siteUrl}/`).replace(/\b(href|src|poster)="\/(?!\/)/g, `$1="${siteUrl}/`);
+export const absoluteLinks = md => mapProse(md, text => text.replace(/\]\(\/(?!\/)/g, `](${siteUrl}/`).replace(/(?<![\w-])(href|src|poster)="\/(?!\/)/g, `$1="${siteUrl}/`));
 
 export function llmsFullTxt({ pages }) {
   const intro = '# Clara user guide\n\nEvery page of the Clara user guide, in reading order. Each page starts with its address.\n';
   return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(p.body.trim())}\n`)].join('\n');
 }
 
+export const REDIRECT_TARGET = /^\/docs\/[a-z0-9/-]+\/$/;
+
 export function redirectPage(to) {
   const target = escapeHtml(to);
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>if(location.hash)location.replace(${JSON.stringify(to)}+location.hash)</script><title>This page has moved — Clara Docs</title><meta name="description" content="This Clara guide page has moved."/><meta name="robots" content="noindex"/><link rel="canonical" href="${siteUrl}${target}"/><meta http-equiv="refresh" content="0;url=${target}"/><link rel="stylesheet" href="/styles.css"/></head><body><main class="container section"><h1>This page has moved.</h1><p><a href="${target}">Continue to the new page →</a></p></main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>if(location.hash)location.replace(${JSON.stringify(to).replace(/</g, '\\u003c')}+location.hash)</script><title>This page has moved — Clara Docs</title><meta name="description" content="This Clara guide page has moved."/><meta name="robots" content="noindex"/><link rel="canonical" href="${siteUrl}${target}"/><meta http-equiv="refresh" content="0;url=${target}"/><link rel="stylesheet" href="/styles.css"/></head><body><main class="container section"><h1>This page has moved.</h1><p><a href="${target}">Continue to the new page →</a></p></main></body></html>`;
 }
