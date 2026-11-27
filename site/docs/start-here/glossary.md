@@ -22,7 +22,7 @@ Short definitions, in alphabetical order. Where a term has its own page, the ter
 - **Content piece (draft).** <!-- TODO link: /docs/create/my-work --> One thing Clara has written, such as a post or an article. Drafts are listed in **My work**.
 - **Draft ready.** <!-- TODO link: /docs/create/my-work --> The status of a draft that Clara has finished and that is waiting for you.
 - [**Knowledge source**](/docs/context/brand). A website, file or other material that Clara reads to learn about your company. See [Give Clara your context](/docs/context/brand).
-- **Memory.** <!-- TODO link: /docs/context/memory --> What Clara keeps from its own work, such as conversations, finished drafts and workflow run summaries, so later chats and drafts can find it.
+- **Memory.** <!-- TODO link: /docs/context/knowledge-search --> What Clara keeps from its own work, such as conversations, finished drafts and workflow run summaries, so later chats and drafts can find it.
 - **Organization.** <!-- TODO link: /docs/account/organizations --> The workspace everything belongs to: people, products, connections and work.
 - [**Play**](/docs/create/plays). A ready-made job for one format, such as a LinkedIn post. See [From a brief to a first draft](/docs/create/plays).
 - **Product.** <!-- TODO link: /docs/context/products --> Something you sell. A product can have its own voice, sources and people.

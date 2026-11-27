@@ -84,14 +84,20 @@ You can also start from **Plays**: pick a play, fill in the dialog and click **R
 
 **You should see:** the draft on its own page, with the status "Draft ready". "Draft ready" means the draft is generated. It is not approved or published.
 
-## 7. Decide what happens next
+## 7. Approve it
 
-Nothing is published until you click. What you see on the draft's page depends on the kind of content:
+Nothing is published until you click. For content Clara can't publish itself, such as release notes, articles and emails, you approve the draft:
 
-- **Posts Clara can publish for you**, such as a LinkedIn post or an X post: **Publish now** and **Schedule post**. Both need a connected account. You can also use **Edit draft** or **Download**.
-- **Content Clara can't publish itself**, such as an article, release notes or an email: **Approve**. Click it to record that your team approved the draft. You then see "Approved by" followed by your name.
+1. On the draft's page, check the text and any claims Clara flags.
+2. Click **Approve**.
+
+<video src="/assets/docs/start-here/quickstart-approve.mp4" poster="/assets/docs/start-here/quickstart-approve.jpg" autoplay muted loop playsinline aria-label="On a release announcement draft page, clicking Approve shows an Approved notice and the line Approved by John Doe replaces the button"></video>
+
+**You should see:** an "Approved." notice, and the line "Approved by" followed by your name and the date in place of the button.
 
 > **Note:** **Approve** records that your team approved the draft. It does not publish or schedule anything. For more, see [Review and share your work](/docs/publish/review-and-approvals).
+
+> **Note:** Posts Clara can publish for you, such as a LinkedIn post or an X post, show **Publish now** and **Schedule post** instead. **Publish now** needs a connected account. **Schedule post** works without one: the dialog says "You can plan this post now. Connect an account before approving it to publish." You can also use **Edit draft**, **Download** or **Share with organization** (under **About this draft**, **Visibility**).
 
 > **Note:** Some actions, such as accepting an invitation, need a verified email address. If Clara says "Verify your email", check your inbox for the link.
 

@@ -37,7 +37,7 @@ Results are grouped in this order: **Pages**, **Plays**, **Settings**, **Product
 The last row is always **Ask Clara**. After you type, it reads **Ask Clara —** followed by your text, with "Start a chat with this" on the right.
 
 1. Type a question, for example "What should I post about our new dashboard?".
-2. Pick the **Ask Clara** row by clicking it. If it is already highlighted, press Enter. Use the arrow keys to move to it otherwise.
+2. Pick the **Ask Clara** row by clicking it. If it is already highlighted, press Enter. Use the arrow keys to move to it otherwise. If nothing in Clara matches, the **Ask Clara** row is the only result.
 
 <video src="/assets/docs/chat/search-ask-clara.mp4" poster="/assets/docs/chat/search-ask-clara.jpg" autoplay muted loop playsinline aria-label="Typing a question into search, selecting the Ask Clara row and a new chat opens with the question already sent"></video>
 
