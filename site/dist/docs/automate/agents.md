@@ -59,5 +59,5 @@ Pause an agent to stop future automatic starts across its jobs, or pause an indi
 > **Note:** New agents can start with approval restrictions even when the workspace uses Autopilot. Check the agent's autonomy summary as well as the organization settings before you expect automatic publishing.
 
 ## Next steps
-- [Choose your level of autonomy](/docs/automate/autonomy)
-- [From a brief to a first draft](/docs/create/plays)
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)

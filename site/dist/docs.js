@@ -7,7 +7,7 @@
   if (quiet.matches) return;
   const watcher = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     for (const { target, isIntersecting } of entries) {
-      if (isIntersecting && !quiet.matches) target.play().catch(() => {});
+      if (isIntersecting && !quiet.matches) target.play().catch(() => { target.controls = true; });
       else target.pause();
     }
   }, { threshold: 0.4 }) : null;

@@ -11,7 +11,7 @@ A finished draft is something to check, not something that has already gone out.
 
 ## Decide what needs your review
 
-Assistant and Co-pilot ask before external or irreversible actions. Autopilot can publish automatically when your effective settings permit it. Keep any action, channel or product that needs a person's decision set to **Needs approval**. See [Choose your level of autonomy](/docs/automate/autonomy).
+Assistant and Co-pilot ask before external or irreversible actions. Autopilot can publish automatically when your effective settings permit it. Keep any action, channel or product that needs a person's decision set to **Needs approval**. See [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy).
 
 ## Start with the facts
 
@@ -36,5 +36,5 @@ Use the publishing integrations available to your workspace, or export a support
 When feedback shows a recurring preference, add it to your brand guidelines or reusable instructions. When it shows a factual gap, update the product sources. The next brief then starts with clearer context.
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
-- [Choose your level of autonomy](/docs/automate/autonomy)
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)

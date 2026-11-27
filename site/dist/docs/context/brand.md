@@ -37,5 +37,5 @@ Keep sources focused and current. If a feature or limit has changed, update the 
 **Skills** capture repeatable instructions and methods. Use them for an approach you want to apply again, such as a tutorial structure or a release-writing checklist. Keep product facts in sources and editorial methods in your instructions.
 
 ## Next steps
-- [From a brief to a first draft](/docs/create/plays)
-- [Your first steps with Clara](/docs/start-here/quickstart)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+- [Your first steps with Clara](https://claragtm.com/docs/start-here/quickstart)

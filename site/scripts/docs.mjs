@@ -15,9 +15,19 @@ export const escapeHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&
 // The retired product name, built from parts so this source never contains it.
 export const retiredName = new RegExp(`\\b${['Mo', 'tif'].join('')}\\b`, 'i');
 
+// Strips one surrounding pair of quotes, but only when the quote isn't also used inside
+// the value (so `"A" and "B"` is kept as is). `\"` and `''` are the escapes.
+function unquote(value) {
+  const double = /^"((?:[^"\\]|\\.)*)"$/.exec(value);
+  if (double) return double[1].replace(/\\(["\\])/g, '$1');
+  const single = /^'((?:[^']|'')*)'$/.exec(value);
+  if (single) return single[1].replace(/''/g, "'");
+  return value;
+}
+
 // Front matter is a flat `key: value` list between two `---` lines. No nesting, no lists.
 export function parseFrontMatter(text) {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/.exec(text);
   if (!match) return { data: null, body: text };
   const data = {};
   for (const line of match[1].split(/\r?\n/)) {
@@ -25,11 +35,13 @@ export function parseFrontMatter(text) {
     const pair = /^([A-Za-z][\w-]*):\s*(.*)$/.exec(line);
     if (!pair) throw new Error(`Unreadable front matter line: "${line}"`);
     let value = pair[2].trim();
-    if (/^(".*"|'.*')$/.test(value)) value = value.slice(1, -1);
+    value = unquote(value);
     data[pair[1]] = value;
   }
   return { data, body: text.slice(match[0].length) };
 }
+
+const UNSAFE_URL = /(?:\]\(\s*<?|\b(?:href|src|poster)\s*=\s*["']?\s*)(?:javascript|data|vbscript):/i;
 
 // Problems with one page's own content. Returns a list of messages.
 export function pageProblems(page) {
@@ -43,7 +55,12 @@ export function pageProblems(page) {
   const prose = page.body.replace(/^(```|~~~)[\s\S]*?^\1/gm, '');
   if ((prose.match(/^# \S/gm) || []).length !== 1) need('needs exactly one "# " heading');
   if (!/^## Next steps\s*$/m.test(prose)) need('needs a "## Next steps" section');
-  else if (!/^## Next steps\s*$[\s\S]*\]\(\/docs\//m.test(prose)) need('"Next steps" needs at least one link to another docs page');
+  else {
+    const tail = prose.slice(prose.search(/^## Next steps\s*$/m)).replace(/^## Next steps\s*$/m, '');
+    if (/^## /m.test(tail)) need('"Next steps" must be the last "## " section');
+    if (!/\]\(\/docs\//.test(tail)) need('"Next steps" needs at least one link to another docs page');
+  }
+  if (UNSAFE_URL.test(page.body)) need('links and clips can\'t use javascript:, data: or vbscript: addresses');
   if (retiredName.test(`${page.title} ${page.description} ${page.body}`)) need('uses the retired product name; the product is Clara');
   return problems;
 }
@@ -53,11 +70,12 @@ export function pageProblems(page) {
 export function referenceProblems(page, pageKeys, redirectKeys, exists) {
   const problems = [];
   const where = `docs/${page.section}/${page.slug}.md`;
-  const links = [...page.body.matchAll(/\]\((\/docs[^)\s]*)\)/g), ...page.body.matchAll(/\bhref="(\/docs[^"]*)"/g)].map(m => m[1]);
+  const links = [...page.body.matchAll(/\]\((\/docs[^)\s]*)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g), ...page.body.matchAll(/\bhref="(\/docs[^"]*)"/g)].map(m => m[1]);
   for (const link of links) {
     const route = link.split('#')[0].replace(/\.md$/, '').replace(/\/+$/, '');
     if (route === '/docs') continue;
-    if (!pageKeys.has(route) && !redirectKeys.has(route)) problems.push(`${where}: link ${link} doesn't match any docs page`);
+    if (redirectKeys.has(route)) problems.push(`${where}: link ${link} is an old address; link the page it moved to`);
+    else if (!pageKeys.has(route)) problems.push(`${where}: link ${link} doesn't match any docs page`);
   }
   for (const [, tag] of page.body.matchAll(/<video\b([^>]*)>/g)) {
     const src = /\bsrc="([^"]+)"/.exec(tag)?.[1];
@@ -111,6 +129,7 @@ export function renderMarkdown(body, page = {}) {
       },
       link({ href, title, tokens }) {
         const text = this.parser.parseInline(tokens);
+        if (/^\s*(?:javascript|data|vbscript):/i.test(href)) return text;
         const target = prettyHref(href);
         return `<a href="${escapeHtml(target)}"${title ? ` title="${escapeHtml(title)}"` : ''}>${text}</a>`;
       },
@@ -119,7 +138,7 @@ export function renderMarkdown(body, page = {}) {
   let html = prepareVideos(marked.parse(body));
   if (page.tag === LIMITED) html = html.replace('</h1>', `</h1>\n<p class="docs-note docs-note-limited"><strong>${LIMITED}.</strong> ${LIMITED_NOTE}</p>`);
   // Wrap the closing "Next steps" section so it can be styled as a block.
-  html = html.replace(/<h2 id="next-steps">[\s\S]*$/, m => `<section class="docs-next-steps" aria-labelledby="next-steps">${m}</section>`);
+  html = html.replace(/<h2 id="next-steps">[\s\S]*?(?=<h2 |$)/, m => `<section class="docs-next-steps" aria-labelledby="next-steps">${m}</section>`);
   return html;
 }
 
@@ -202,12 +221,15 @@ export function llmsTxt({ sections }) {
   return lines.join('\n');
 }
 
+// Root-relative links and clips become absolute, for copies read away from the site.
+export const absoluteLinks = md => md.replace(/\]\(\/(?!\/)/g, `](${siteUrl}/`).replace(/\b(href|src|poster)="\/(?!\/)/g, `$1="${siteUrl}/`);
+
 export function llmsFullTxt({ pages }) {
   const intro = '# Clara user guide\n\nEvery page of the Clara user guide, in reading order. Each page starts with its address.\n';
-  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${p.body.trim()}\n`)].join('\n');
+  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(p.body.trim())}\n`)].join('\n');
 }
 
 export function redirectPage(to) {
   const target = escapeHtml(to);
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>This page has moved — Clara Docs</title><meta name="description" content="This Clara guide page has moved."/><meta name="robots" content="noindex"/><link rel="canonical" href="${siteUrl}${target}"/><meta http-equiv="refresh" content="0;url=${target}"/><link rel="stylesheet" href="/styles.css"/></head><body><main class="container section"><h1>This page has moved.</h1><p><a href="${target}">Continue to the new page →</a></p></main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><script>if(location.hash)location.replace(${JSON.stringify(to)}+location.hash)</script><title>This page has moved — Clara Docs</title><meta name="description" content="This Clara guide page has moved."/><meta name="robots" content="noindex"/><link rel="canonical" href="${siteUrl}${target}"/><meta http-equiv="refresh" content="0;url=${target}"/><link rel="stylesheet" href="/styles.css"/></head><body><main class="container section"><h1>This page has moved.</h1><p><a href="${target}">Continue to the new page →</a></p></main></body></html>`;
 }

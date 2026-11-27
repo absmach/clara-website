@@ -8,7 +8,7 @@ Source: https://claragtm.com/docs/start-here/quickstart/
 
 # Your first steps with Clara
 
-This page takes you from a new workspace to your first draft. You need access to a Clara workspace. If you're new here, [request early access](/early-access/).
+This page takes you from a new workspace to your first draft. You need access to a Clara workspace. If you're new here, [request early access](https://claragtm.com/early-access/).
 
 **Where to find it:** sidebar → **Products**, **Brand & knowledge**, **Plays**
 
@@ -25,7 +25,7 @@ Keep your first task focused on one product and one audience.
 2. Add your voice, audience and writing guidelines.
 3. Bring in relevant product sources. A current overview and a specific release note make a good start.
 
-See [Give Clara your context](/docs/context/brand) for the details.
+See [Give Clara your context](https://claragtm.com/docs/context/brand) for the details.
 
 ## Make a first draft
 
@@ -38,16 +38,16 @@ You can also start a conversation through **New chat**. For example:
 
 ## Meet Agents and Workflows
 
-After your first draft, open **Agents** for recurring marketing roles and **Workflows** for the jobs behind them. Choose how independently they run in **Settings → Autonomy**. See [Build your marketing team](/docs/automate/agents).
+After your first draft, open **Agents** for recurring marketing roles and **Workflows** for the jobs behind them. Choose how independently they run in **Settings → Autonomy**. See [Build your marketing team](https://claragtm.com/docs/automate/agents).
 
 ## Review before you share
 
 Open the resulting work and check its claims against your sources. Refine the wording. A finished generation is a draft to assess. Check the destination and any connected publishing action before you approve it.
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
-- [From a brief to a first draft](/docs/create/plays)
-- [Review and share your work](/docs/publish/review-and-approvals)
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)
 
 ---
 
@@ -87,8 +87,8 @@ Keep sources focused and current. If a feature or limit has changed, update the 
 **Skills** capture repeatable instructions and methods. Use them for an approach you want to apply again, such as a tutorial structure or a release-writing checklist. Keep product facts in sources and editorial methods in your instructions.
 
 ## Next steps
-- [From a brief to a first draft](/docs/create/plays)
-- [Your first steps with Clara](/docs/start-here/quickstart)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
+- [Your first steps with Clara](https://claragtm.com/docs/start-here/quickstart)
 
 ---
 
@@ -120,11 +120,11 @@ For a launch or release, use a campaign play to organize related pieces. Keep th
 
 ## Explore visual formats
 
-Carousels turn an idea into a sequence of slides. Video studio works from a brief and supplied footage, images or audio, with preview and revision before export. See [Explore carousels and video](/#visuals).
+Carousels turn an idea into a sequence of slides. Video studio works from a brief and supplied footage, images or audio, with preview and revision before export. See [Explore carousels and video](https://claragtm.com/#visuals).
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
-- [Review and share your work](/docs/publish/review-and-approvals)
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)
 
 ---
 
@@ -138,7 +138,7 @@ A finished draft is something to check, not something that has already gone out.
 
 ## Decide what needs your review
 
-Assistant and Co-pilot ask before external or irreversible actions. Autopilot can publish automatically when your effective settings permit it. Keep any action, channel or product that needs a person's decision set to **Needs approval**. See [Choose your level of autonomy](/docs/automate/autonomy).
+Assistant and Co-pilot ask before external or irreversible actions. Autopilot can publish automatically when your effective settings permit it. Keep any action, channel or product that needs a person's decision set to **Needs approval**. See [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy).
 
 ## Start with the facts
 
@@ -163,8 +163,8 @@ Use the publishing integrations available to your workspace, or export a support
 When feedback shows a recurring preference, add it to your brand guidelines or reusable instructions. When it shows a factual gap, update the product sources. The next brief then starts with clearer context.
 
 ## Next steps
-- [Give Clara your context](/docs/context/brand)
-- [Choose your level of autonomy](/docs/automate/autonomy)
+- [Give Clara your context](https://claragtm.com/docs/context/brand)
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)
 
 ---
 
@@ -226,8 +226,8 @@ Pause an agent to stop future automatic starts across its jobs, or pause an indi
 > **Note:** New agents can start with approval restrictions even when the workspace uses Autopilot. Check the agent's autonomy summary as well as the organization settings before you expect automatic publishing.
 
 ## Next steps
-- [Choose your level of autonomy](/docs/automate/autonomy)
-- [From a brief to a first draft](/docs/create/plays)
+- [Choose your level of autonomy](https://claragtm.com/docs/automate/autonomy)
+- [From a brief to a first draft](https://claragtm.com/docs/create/plays)
 
 ---
 
@@ -277,5 +277,5 @@ Applying a preset resets action, channel and product overrides. Guardrails, paus
 **Does Clara publish by itself?** Only when your effective autonomy settings allow it. Assistant and Co-pilot ask before anything external.
 
 ## Next steps
-- [Build your marketing team](/docs/automate/agents)
-- [Review and share your work](/docs/publish/review-and-approvals)
+- [Build your marketing team](https://claragtm.com/docs/automate/agents)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)

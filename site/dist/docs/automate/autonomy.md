@@ -47,5 +47,5 @@ Applying a preset resets action, channel and product overrides. Guardrails, paus
 **Does Clara publish by itself?** Only when your effective autonomy settings allow it. Assistant and Co-pilot ask before anything external.
 
 ## Next steps
-- [Build your marketing team](/docs/automate/agents)
-- [Review and share your work](/docs/publish/review-and-approvals)
+- [Build your marketing team](https://claragtm.com/docs/automate/agents)
+- [Review and share your work](https://claragtm.com/docs/publish/review-and-approvals)

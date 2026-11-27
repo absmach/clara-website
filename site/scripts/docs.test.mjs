@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, prettyHref, llmsTxt, llmsFullTxt, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
+import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, prettyHref, llmsTxt, llmsFullTxt, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
 
 const body = '# Plays\n\nText.\n\n## Next steps\n- [Other](/docs/create/campaigns)\n';
 const page = (extra = {}) => ({ section: 'create', slug: 'plays', route: 'docs/create/plays', title: 'Plays', description: 'Pick a play.', order: 1, tag: '', body, ...extra });
@@ -42,7 +42,10 @@ test('links and clips must resolve', () => {
   assert.ok(bad.some(p => p.includes('gone.mp4') && p.includes('not found')));
   assert.ok(bad.some(p => p.includes('needs a poster')));
   assert.ok(bad.some(p => p.includes('aria-label')));
-  assert.deepEqual(referenceProblems(page({ body: '[old](/docs/getting-started/) [md](/docs/create/campaigns.md#x)' }), keys, new Set(['/docs/getting-started']), exists), []);
+  assert.deepEqual(referenceProblems(page({ body: '[md](/docs/create/campaigns.md#x) [t](/docs/create/campaigns "A title")' }), keys, new Set(), exists), []);
+  assert.equal(referenceProblems(page({ body: '[bad](/docs/nope/page "A title")' }), keys, new Set(), exists).length, 1);
+  const old = referenceProblems(page({ body: '[old](/docs/getting-started/)' }), keys, new Set(['/docs/getting-started']), exists);
+  assert.ok(old.length === 1 && old[0].includes('old address'));
 });
 
 test('clips lose autoplay in the HTML and gain controls, and the script opts them back in', () => {
@@ -78,4 +81,42 @@ test('llms files list every page', () => {
   assert.match(index, /\[Plays\]\(https:\/\/claragtm\.com\/docs\/create\/plays\.md\): Pick a play\./);
   assert.match(index, /\(Limited availability\)/);
   assert.match(llmsFullTxt(docs), /Source: https:\/\/claragtm\.com\/docs\/create\/plays\/[\s\S]*# Plays/);
+});
+
+test('front matter quotes are only stripped when they wrap the whole value', () => {
+  const read = value => parseFrontMatter(`---\ntitle: ${value}\n---\n`).data.title;
+  assert.equal(read('"Plays"'), 'Plays');
+  assert.equal(read("'Plays'"), 'Plays');
+  assert.equal(read('"A" and "B"'), '"A" and "B"');
+  assert.equal(read('"Say \\"hi\\""'), 'Say "hi"');
+  assert.equal(read("'It''s'"), "It's");
+  assert.equal(parseFrontMatter('---\ntitle: x\n---x\n# A').data, null);
+  assert.deepEqual(parseFrontMatter('---\ntitle: x\n---  \n# A').data, { title: 'x' });
+});
+
+test('Next steps must be the last section, and unsafe addresses are rejected', () => {
+  assert.ok(pageProblems(page({ body: `${body}\n## FAQ\n**Q?** A.\n` })).some(p => p.includes('last')));
+  assert.ok(pageProblems(page({ body: `${body}\n[x](javascript:alert(1))` })).some(p => p.includes('javascript')));
+  assert.ok(pageProblems(page({ body: `${body}\n<a href="data:text/html,x">x</a>` })).length > 0);
+  assert.match(renderMarkdown('[x](javascript:alert(1))'), /<p>x<\/p>/);
+});
+
+test('the Next steps box stops at the next heading', () => {
+  const html = renderMarkdown('# A\n\n## Next steps\n- [x](/docs/a/b)\n\n## FAQ\n\nAfter.\n');
+  assert.match(html, /<section class="docs-next-steps"[\s\S]*<\/section>\s*<h2 id="faq">/);
+});
+
+test('copies read away from the site get absolute links', () => {
+  const md = 'See [x](/docs/a/b) and [y](/early-access/) and [z](https://example.com/).\n<video src="/assets/docs/a.mp4" poster="/assets/docs/a.jpg"></video>';
+  const out = absoluteLinks(md);
+  assert.match(out, /\]\(https:\/\/claragtm\.com\/docs\/a\/b\)/);
+  assert.match(out, /\(https:\/\/claragtm\.com\/early-access\/\)/);
+  assert.match(out, /src="https:\/\/claragtm\.com\/assets\/docs\/a\.mp4" poster="https:\/\/claragtm\.com\/assets\/docs\/a\.jpg"/);
+  assert.match(out, /\]\(https:\/\/example\.com\/\)/);
+});
+
+test('redirect pages carry the hash over', () => {
+  const html = redirectPage('/docs/a/b/');
+  assert.match(html, /location\.replace\("\/docs\/a\/b\/"\+location\.hash\)/);
+  assert.match(html, /http-equiv="refresh"/);
 });

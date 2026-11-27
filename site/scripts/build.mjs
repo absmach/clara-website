@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { resourcePages } from './resource-pages.mjs';
-import { loadDocs, docPage, docsIndex, llmsTxt, llmsFullTxt, redirectPage, escapeHtml } from './docs.mjs';
+import { loadDocs, docPage, docsIndex, llmsTxt, llmsFullTxt, redirectPage, escapeHtml, absoluteLinks } from './docs.mjs';
 import { CONTACT_TOPICS, NOTICE_VERSION } from '../../worker/forms.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -84,11 +84,12 @@ await writeFile(path.join(formerFormats, 'index.html'), `<!doctype html><html la
 
 // Raw Markdown next to each page, plus the files for assistants.
 for (const page of docs.pages) {
-  await mkdir(path.join(out, 'docs', page.section), { recursive: true });
-  await writeFile(path.join(out, `${page.route}.md`), page.raw);
+  await writeFile(path.join(out, `${page.route}.md`), absoluteLinks(page.raw));
 }
 await writeFile(path.join(out, 'llms.txt'), llmsTxt(docs));
 await writeFile(path.join(out, 'llms-full.txt'), llmsFullTxt(docs));
+// Cloudflare static assets read _headers. Without it .md files may be served as plain text.
+await writeFile(path.join(out, '_headers'), '/docs/*.md\n  Content-Type: text/markdown; charset=utf-8\n/llms.txt\n  Content-Type: text/plain; charset=utf-8\n/llms-full.txt\n  Content-Type: text/plain; charset=utf-8\n');
 console.log(`Built ${docs.pages.length} docs pages, their Markdown, llms.txt and llms-full.txt.`);
 
 // The six first guides moved into sections. Keep their old addresses working.
