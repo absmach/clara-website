@@ -5,7 +5,7 @@ order: 1
 ---
 # Welcome to Clara
 
-<video src="/assets/docs/start-here/welcome-home-tour.mp4" poster="/assets/docs/start-here/welcome-home-tour.jpg" autoplay muted loop playsinline aria-label="A tour of Clara's Home page: the cursor moves over the message box, the three quick cards and the sidebar"></video>
+<video src="/assets/docs/start-here/welcome-agents-at-work.mp4" poster="/assets/docs/start-here/welcome-agents-at-work.jpg" autoplay muted loop playsinline aria-label="Setting up a Content Writer agent from the Agent library: choosing the Acme Analytics product and a weekly schedule, creating and activating the agent, starting a run, watching its Activity until the run waits for review, then opening the article draft it wrote"></video>
 
 Clara is your autonomous marketing department. You hand it your marketing work, and agents run that work for you. They start on a schedule or when something happens, such as a competitor posting or changing a page, or a post going live. They research, draft, schedule and publish across your channels, and they report back on what they did.
 
