@@ -2,6 +2,8 @@
 title: Quickstart
 description: Sign up, meet Clara, and get your first approved draft in seven steps.
 order: 4
+popular: 1
+task: Write your first draft
 ---
 # Quickstart
 

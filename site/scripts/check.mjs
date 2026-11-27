@@ -5,6 +5,8 @@ import assert from 'node:assert/strict';
 import { loadMedia, manifestProblems, CDN_BASE } from './media.mjs';
 import { loadDocs, referenceProblems, pageKeys, redirectKeys, retiredName, REDIRECT_TARGET } from './docs.mjs';
 
+// The strings that used to be shown to readers. A page may still mention LLMs in its own words.
+const BOT_TEXT = /\bllms(-full)?\.txt\b|View this page as Markdown|for assistants and other tools/i;
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 async function walk(dir) {
   const files = [];
@@ -74,6 +76,23 @@ for (const [from, to] of Object.entries(docs.redirects)) {
   if (!files.includes(path.join(root, from, 'index.html'))) problems.push(`${from}: redirect page missing from dist`);
   if (!REDIRECT_TARGET.test(to)) problems.push(`${from}: redirect target ${to} must look like /docs/section/page/`);
   if (!keys.has(to.replace(/\/+$/, ''))) problems.push(`${from}: redirects to ${to}, which is not a docs page`);
+}
+const searchFile = path.join(root, 'docs/search-index.json');
+if (!files.includes(searchFile)) problems.push('docs/search-index.json missing from dist');
+else {
+  const index = JSON.parse(await readFile(searchFile, 'utf8'));
+  for (const page of docs.pages) {
+    const entry = index.find(e => e.route === `/${page.route}/`);
+    if (!entry) problems.push(`search-index.json doesn't list ${page.route}`);
+    else if (!entry.title || !entry.section || !Array.isArray(entry.headings) || typeof entry.excerpt !== 'string') problems.push(`search-index.json: incomplete entry for ${page.route}`);
+  }
+}
+for (const [file, { html }] of pages) {
+  if (!file.startsWith(path.join(root, 'docs') + path.sep)) continue;
+  if (/redirect|has moved/i.test(html) && html.includes('http-equiv="refresh"')) continue;
+  const visible = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/g, '').replace(/<head>[\s\S]*?<\/head>/, '').replace(/<[^>]+>/g, ' ');
+  assert.doesNotMatch(visible, BOT_TEXT, `Visible text for assistants and tools in ${file}`);
+  assert.match(html, /rel="alternate" type="text\/plain" href="[^"]*\/llms\.txt"/, `Missing llms.txt alternate link in ${file}`);
 }
 // The Markdown copies and llms-full.txt must not point at a path that only exists in the source (links, clips, posters).
 for (const file of files.filter(f => f.endsWith('.md') || f.endsWith('llms-full.txt'))) {

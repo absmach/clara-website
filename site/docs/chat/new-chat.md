@@ -2,6 +2,8 @@
 title: Home and New chat
 description: Start a conversation with Clara, attach files and links, and turn a request into a draft.
 order: 1
+popular: 2
+task: Start a chat and attach files
 ---
 # Home and New chat
 

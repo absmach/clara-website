@@ -2,6 +2,7 @@
 title: Choose your level of autonomy
 description: From suggestions to automatic publishing, decide what Clara can do on its own.
 order: 2
+popular: 6
 ---
 # Choose your level of autonomy
 

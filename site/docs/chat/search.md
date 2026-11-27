@@ -2,6 +2,8 @@
 title: Search
 description: Find pages, plays, settings, products and your work from anywhere, or ask Clara.
 order: 3
+popular: 4
+task: Find anything with search
 ---
 # Search
 

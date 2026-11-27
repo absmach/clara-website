@@ -63,6 +63,9 @@ export function pageProblems(page) {
   if (!page.title) need('front matter needs a title');
   if (!page.description) need('front matter needs a description');
   if (!Number.isFinite(page.order)) need('front matter needs a numeric order');
+  if (page.popular !== undefined && !Number.isFinite(page.popular)) need('"popular" must be a number (its place in Popular tasks)');
+  if (page.task !== undefined && !String(page.task).trim()) need('"task" must not be empty (a short, verb-first label such as "Write your first draft")');
+  if (page.task !== undefined && page.popular === undefined) need('"task" only appears in Popular tasks, so it needs a "popular" number too');
   if (page.tag && page.tag !== LIMITED) need(`unknown tag "${page.tag}" (only "${LIMITED}" is supported)`);
   const prose = stripCode(page.body);
   if ((prose.match(/^# \S/gm) || []).length !== 1) need('needs exactly one "# " heading');
@@ -180,7 +183,7 @@ export async function loadDocs(dir = docsRoot) {
       let parsed;
       try { parsed = parseFrontMatter(raw); } catch (error) { problems.push(`docs/${section.id}/${file}: ${error.message}`); continue; }
       if (!parsed.data) { problems.push(`docs/${section.id}/${file}: missing front matter (title, description, order)`); continue; }
-      const page = { section: section.id, sectionTitle: section.title, slug, route: `docs/${section.id}/${slug}`, title: parsed.data.title, description: parsed.data.description, order: Number(parsed.data.order), tag: parsed.data.tag || '', body: parsed.body, raw };
+      const page = { section: section.id, sectionTitle: section.title, slug, route: `docs/${section.id}/${slug}`, title: parsed.data.title, description: parsed.data.description, order: Number(parsed.data.order), tag: parsed.data.tag || '', popular: parsed.data.popular === undefined ? undefined : (parsed.data.popular === '' ? NaN : Number(parsed.data.popular)), task: parsed.data.task, body: parsed.body, raw };
       problems.push(...pageProblems(page));
       pages.push(page);
     }
@@ -196,10 +199,82 @@ export async function loadDocs(dir = docsRoot) {
 export const pageKeys = pages => new Set(pages.map(p => `/${p.route}`));
 export const redirectKeys = redirects => new Set(Object.keys(redirects).map(k => k.replace(/\/+$/, '')));
 
+// Small line icons, defined once. Keyed by section id, plus a few interface icons.
+const ICON_PATHS = {
+  'start-here': '<path d="M5 3v18"/><path d="M5 4h12l-3 4 3 4H5"/>',
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/>',
+  context: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 21h15"/><path d="M9 8h6"/>',
+  create: '<path d="m4 20 1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1Z"/><path d="m14 7 3 3"/>',
+  video: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3V9Z"/>',
+  grow: '<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  publish: '<path d="M21 3 10 14"/><path d="m21 3-7 18-4-7-7-4 18-7Z"/>',
+  automate: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  connections: '<path d="M9 2v5"/><path d="M15 2v5"/><path d="M6 7h12v4a6 6 0 0 1-12 0V7Z"/><path d="M12 17v5"/>',
+  account: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  help: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9"/><path d="m14.5 14.5 3.9 3.9"/><path d="m18.4 5.6-3.9 3.9"/><path d="m9.5 14.5-3.9 3.9"/>',
+  fallback: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  chevron: '<path d="m9 6 6 6-6 6"/>',
+};
+export const icon = (name, size = 20) => `<svg class="docs-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICON_PATHS[name] || ICON_PATHS.fallback}</svg>`;
+
+// "Get started" cards: page route, and an optional clip poster used as the thumbnail.
+const GET_STARTED = [
+  { route: 'docs/start-here/quickstart', poster: { src: '/assets/docs/start-here/quickstart-first-draft.jpg', width: 1280, height: 800 } },
+  { route: 'docs/start-here/concepts' },
+  { route: 'docs/start-here/glossary' },
+];
+export const POPULAR_LIMIT = 7;
+
+// Pages with a `popular` number, in that order. The label is `task` or, without one, the page title.
+export function popularTasks(pages, limit = POPULAR_LIMIT) {
+  return pages
+    .filter(p => Number.isFinite(p.popular))
+    .sort((a, b) => a.popular - b.popular || a.order - b.order || a.title.localeCompare(b.title))
+    .slice(0, limit)
+    .map(page => ({ page, label: String(page.task ?? '').trim() || page.title }));
+}
+
+const decodeEntities = s => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+const EXCERPT_LENGTH = 240;
+
+// Plain text of the first paragraphs, before "Next steps": no Markdown, HTML or code.
+export function excerpt(body, max = EXCERPT_LENGTH) {
+  let text = stripCode(body).split(/^## Next steps\s*$/m)[0]
+    .replace(/<video\b[\s\S]*?<\/video>/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/^#{1,6}\s.*$/gm, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/[*_]{1,3}([^*_\n]+)[*_]{1,3}/g, '$1');
+  text = decodeEntities(text).replace(/\s+/g, ' ').trim();
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 1))}…`;
+}
+
+// What the browser searches: one entry per page, written to /docs/search-index.json.
+export function searchIndex({ pages }) {
+  return pages.map(page => {
+    const html = renderMarkdown(page.body, page);
+    const headings = [...html.matchAll(/<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
+      .map(m => ({ level: Number(m[1]), id: m[2], text: decodeEntities(m[3].replace(/<[^>]+>/g, '')).trim() }))
+      .filter(h => h.id !== 'next-steps');
+    return { title: page.title, task: String(page.task ?? '').trim(), description: page.description, section: page.sectionTitle, route: `/${page.route}/`, headings, excerpt: excerpt(page.body) };
+  });
+}
+
+// The search field. docs.js switches it on; without JavaScript it stays hidden.
+export function searchBox(prefix, { large = false } = {}) {
+  return `<div class="docs-search${large ? ' docs-search-large' : ''}" data-docs-search hidden><label class="docs-search-label" for="${prefix}-search">Search the docs</label><div class="docs-search-field">${icon('search', 18)}<input id="${prefix}-search" type="search" role="combobox" aria-expanded="false" aria-controls="${prefix}-results" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the docs"/><kbd aria-hidden="true" data-search-hint>Ctrl K</kbd></div><div class="docs-search-pop" hidden><ul class="docs-search-results" id="${prefix}-results" role="listbox" aria-label="Search results"></ul></div><p class="docs-search-status" role="status" aria-live="polite" data-search-status></p></div>`;
+}
+
 // Sidebar: sections > pages. The open section is the current one.
-export function sidebar(sections, current) {
+export function sidebar(sections, current, openId) {
   const body = sections.map(s => {
-    const open = current && s.id === current.section;
+    const open = current ? s.id === current.section : s.id === openId;
     const items = s.pages.map(p => {
       const here = current && p.route === current.route;
       return `<li><a href="/${p.route}/"${here ? ' aria-current="page"' : ''}>${escapeHtml(p.title)}${p.tag ? `<span class="docs-pill">${escapeHtml(p.tag)}</span>` : ''}</a></li>`;
@@ -209,19 +284,37 @@ export function sidebar(sections, current) {
   return `<div class="docs-nav-list"><a class="docs-overview${current ? '' : ' is-current'}" href="/docs/"${current ? '' : ' aria-current="page"'}>All docs</a>${body}</div>`;
 }
 
+// The shell shared by the home and the articles: sidebar on wide screens, a menu on small ones.
+function shell({ sections, current, main, head = '', sidebarSearch, mobileSearch, mobileLabel, openId }) {
+  const nav = sidebar(sections, current, openId);
+  return `<div class="container docs-shell"><aside class="docs-sidebar">${sidebarSearch || ''}<nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us</a></aside><div class="docs-main">${head}${mobileSearch || ''}<details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(mobileLabel)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details>${main}</div></div>`;
+}
+
 export function docPage({ page, sections, pages, media = {} }) {
   const i = pages.indexOf(page);
   const prev = pages[i - 1];
   const next = pages[i + 1];
-  const nav = sidebar(sections, page);
   const pager = link => (link ? `<a href="/${link.route}/"><span>${link === prev ? 'Previous' : 'Next'}</span><strong>${escapeHtml(link.title)}</strong></a>` : '<span></span>');
-  return `<div class="container docs-shell"><aside class="docs-sidebar"><p class="eyebrow">CLARA DOCS</p><nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us →</a></aside><article class="docs-article"><details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(page.sectionTitle)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${applyManifest(renderMarkdown(page.body, page), media)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav><p class="docs-raw"><a href="/${page.route}.md">View this page as Markdown</a></p></article></div>`;
+  const main = `<article class="docs-article"><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${applyManifest(renderMarkdown(page.body, page), media)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav></article>`;
+  return shell({ sections, current: page, main, sidebarSearch: searchBox('sb'), mobileSearch: searchBox('mb'), mobileLabel: page.sectionTitle });
 }
 
-export function docsIndex({ sections, pages }) {
-  const first = pages[0];
-  const cards = sections.map(s => `<section class="docs-index-section" aria-labelledby="idx-${s.id}"><h2 id="idx-${s.id}">${escapeHtml(s.title)}</h2>${s.description ? `<p>${escapeHtml(s.description)}</p>` : ''}<ul>${s.pages.map(p => `<li><a href="/${p.route}/"><strong>${escapeHtml(p.title)}</strong>${p.tag ? `<span class="docs-pill">${escapeHtml(p.tag)}</span>` : ''}<span>${escapeHtml(p.description)}</span></a></li>`).join('')}</ul></section>`).join('');
-  return `<section class="page-hero resource-hero"><div class="container"><h1>A little guidance. <em>A good place to start.</em></h1><p class="lead">Learn how to use Clara, step by step. Every page is also plain Markdown for assistants and other tools.</p></div></section><div class="container docs-index">${first ? `<a class="docs-start" href="/${first.route}/"><span class="eyebrow">NEW TO CLARA?</span><h2>${escapeHtml(first.title)}</h2><p>${escapeHtml(first.description)}</p><span class="quiet-link">Start here ↗</span></a>` : ''}<div class="docs-index-grid">${cards}</div><p class="docs-raw">For assistants and other tools: <a href="/llms.txt">llms.txt</a> lists every page, and <a href="/llms-full.txt">llms-full.txt</a> holds them all in one file.</p></div>`;
+export function docsIndex({ sections, pages, media = {} }) {
+  const byRoute = new Map(pages.map(p => [p.route, p]));
+  const start = GET_STARTED.map(item => ({ ...item, page: byRoute.get(item.route) })).filter(item => item.page);
+  const startCards = start.map(({ page, poster }, n) => `<li><a class="docs-card docs-start-card" href="/${page.route}/">${poster ? `<img class="docs-start-thumb" src="${poster.src}" width="${poster.width}" height="${poster.height}" alt="" loading="lazy" decoding="async"/>` : ''}<span class="docs-start-copy"><span class="docs-start-head"><span class="docs-step" aria-hidden="true">${n + 1}</span><strong>${escapeHtml(page.title)}</strong></span><span>${escapeHtml(page.description)}</span><span class="docs-start-go" aria-hidden="true">${icon('chevron', 18)}</span></span></a></li>`).join('');
+  const tasks = popularTasks(pages);
+  const taskList = tasks.map(({ page, label }) => `<li><a href="/${page.route}/"><span>${escapeHtml(label)}</span>${icon('chevron', 16)}</a></li>`).join('');
+  const topics = sections.map(s => {
+    const link = p => `<li><a href="/${p.route}/">${escapeHtml(p.title)}</a></li>`;
+    const rest = s.pages.slice(3);
+    // Past three pages the rest open in place, so nothing is a click away from the list.
+    const more = rest.length ? `<details class="docs-topic-more"><summary>See all ${s.pages.length} pages</summary><ul>${rest.map(link).join('')}</ul></details>` : '';
+    return `<li class="docs-card docs-topic" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p><ul>${s.pages.slice(0, 3).map(link).join('')}</ul>${more}</li>`;
+  }).join('');
+  const head = `<header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>`;
+  const main = `<div class="docs-home">${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
+  return applyManifest(shell({ sections, current: null, main, head, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id }), media);
 }
 
 export function llmsTxt({ sections }) {
