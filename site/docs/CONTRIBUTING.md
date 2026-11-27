@@ -9,7 +9,7 @@ The guide is plain Markdown. Assistants, tools and people read the same files. `
 1. Pick a section folder from `site/docs/sections.json`. Create `site/docs/<section>/<slug>.md`. The slug becomes the address: `/docs/<section>/<slug>/`.
 2. Copy the page template below.
 3. Run `pnpm run build && pnpm run check`, then open the page with `pnpm run dev`.
-4. Commit the regenerated `site/dist/` with your page.
+4. Commit your page. `site/dist/` is generated and not committed.
 
 To add a section, add it to `sections.json` and create its folder. A section with no pages doesn't appear on the site. To move or rename a page, add its old address to `site/docs/redirects.json`.
 

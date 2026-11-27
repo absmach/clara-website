@@ -10,7 +10,7 @@
 
 ## Run locally
 
-Requires **Node.js 22+** and [pnpm](https://pnpm.io) (the version in `packageManager`; enable it with `corepack enable`). Building and previewing need no dependencies; running the Worker locally does (`pnpm install`, Node.js 22.18+).
+Requires **Node.js 22.18+** and [pnpm](https://pnpm.io). Install pnpm with `npm i -g pnpm@12.20.0` (the version in `packageManager`; pnpm then manages its own version from that field), then run `pnpm install` once before anything else, because the build imports `marked`.
 
 ```sh
 pnpm run dev
@@ -23,7 +23,7 @@ Open **[localhost:4173](http://localhost:4173)**. After editing source files, ru
 | `pnpm run dev` | Build the site and start the local preview |
 | `pnpm run build` | Generate the static site in `site/dist/` |
 | `pnpm run check` | Check JavaScript syntax, page metadata, links, and assets, and run the Worker tests |
-| `pnpm run dev:worker` | Build (without the checks), then run the site and the form Worker together (see [Forms](#forms)) |
+| `pnpm run dev:worker` | Build (without the checks, only `cf dev` skips them), then run the site and the form Worker together (see [Forms](#forms)) |
 
 ## What’s inside
 
@@ -75,7 +75,7 @@ The site is hosted on **Cloudflare Workers** at **[claragtm.com](https://claragt
 
 GitHub Actions (`.github/workflows/checks.yml`) checks every pull request and push to `main`: it dry-runs the Cloudflare deploy, which builds the site and runs `pnpm run check` (static checks and Worker tests) through `wrangler.config.ts`. `site/dist/` is not committed.
 
-To validate a deploy locally without uploading, run `pnpm run deploy:check` (it builds and checks too). To deploy by hand in an emergency, sign in with `pnpm exec cf auth login` (using the Cloudflare account that owns claragtm.com) and run `pnpm run build && pnpm exec cf deploy --mode production`.
+To validate a deploy locally without uploading, run `pnpm run deploy:check` (it builds and checks too). To deploy by hand in an emergency, sign in with `pnpm exec cf auth login` (using the Cloudflare account that owns claragtm.com) and run `pnpm exec cf deploy --mode production`; it builds and checks the site itself.
 
 `www.claragtm.com` redirects to `claragtm.com` (301) through a zone Redirect Rule, and the zone redirects HTTP to HTTPS. Unknown paths return `404.html` with a 404 status, and `/docs` redirects to `/docs/`.
 

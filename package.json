@@ -5,7 +5,7 @@
     "dev": "pnpm --dir site run dev",
     "build": "pnpm --dir site run build",
     "check": "pnpm --dir site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
-    "dev:worker": "CLARA_SKIP_CHECK=1 cf dev",
+    "dev:worker": "cf dev",
     "deploy:check": "cf deploy --mode production --dry-run"
   },
   "devDependencies": {
