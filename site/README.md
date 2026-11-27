@@ -27,7 +27,7 @@ npm run build
 npm run check
 ```
 
-The preview serves `dist/` at [localhost:4173](http://localhost:4173). Rebuild and refresh after edits. Commit the regenerated `dist/` files with their source changes.
+The preview serves `dist/` at [localhost:4173](http://localhost:4173). Rebuild and refresh after edits. `dist/` is generated and not committed; Cloudflare builds it on every deploy.
 
 ## Product tour
 
