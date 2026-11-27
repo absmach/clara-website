@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { search, stem } from '../src/docs-search.js';
 import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, popularTasks, searchIndex, excerpt, docsIndex, docPage, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
 
 const body = '# Plays\n\nText.\n\n## Next steps\n- [Other](/docs/create/campaigns)\n';
@@ -177,7 +179,7 @@ test('the search index has every field and no Markdown, code or llms text', () =
   const entries = searchIndex(home());
   assert.equal(entries.length, 4);
   const [entry] = entries;
-  assert.deepEqual(Object.keys(entry).sort(), ['description', 'excerpt', 'headings', 'route', 'section', 'title']);
+  assert.deepEqual(Object.keys(entry).sort(), ['description', 'excerpt', 'headings', 'route', 'section', 'task', 'title']);
   assert.equal(entry.route, '/docs/start-here/quickstart/');
   assert.deepEqual(entry.headings.map(h => [h.level, h.id, h.text]), [[2, 'do-it-more', 'Do it & more'], [3, 'detail', 'Detail']]);
   assert.equal(entry.excerpt, 'Intro with bold and a link.');
@@ -188,7 +190,7 @@ test('the search index has every field and no Markdown, code or llms text', () =
 test('the docs home and articles show nothing meant for assistants', () => {
   const docs = home();
   for (const html of [docsIndex(docs), docPage({ page: docs.pages[0], ...docs })]) {
-    assert.doesNotMatch(html.replace(/<[^>]+>/g, ' '), /llms|View this page as Markdown|for assistants/i);
+    assert.doesNotMatch(html.replace(/<[^>]+>/g, ' '), /\bllms(-full)?\.txt\b|View this page as Markdown|for assistants/i);
     assert.doesNotMatch(html, /docs-raw|\.md"/);
     assert.match(html, /data-docs-search/);
   }
@@ -198,6 +200,56 @@ test('the docs home and articles show nothing meant for assistants', () => {
   assert.match(index, /class="docs-sidebar"/);
   assert.match(index, /Browse the docs/);
   assert.match(index, /href="\/contact\/"/);
-  assert.match(index, /All 4 pages/);
+  assert.match(index, /<summary>See all 4 pages<\/summary>/);
+  assert.doesNotMatch(index, /All \d+ pages? </);
+  assert.match(index, /<details class="docs-group" open><summary>Start here/);
+  assert.match(index, /<div class="docs-main"><div class="docs-search"[^>]*data-docs-search/);
   assert.ok(index.indexOf('>Write your first draft<') > index.indexOf('>CONCEPTS<'));
+});
+
+const FIND = [
+  { title: 'Review and share your work', task: 'Review and approve work', description: 'Check the details and choose where approvals belong.', section: 'Publish and engage', route: '/docs/publish/review-and-approvals/', headings: [{ level: 2, id: 'approve-a-draft', text: 'Approve a draft' }, { level: 2, id: 'share-a-link', text: 'Share a link' }], excerpt: 'Approvals keep work from going out early.' },
+  { title: 'Chat history and sharing', task: 'Share a chat with a teammate', description: 'Find, rename and share your chats.', section: 'Chat', route: '/docs/chat/chats/', headings: [{ level: 2, id: 'share-a-chat', text: 'Share a chat' }], excerpt: 'Choose who can open each one.' },
+  { title: 'Search', task: 'Find anything with search', description: 'Find pages, plays and your work.', section: 'Chat', route: '/docs/chat/search/', headings: [], excerpt: 'Press Ctrl K.' },
+];
+const titles = q => search(FIND, q).map(h => h.entry.title);
+
+test('search stems words so approve finds approvals and share finds sharing', () => {
+  assert.equal(stem('approvals'), stem('approve'));
+  assert.equal(stem('sharing'), stem('share'));
+  assert.equal(titles('approve')[0], 'Review and share your work');
+  assert.ok(titles('approving').includes('Review and share your work'));
+  assert.ok(titles('shared').includes('Chat history and sharing'));
+  assert.ok(titles('appro').length > 0);
+});
+
+test('a task label boosts the page that is about the query', () => {
+  assert.equal(titles('share')[0], 'Chat history and sharing');
+  assert.equal(titles('share chat')[0], 'Chat history and sharing');
+  assert.equal(search(FIND, 'share chat')[0].heading, null);
+});
+
+test('the heading shown is the one that matches the most words', () => {
+  const hit = search(FIND, 'approve draft')[0];
+  assert.equal(hit.entry.route, '/docs/publish/review-and-approvals/');
+  assert.equal(hit.heading.id, 'approve-a-draft');
+});
+
+test('nonsense and markup find nothing and never throw', () => {
+  assert.deepEqual(search(FIND, 'zxqvbn'), []);
+  assert.deepEqual(search(FIND, '   '), []);
+  assert.deepEqual(search(FIND, '<img src=x onerror=alert(1)>'), []);
+  assert.deepEqual(search(null, 'share'), []);
+});
+
+test('the search script shows results as text, never as HTML', async () => {
+  const script = await readFile(new URL('../src/docs.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(script, /innerHTML|insertAdjacentHTML|outerHTML/);
+  assert.match(script, /textContent = /);
+});
+
+test('topic cards list all pages in place only when there are more than three', () => {
+  const docs = home();
+  docs.sections[0].pages.splice(3);
+  assert.doesNotMatch(docsIndex(docs), /See all/);
 });

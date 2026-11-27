@@ -4,6 +4,8 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { loadDocs, referenceProblems, pageKeys, redirectKeys, retiredName, REDIRECT_TARGET } from './docs.mjs';
 
+// The strings that used to be shown to readers. A page may still mention LLMs in its own words.
+const BOT_TEXT = /\bllms(-full)?\.txt\b|View this page as Markdown|for assistants and other tools/i;
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 async function walk(dir) {
   const files = [];
@@ -85,7 +87,7 @@ for (const [file, { html }] of pages) {
   if (!file.startsWith(path.join(root, 'docs') + path.sep)) continue;
   if (/redirect|has moved/i.test(html) && html.includes('http-equiv="refresh"')) continue;
   const visible = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/g, '').replace(/<head>[\s\S]*?<\/head>/, '').replace(/<[^>]+>/g, ' ');
-  assert.doesNotMatch(visible, /llms|View this page as Markdown/i, `Visible text for assistants and tools in ${file}`);
+  assert.doesNotMatch(visible, BOT_TEXT, `Visible text for assistants and tools in ${file}`);
   assert.match(html, /rel="alternate" type="text\/plain" href="[^"]*\/llms\.txt"/, `Missing llms.txt alternate link in ${file}`);
 }
 for (const name of ['llms.txt', 'llms-full.txt']) if (!files.includes(path.join(root, name))) problems.push(`${name} missing from dist`);

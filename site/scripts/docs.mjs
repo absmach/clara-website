@@ -259,7 +259,7 @@ export function searchIndex({ pages }) {
     const headings = [...html.matchAll(/<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
       .map(m => ({ level: Number(m[1]), id: m[2], text: decodeEntities(m[3].replace(/<[^>]+>/g, '')).trim() }))
       .filter(h => h.id !== 'next-steps');
-    return { title: page.title, description: page.description, section: page.sectionTitle, route: `/${page.route}/`, headings, excerpt: excerpt(page.body) };
+    return { title: page.title, task: String(page.task ?? '').trim(), description: page.description, section: page.sectionTitle, route: `/${page.route}/`, headings, excerpt: excerpt(page.body) };
   });
 }
 
@@ -269,9 +269,9 @@ export function searchBox(prefix, { large = false } = {}) {
 }
 
 // Sidebar: sections > pages. The open section is the current one.
-export function sidebar(sections, current) {
+export function sidebar(sections, current, openId) {
   const body = sections.map(s => {
-    const open = current && s.id === current.section;
+    const open = current ? s.id === current.section : s.id === openId;
     const items = s.pages.map(p => {
       const here = current && p.route === current.route;
       return `<li><a href="/${p.route}/"${here ? ' aria-current="page"' : ''}>${escapeHtml(p.title)}${p.tag ? `<span class="docs-pill">${escapeHtml(p.tag)}</span>` : ''}</a></li>`;
@@ -282,8 +282,8 @@ export function sidebar(sections, current) {
 }
 
 // The shell shared by the home and the articles: sidebar on wide screens, a menu on small ones.
-function shell({ sections, current, main, sidebarSearch, mobileSearch, mobileLabel }) {
-  const nav = sidebar(sections, current);
+function shell({ sections, current, main, sidebarSearch, mobileSearch, mobileLabel, openId }) {
+  const nav = sidebar(sections, current, openId);
   return `<div class="container docs-shell"><aside class="docs-sidebar">${sidebarSearch || ''}<nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us</a></aside><div class="docs-main">${mobileSearch || ''}<details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(mobileLabel)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details>${main}</div></div>`;
 }
 
@@ -299,15 +299,18 @@ export function docPage({ page, sections, pages }) {
 export function docsIndex({ sections, pages }) {
   const byRoute = new Map(pages.map(p => [p.route, p]));
   const start = GET_STARTED.map(item => ({ ...item, page: byRoute.get(item.route) })).filter(item => item.page);
-  const startCards = start.map(({ page, poster }, n) => `<li><a class="docs-card docs-start-card" href="/${page.route}/">${poster ? `<img class="docs-start-thumb" src="${poster.src}" width="${poster.width}" height="${poster.height}" alt="" loading="lazy" decoding="async"/>` : ''}<span class="docs-start-copy"><span class="docs-step" aria-hidden="true">${n + 1}</span><strong>${escapeHtml(page.title)}</strong><span>${escapeHtml(page.description)}</span></span></a></li>`).join('');
+  const startCards = start.map(({ page, poster }, n) => `<li><a class="docs-card docs-start-card" href="/${page.route}/">${poster ? `<img class="docs-start-thumb" src="${poster.src}" width="${poster.width}" height="${poster.height}" alt="" loading="lazy" decoding="async"/>` : ''}<span class="docs-start-copy"><span class="docs-start-head"><span class="docs-step" aria-hidden="true">${n + 1}</span><strong>${escapeHtml(page.title)}</strong></span><span>${escapeHtml(page.description)}</span><span class="docs-start-go" aria-hidden="true">${icon('chevron', 18)}</span></span></a></li>`).join('');
   const tasks = popularTasks(pages);
   const taskList = tasks.map(({ page, label }) => `<li><a href="/${page.route}/"><span>${escapeHtml(label)}</span>${icon('chevron', 16)}</a></li>`).join('');
   const topics = sections.map(s => {
-    const count = `${s.pages.length} ${s.pages.length === 1 ? 'page' : 'pages'}`;
-    return `<li class="docs-card docs-topic" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p><ul>${s.pages.slice(0, 3).map(p => `<li><a href="/${p.route}/">${escapeHtml(p.title)}</a></li>`).join('')}</ul><a class="docs-topic-all" href="/${s.pages[0].route}/">All ${count}${icon('chevron', 14)}</a></li>`;
+    const link = p => `<li><a href="/${p.route}/">${escapeHtml(p.title)}</a></li>`;
+    const rest = s.pages.slice(3);
+    // Past three pages the rest open in place, so nothing is a click away from the list.
+    const more = rest.length ? `<details class="docs-topic-more"><summary>See all ${s.pages.length} pages</summary><ul>${rest.map(link).join('')}</ul></details>` : '';
+    return `<li class="docs-card docs-topic" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p><ul>${s.pages.slice(0, 3).map(link).join('')}</ul>${more}</li>`;
   }).join('');
   const main = `<div class="docs-home"><header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
-  return shell({ sections, current: null, main, mobileLabel: 'All docs' });
+  return shell({ sections, current: null, main, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id });
 }
 
 export function llmsTxt({ sections }) {
