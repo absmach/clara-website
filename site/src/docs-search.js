@@ -1,12 +1,14 @@
 // Docs search: matching only, no DOM. docs.js shows the results, and the tests import this file.
 // Words are reduced to a light stem and matched by prefix, so "approve" finds "approvals"
 // and "share" finds "sharing". Titles (and the short `task` label) outweigh headings, then text.
+const MIN_STEM = 4;
+const STOPWORDS = new Set(['the', 'a', 'an', 'how', 'do', 'i', 'to', 'of', 'in', 'on', 'is', 'my']);
 const SUFFIXES = ['ations', 'ation', 'ings', 'ing', 'ions', 'ion', 'als', 'al', 'ed', 'es', 's', 'e'];
 
 export const words = text => String(text ?? '').toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 
 export function stem(word) {
-  for (const suffix of SUFFIXES) if (word.length - suffix.length >= 3 && word.endsWith(suffix)) return word.slice(0, -suffix.length);
+  for (const suffix of SUFFIXES) if (word.length - suffix.length >= MIN_STEM && word.endsWith(suffix)) return word.slice(0, -suffix.length);
   return word;
 }
 
@@ -32,7 +34,9 @@ function prepare(entry) {
 // Up to `limit` hits, best first: { entry, heading, score }. Every word must match somewhere.
 // `heading` is the section of the page that matches the most words, or null when the title already covers them all.
 export function search(index, query, limit = 8) {
-  const terms = words(query).map(stem);
+  // One-letter words are noise. Stopwords are dropped unless they are all there is.
+  const typed = words(query).filter(w => w.length >= 2);
+  const terms = (typed.some(w => !STOPWORDS.has(w)) ? typed.filter(w => !STOPWORDS.has(w)) : typed).map(stem);
   if (!terms.length || !Array.isArray(index)) return [];
   const hits = [];
   for (const entry of index) {

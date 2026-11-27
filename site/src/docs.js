@@ -1,5 +1,3 @@
-import { search } from '/docs-search.js';
-
 // Docs clips. The build removes `autoplay` and adds controls, so without this script
 // (or with reduced motion) visitors see the poster and can press play.
 function startClips() {
@@ -30,7 +28,7 @@ startClips();
 
 // Search. The field is hidden in the HTML and shown here, so without JavaScript nothing looks broken.
 // It matches words against /docs/search-index.json (see docs-search.js for the ranking).
-function startSearch() {
+function startSearch(search) {
   const boxes = [...document.querySelectorAll('[data-docs-search]')];
   if (!boxes.length) return;
   let index = null;
@@ -143,4 +141,5 @@ function startSearch() {
     input.select();
   });
 }
-startSearch();
+// Loaded on its own so a missing search file can never stop the clips above.
+import('/docs-search.js').then(module => startSearch(module.search)).catch(() => {});

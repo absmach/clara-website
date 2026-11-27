@@ -282,9 +282,9 @@ export function sidebar(sections, current, openId) {
 }
 
 // The shell shared by the home and the articles: sidebar on wide screens, a menu on small ones.
-function shell({ sections, current, main, sidebarSearch, mobileSearch, mobileLabel, openId }) {
+function shell({ sections, current, main, head = '', sidebarSearch, mobileSearch, mobileLabel, openId }) {
   const nav = sidebar(sections, current, openId);
-  return `<div class="container docs-shell"><aside class="docs-sidebar">${sidebarSearch || ''}<nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us</a></aside><div class="docs-main">${mobileSearch || ''}<details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(mobileLabel)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details>${main}</div></div>`;
+  return `<div class="container docs-shell"><aside class="docs-sidebar">${sidebarSearch || ''}<nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us</a></aside><div class="docs-main">${head}${mobileSearch || ''}<details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(mobileLabel)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details>${main}</div></div>`;
 }
 
 export function docPage({ page, sections, pages }) {
@@ -309,8 +309,9 @@ export function docsIndex({ sections, pages }) {
     const more = rest.length ? `<details class="docs-topic-more"><summary>See all ${s.pages.length} pages</summary><ul>${rest.map(link).join('')}</ul></details>` : '';
     return `<li class="docs-card docs-topic" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p><ul>${s.pages.slice(0, 3).map(link).join('')}</ul>${more}</li>`;
   }).join('');
-  const main = `<div class="docs-home"><header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
-  return shell({ sections, current: null, main, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id });
+  const head = `<header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>`;
+  const main = `<div class="docs-home">${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
+  return shell({ sections, current: null, main, head, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id });
 }
 
 export function llmsTxt({ sections }) {

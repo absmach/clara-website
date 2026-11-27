@@ -203,13 +203,15 @@ test('the docs home and articles show nothing meant for assistants', () => {
   assert.match(index, /<summary>See all 4 pages<\/summary>/);
   assert.doesNotMatch(index, /All \d+ pages? </);
   assert.match(index, /<details class="docs-group" open><summary>Start here/);
-  assert.match(index, /<div class="docs-main"><div class="docs-search"[^>]*data-docs-search/);
+  // Small screens: heading and intro first, then search, then the menu.
+  assert.match(index, /<div class="docs-main"><header class="docs-home-head"><h1>[\s\S]*?<\/header><div class="docs-search"[^>]*data-docs-search[\s\S]*?<details class="docs-mobile-nav">/);
   assert.ok(index.indexOf('>Write your first draft<') > index.indexOf('>CONCEPTS<'));
 });
 
 const FIND = [
   { title: 'Review and share your work', task: 'Review and approve work', description: 'Check the details and choose where approvals belong.', section: 'Publish and engage', route: '/docs/publish/review-and-approvals/', headings: [{ level: 2, id: 'approve-a-draft', text: 'Approve a draft' }, { level: 2, id: 'share-a-link', text: 'Share a link' }], excerpt: 'Approvals keep work from going out early.' },
   { title: 'Chat history and sharing', task: 'Share a chat with a teammate', description: 'Find, rename and share your chats.', section: 'Chat', route: '/docs/chat/chats/', headings: [{ level: 2, id: 'share-a-chat', text: 'Share a chat' }], excerpt: 'Choose who can open each one.' },
+  { title: 'Notifications', task: 'Choose which notifications to see', description: 'Decide what Clara tells you about.', section: 'Chat', route: '/docs/chat/notifications/', headings: [], excerpt: 'Bell icon.' },
   { title: 'Search', task: 'Find anything with search', description: 'Find pages, plays and your work.', section: 'Chat', route: '/docs/chat/search/', headings: [], excerpt: 'Press Ctrl K.' },
 ];
 const titles = q => search(FIND, q).map(h => h.entry.title);
@@ -252,4 +254,14 @@ test('topic cards list all pages in place only when there are more than three', 
   const docs = home();
   docs.sections[0].pages.splice(3);
   assert.doesNotMatch(docsIndex(docs), /See all/);
+});
+
+test('short words, stopwords and partial stems do not over-match', () => {
+  assert.equal(stem('notes'), 'note');
+  assert.deepEqual(titles('notes'), []);
+  assert.ok(titles('notif').includes('Notifications'));
+  assert.deepEqual(titles('a'), []);
+  assert.deepEqual(titles('i'), []);
+  assert.deepEqual(titles('the share'), titles('share'));
+  assert.deepEqual(titles('how do I share'), titles('share'));
 });
