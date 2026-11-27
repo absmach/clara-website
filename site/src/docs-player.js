@@ -22,6 +22,7 @@ export const valueText = (current, duration) => `${formatTime(current)} of ${for
 // Space also plays and pauses from the scrubber, so it never scrolls the page.
 export function keyAction(key, { slider = false } = {}) {
   if (key === ' ' || key === 'k' || key === 'K') return { type: 'toggle' };
+  if (key === 'f' || key === 'F') return { type: 'fullscreen' };
   if (key === 'ArrowLeft' || (slider && key === 'ArrowDown')) return { type: 'seek', delta: -STEP };
   if (key === 'ArrowRight' || (slider && key === 'ArrowUp')) return { type: 'seek', delta: STEP };
   if (slider && key === 'Home') return { type: 'to', start: true };
@@ -30,6 +31,8 @@ export function keyAction(key, { slider = false } = {}) {
 }
 
 const ICONS = {
+  expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+  compress: '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>',
   play: '<path d="M7 4.5v15l12-7.5-12-7.5Z" fill="currentColor" stroke="none"/>',
   pause: '<path d="M7 5v14M17 5v14"/>',
   back: '<path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/><text x="12" y="15.4" font-size="8.5" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">5</text>',
@@ -44,7 +47,7 @@ const btn = (name, label) => `<button type="button" class="docs-player-btn" aria
 // Without JavaScript the bar is hidden (see the <noscript> style) and the native controls stay.
 // `label` is the text of the clip's aria-label attribute, as written in the page.
 export function playerHtml(videoTag, label) {
-  return `<div class="docs-player" role="group" aria-label="Video player: ${label || 'clip'}">${videoTag}<div class="docs-player-bar">${btn('play', 'Play')}${btn('back', `Back ${STEP} seconds`)}${btn('forward', `Forward ${STEP} seconds`)}<div class="docs-player-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00 of 0:00"><div class="docs-player-rail"><div class="docs-player-fill"></div></div></div><span class="docs-player-time">0:00 / 0:00</span></div></div>`;
+  return `<div class="docs-player" role="group" aria-label="Video player: ${label || 'clip'}">${videoTag}<div class="docs-player-bar">${btn('play', 'Play')}${btn('back', `Back ${STEP} seconds`)}${btn('forward', `Forward ${STEP} seconds`)}<div class="docs-player-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00 of 0:00"><div class="docs-player-rail"><div class="docs-player-fill"></div></div></div><span class="docs-player-time"><span class="docs-player-cur">0:00</span><span class="docs-player-total"> / 0:00</span></span>${btn('expand', 'Full screen')}</div></div>`;
 }
 
 // Wires up one player written by playerHtml(). `video` is the <video> inside it.
@@ -58,12 +61,34 @@ export function mountPlayer(video) {
   if (w > 0 && h > 0) wrap.style.setProperty('--ratio', `${w} / ${h}`);
   video.controls = false;
   wrap.tabIndex = 0;
-  const [play, back, forward] = wrap.querySelectorAll('.docs-player-btn');
-  for (const b of [play, back, forward]) b.disabled = false;
+  const [play, back, forward, full] = wrap.querySelectorAll('.docs-player-btn');
+  for (const b of [play, back, forward, full]) b.disabled = false;
+  full.setAttribute('aria-pressed', 'false');
+  // Full screen is for the whole player, so the custom controls come along. iOS Safari can only do the bare
+  // video (its native player). With neither, the button is hidden.
+  const enter = wrap.requestFullscreen || wrap.webkitRequestFullscreen;
+  if (!enter && !video.webkitEnterFullscreen) full.hidden = true;
+  const isFull = () => (document.fullscreenElement || document.webkitFullscreenElement) === wrap || !!video.webkitDisplayingFullscreen;
+  const toggleFull = () => {
+    if (isFull()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) Promise.resolve(exit.call(document)).catch(() => {});
+      else video.webkitExitFullscreen?.();
+    } else if (enter) Promise.resolve(enter.call(wrap)).catch(() => {});
+    else video.webkitEnterFullscreen?.();
+  };
+  const fullState = () => {
+    const on = isFull();
+    wrap.dataset.fullscreen = on ? '1' : '';
+    full.setAttribute('aria-pressed', String(on));
+    full.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+    full.innerHTML = icon(on ? 'compress' : 'expand');
+  };
   const track = wrap.querySelector('.docs-player-track');
   track.tabIndex = 0;
   const fill = wrap.querySelector('.docs-player-fill');
-  const time = wrap.querySelector('.docs-player-time');
+  const cur = wrap.querySelector('.docs-player-cur');
+  const total = wrap.querySelector('.docs-player-total');
 
   const duration = () => (Number.isFinite(video.duration) ? video.duration : 0);
   // A clip the reader paused stays paused when it scrolls back into view (see docs.js).
@@ -79,7 +104,8 @@ export function mountPlayer(video) {
     track.setAttribute('aria-valuenow', String(Math.floor(c)));
     track.setAttribute('aria-valuetext', valueText(c, d));
     fill.style.width = d ? `${(c / d) * 100}%` : '0%';
-    time.textContent = `${formatTime(c)} / ${formatTime(d)}`;
+    cur.textContent = formatTime(c);
+    total.textContent = ` / ${formatTime(d)}`;
   };
   const state = () => {
     const playing = !video.paused;
@@ -90,6 +116,7 @@ export function mountPlayer(video) {
   const act = action => {
     if (!action) return false;
     if (action.type === 'toggle') toggle();
+    else if (action.type === 'fullscreen') toggleFull();
     else if (action.type === 'seek') seekTo(jump(video.currentTime, action.delta, duration()));
     else seekTo(action.start ? 0 : duration());
     return true;
@@ -98,6 +125,13 @@ export function mountPlayer(video) {
   play.addEventListener('click', toggle);
   back.addEventListener('click', () => act({ type: 'seek', delta: -STEP }));
   forward.addEventListener('click', () => act({ type: 'seek', delta: STEP }));
+  full.addEventListener('click', toggleFull);
+  for (const type of ['fullscreenchange', 'webkitfullscreenchange']) document.addEventListener(type, fullState);
+  for (const type of ['webkitbeginfullscreen', 'webkitendfullscreen']) video.addEventListener(type, fullState);
+  // Pausing or playing from inside full screen (including iOS's native controls) is the reader's choice,
+  // so leaving full screen never restarts a clip they paused.
+  video.addEventListener('pause', () => { if (isFull()) video.dataset.userPaused = '1'; });
+  video.addEventListener('play', () => { if (isFull()) delete video.dataset.userPaused; });
   video.addEventListener('click', toggle);
   for (const type of ['play', 'pause', 'ended']) video.addEventListener(type, state);
   for (const type of ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked']) video.addEventListener(type, sync);
