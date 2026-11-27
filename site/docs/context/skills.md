@@ -55,7 +55,7 @@ A custom skill is private to its creator until you share it. Organization admins
 3. Under **Role**, choose **Viewer** or **Manager**.
 4. Click **Grant access**. **Remove** takes access away.
 
-<!-- CLIP: context/skills-share — Skill page, People: pick Jane Doe, Viewer, Grant access -->
+<video src="/assets/docs/context/skills-share.mp4" poster="/assets/docs/context/skills-share.jpg" autoplay muted loop playsinline aria-label="On the Launch checklist skill page, choosing Jane Doe and the Viewer role under People and clicking Grant access; Jane Doe appears in the People list as a Viewer"></video>
 
 - **Viewer** can read the skill and use it.
 - **Manager** can also edit it and manage its people.

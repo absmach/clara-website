@@ -16,12 +16,12 @@ Organization sources are available across products. Product sources keep their p
 1. Open **Sources** and click **Add source**. The dialog says "Add a little more context."
 2. Under **Attach to**, choose **Organization** or a product.
 3. Under **Source type**, choose **Website / Docs**.
-4. Enter the **Website / docs URL**, for example https://docs.example.com.
+4. Enter the **Website / docs URL**, for example https://example.com.
 5. Optional: set **Web crawl depth**, and **JavaScript rendering** to **Automatic: render pages that look incomplete**, **Always render every page** or **Never render**.
 6. Optional: set the **Authority tier** (see below).
 7. Click **Add Source**.
 
-<!-- CLIP: context/sources-add-website — Add source: Website / Docs, URL, Add Source; the row appears with status pending/syncing -->
+<video src="/assets/docs/context/sources-add-website.mp4" poster="/assets/docs/context/sources-add-website.jpg" autoplay muted loop playsinline aria-label="Clicking Add source, leaving Attach to on Organization and Source type on Website / Docs, typing https://example.com and clicking Add Source; the new row shows syncing and then Ready"></video>
 
 **You should see:** a new row in the table. It moves through the syncing states and ends at **Ready**. The first sync of a large site can take several minutes.
 

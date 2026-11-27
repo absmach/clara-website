@@ -28,7 +28,7 @@ The header shows the product name and "Product context · " followed by your org
 4. Read it. The dialog lists **Capabilities**, **Who it helps**, **What we should not claim**, **Limitations**, **What sets it apart** and **Competitors**. Fix anything wrong in the form, then click **Save draft**.
 5. When it is accurate, click **Verify profile**. The badge changes to **Reviewed context**.
 
-<!-- CLIP: context/product-understanding — Overview tab: open Read the full understanding, Review and edit, Generate from evidence, Verify profile; badge becomes Reviewed context -->
+<video src="/assets/docs/context/product-understanding.mp4" poster="/assets/docs/context/product-understanding.jpg" autoplay muted loop playsinline aria-label="On the Acme Analytics Overview, opening the understanding, clicking Generate from evidence, reviewing the filled-in form, clicking Save draft and then Verify profile; the product shows Reviewed context"></video>
 
 > **Note:** Clara writes the understanding from the product's own evidence. A draft says "A draft: check it against the sources before relying on it." Review it before you rely on it.
 
@@ -39,7 +39,7 @@ The header shows the product name and "Product context · " followed by your org
 3. Under **Logo, colours and fonts**, add a logo address or upload a PNG, JPEG or SVG file up to 1 MB. Set **Primary colour**, **Accent colour**, **Background colour**, **Text colour**, **Secondary colour**, **Heading font** and **Body font**. Leave a field blank to use the organization's value.
 4. Click **Save customization**.
 
-<!-- CLIP: context/product-customize-voice — Customize for Acme Analytics: change Brand voice, Save customization, badge shows Customized -->
+<video src="/assets/docs/context/product-customize-voice.mp4" poster="/assets/docs/context/product-customize-voice.jpg" autoplay muted loop playsinline aria-label="Clicking Customize for Acme Analytics, typing a product brand voice and audience and clicking Save customization; the Brand voice card shows the new voice and the badge Customized"></video>
 
 **You should see:** the badge **Customized**. To go back, open **Customize** again and click **Reset to shared guidelines**.
 
@@ -60,7 +60,7 @@ Your answers guide the next plan. They don't change existing plans, approvals or
 3. Under **Role**, choose **Viewer** or **Manager**.
 4. Click **Grant access**.
 
-<!-- CLIP: context/product-manage-access — Manage access: pick Jane Doe, Viewer, Grant access; she appears in the list -->
+<video src="/assets/docs/context/product-manage-access.mp4" poster="/assets/docs/context/product-manage-access.jpg" autoplay muted loop playsinline aria-label="Clicking Manage access on the Acme Insights product, choosing Jane Doe and the Viewer role and clicking Grant access; Jane Doe appears in the list as a Viewer, then Done"></video>
 
 - **Viewer** can read the product and what is made with it.
 - **Manager** can also edit the product, manage its sources and manage its people.

@@ -21,14 +21,14 @@ Only organization admins can add products.
 
 1. Open **Products**.
 2. Click **Add product**.
-3. Fill in **Name**, for example "Acme Analytics".
+3. Fill in **Name**, for example "Acme Insights".
 4. Leave **Slug** empty to create it from the name, or type your own. The slug is the product's short address.
 5. Add the **Website** and a **Description** that says what the product does, who uses it and what problem it solves.
 6. Click **Add product**.
 
-<!-- CLIP: context/products-add — Products page: Add product dialog filled in for Acme Analytics and submitted, the new card appears -->
+<video src="/assets/docs/context/products-add.mp4" poster="/assets/docs/context/products-add.jpg" autoplay muted loop playsinline aria-label="Clicking Add product on the Products page, typing the name Acme Insights, the website https://example.com and a short description, leaving Slug empty and clicking Add product; Clara opens the new product's page"></video>
 
-**You should see:** a new card for the product, with the badge **Organization voice**.
+**You should see:** the new product's page. Back on **Products**, it has its own card with the badge **Organization voice**.
 
 > **Note:** Products are private. Nobody except organization admins can see a new product until they are given access. See [Product page and product access](/docs/context/product-page).
 

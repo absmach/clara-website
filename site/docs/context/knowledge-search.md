@@ -19,7 +19,7 @@ This is not the search box in the page header. That one finds pages, plays and y
 4. Under **Evidence up to**, choose **Tier 1 only**, **Tiers 1-2**, **Tiers 1-3** or **All tiers**. A lower tier limit shows only the most reliable sources.
 5. Click **Search**.
 
-<!-- CLIP: context/search-knowledge — Find information: type a question about Acme Analytics, Search, results with sources, click How was this found? -->
+<video src="/assets/docs/context/search-knowledge.mp4" poster="/assets/docs/context/search-knowledge.jpg" autoplay muted loop playsinline aria-label="Typing What does Acme Analytics help teams do? on Find information and clicking Search; passages from the Acme Analytics product guide appear, then How was this found? shows the search details"></video>
 
 **You should see:** the matching passages, each with the page or file it came from. If nothing matches, you see "No results found."
 
@@ -35,7 +35,7 @@ Organization admins see three buttons on each passage: **Pin**, **Correct** and 
 - **Correct** lets you replace the text. Write what the passage should say under "Write what this should say", then click **Save correction**. The passage shows **Corrected by you**, and your text replaces the original everywhere Clara reads. The source itself isn't changed.
 - **Exclude** stops Clara using the passage.
 
-<!-- CLIP: context/search-correct — Find information: Correct on a result, type the fixed text, Save correction, Corrected by you appears -->
+<video src="/assets/docs/context/search-correct.mp4" poster="/assets/docs/context/search-correct.jpg" autoplay muted loop playsinline aria-label="Clicking Correct on a Find information result, replacing the text with a corrected sentence and clicking Save correction; the passage shows the new text with Corrected by you and Pinned"></video>
 
 Memory results are labelled "Memory ·" followed by the kind. You can exclude them, but not pin or correct them.
 

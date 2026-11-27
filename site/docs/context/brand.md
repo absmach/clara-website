@@ -21,7 +21,7 @@ Brand guidelines tell Clara how your company sounds and looks. Chats, plays, age
 6. Optional: describe **How you write email**. Clara uses it for outreach and follow-up drafts. If Gmail is connected, **Learn from my sent mail** fills it in from your recent sent mail. Clara keeps only the summary, never the emails.
 7. Click **Save guidelines**.
 
-<!-- CLIP: context/brand-edit-save — Type Brand voice and Who you're speaking to for Acme Corp, click Save guidelines, status shows Your shared brand guidelines -->
+<video src="/assets/docs/context/brand-edit-save.mp4" poster="/assets/docs/context/brand-edit-save.jpg" autoplay muted loop playsinline aria-label="Typing a brand voice and who you're speaking to on the Brand guidelines page; the status shows Unsaved changes, then after Save guidelines it shows Your shared brand guidelines"></video>
 
 **You should see:** "Brand guidelines updated." The status under the form changes from "Unsaved changes" to "Your shared brand guidelines".
 
@@ -40,7 +40,7 @@ Brand guidelines tell Clara how your company sounds and looks. Chats, plays, age
 3. Clara answers with **Suggested changes**. Click **Apply to form** to put them in the form, or **Dismiss**.
 4. Click **Save guidelines** when you are happy.
 
-<!-- CLIP: context/brand-refine — Refine with Clara: send a message, Suggested changes appear, Apply to form, Save guidelines -->
+<video src="/assets/docs/context/brand-refine.mp4" poster="/assets/docs/context/brand-refine.jpg" autoplay muted loop playsinline aria-label="Clicking Refine with Clara, asking it to make the voice a bit more playful, reading the Suggested changes, clicking Apply to form and then Save guidelines"></video>
 
 > **Note:** Nothing is saved until you click **Save guidelines**. Suggested changes only change the form.
 
