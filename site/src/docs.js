@@ -3,7 +3,11 @@
 // the control bar from docs-player.js, and clips that may autoplay play, muted and looping, only while visible.
 async function startClips() {
   let mount = null;
-  try { ({ mountPlayer: mount } = await import('/docs-player.js')); } catch { /* the native controls stay */ }
+  try { ({ mountPlayer: mount } = await import('/docs-player.js')); } catch {
+    // No player: hide the bar the page was built with and keep the native controls.
+    document.documentElement.classList.add('no-player');
+    for (const video of document.querySelectorAll('.docs-body video')) video.controls = true;
+  }
   const videos = [...document.querySelectorAll('.docs-body video')];
   if (mount) for (const video of videos) mount(video);
   // Without the control bar, hand control back to the browser's own.
