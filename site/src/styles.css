@@ -790,6 +790,26 @@ a.docs-card:hover{border-color:#b2a5e2;box-shadow:0 10px 28px #2723340f}
 .docs-help-card{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 26px;background:var(--tint);border-color:var(--tint-strong)}
 .docs-home .docs-help-card h2{margin-bottom:4px}
 .docs-help-card p{font-size:16px;color:var(--tint-ink)}
+/* One scrollbar style for the docs scroll areas (not the page): a thin rounded thumb that sits inside the
+   component, always visible, with no track strip and no arrow buttons. Chromium and Safari use the
+   ::-webkit-scrollbar pieces below. Firefox uses the standard properties. */
+@media(forced-colors:none){
+  .docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:rgba(91,96,111,.5);--thumb-strong:rgba(91,96,111,.75)}
+  @supports(color:color-mix(in srgb,red,blue)){.docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:color-mix(in srgb,var(--muted) 55%,transparent);--thumb-strong:color-mix(in srgb,var(--muted) 80%,transparent)}}
+  .docs-search-results::-webkit-scrollbar,.docs-sidebar>nav::-webkit-scrollbar,.docs-mobile-nav nav::-webkit-scrollbar,.docs-body pre::-webkit-scrollbar,.docs-body table::-webkit-scrollbar{width:10px;height:10px;background:transparent}
+  .docs-search-results::-webkit-scrollbar-track,.docs-sidebar>nav::-webkit-scrollbar-track,.docs-mobile-nav nav::-webkit-scrollbar-track,.docs-body pre::-webkit-scrollbar-track,.docs-body table::-webkit-scrollbar-track{background:transparent;margin:8px 0}
+  .docs-search-results::-webkit-scrollbar-corner,.docs-sidebar>nav::-webkit-scrollbar-corner,.docs-mobile-nav nav::-webkit-scrollbar-corner,.docs-body pre::-webkit-scrollbar-corner,.docs-body table::-webkit-scrollbar-corner{background:transparent}
+  .docs-search-results::-webkit-scrollbar-button,.docs-sidebar>nav::-webkit-scrollbar-button,.docs-mobile-nav nav::-webkit-scrollbar-button,.docs-body pre::-webkit-scrollbar-button,.docs-body table::-webkit-scrollbar-button{display:none;width:0;height:0}
+  .docs-search-results::-webkit-scrollbar-thumb,.docs-sidebar>nav::-webkit-scrollbar-thumb,.docs-mobile-nav nav::-webkit-scrollbar-thumb,.docs-body pre::-webkit-scrollbar-thumb,.docs-body table::-webkit-scrollbar-thumb{background-color:var(--thumb);background-clip:padding-box;border:3px solid transparent;border-radius:99px}
+  .docs-search-results::-webkit-scrollbar-thumb:hover,.docs-sidebar>nav::-webkit-scrollbar-thumb:hover,.docs-mobile-nav nav::-webkit-scrollbar-thumb:hover,.docs-body pre::-webkit-scrollbar-thumb:hover,.docs-body table::-webkit-scrollbar-thumb:hover,.docs-search-results::-webkit-scrollbar-thumb:active,.docs-sidebar>nav::-webkit-scrollbar-thumb:active,.docs-mobile-nav nav::-webkit-scrollbar-thumb:active,.docs-body pre::-webkit-scrollbar-thumb:active,.docs-body table::-webkit-scrollbar-thumb:active{background-color:var(--thumb-strong)}
+  @supports not selector(::-webkit-scrollbar){
+    .docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{scrollbar-width:thin;scrollbar-color:var(--thumb) transparent}
+    .docs-search-results:hover,.docs-sidebar>nav:hover,.docs-mobile-nav nav:hover,.docs-body pre:hover,.docs-body table:hover{scrollbar-color:var(--thumb-strong) transparent}
+  }
+  .docs-search-results{padding-right:0}
+  /* A soft shade at the bottom while more results are below it, gone at the end. */
+  .docs-search-results{background:linear-gradient(#fff 30%,#fff0) center top,linear-gradient(#fff0,#fff 70%) center bottom,linear-gradient(#27233414,#2723340a 40%,#27233400) center top,linear-gradient(#27233400,#2723340a 60%,#27233414) center bottom;background-color:#fff;background-repeat:no-repeat;background-size:100% 36px,100% 36px,100% 12px,100% 12px;background-attachment:local,local,scroll,scroll}
+}
 .docs-shell a:focus-visible,.docs-shell summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 @media(max-width:900px){
   .docs-shell{grid-template-columns:1fr;gap:20px;padding-block:20px 70px}
