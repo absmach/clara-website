@@ -1,0 +1,8 @@
+{
+  "/docs/getting-started/": "/docs/start-here/quickstart/",
+  "/docs/brand-and-knowledge/": "/docs/context/brand/",
+  "/docs/creating-content/": "/docs/create/plays/",
+  "/docs/agents-and-workflows/": "/docs/automate/agents/",
+  "/docs/autonomy/": "/docs/automate/autonomy/",
+  "/docs/review-and-share/": "/docs/publish/review-and-approvals/"
+}

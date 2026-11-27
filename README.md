@@ -29,7 +29,7 @@ Open **[localhost:4173](http://localhost:4173)**. After editing source files, ru
 
 - **Product homepage** with real app screenshots, an animated product tour, and interactive content examples.
 - **How it works and About** pages explaining Clara’s workflow and approach.
-- **Docs and Blog** with product guides and introductory articles.
+- **Docs**: a Markdown user guide in `site/docs/` (each page also served as raw `.md`, plus `/llms.txt` and `/llms-full.txt`), and a **Blog** with introductory articles.
 - **Early access** and **Contact** forms, protected by Cloudflare Turnstile. Early-access requests go to Listmonk; contact messages are emailed to info@absmach.eu.
 
 The site is static HTML, CSS, and JavaScript, plus a small Worker that handles the two forms. Fonts and artwork are served locally. There is no analytics integration or AI generation running on the website.
@@ -39,10 +39,12 @@ The site is static HTML, CSS, and JavaScript, plus a small Worker that handles t
 ```text
 worker/                     Form API (/api/early-access, /api/contact) and its tests
 site/
+├── docs/                   User guide pages (Markdown) and sections.json; see docs/CONTRIBUTING.md
 ├── src/                    Page content, styles, scripts, and assets
 ├── scripts/
 │   ├── build.mjs           Shared layout and page generation
-│   ├── resource-pages.mjs  Docs and Blog content
+│   ├── docs.mjs            User guide: Markdown rendering, checks, llms files
+│   ├── resource-pages.mjs  Blog content
 │   ├── check.mjs           Static validation
 │   └── serve.mjs           Local preview server
 └── dist/                   Generated files for static hosting
