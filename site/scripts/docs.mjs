@@ -266,7 +266,7 @@ export function searchIndex({ pages }) {
 
 // The search field. docs.js switches it on; without JavaScript it stays hidden.
 export function searchBox(prefix, { large = false } = {}) {
-  return `<div class="docs-search${large ? ' docs-search-large' : ''}" data-docs-search hidden><label class="docs-search-label" for="${prefix}-search">Search the docs</label><div class="docs-search-field">${icon('search', 18)}<input id="${prefix}-search" type="search" role="combobox" aria-expanded="false" aria-controls="${prefix}-results" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the docs"/><kbd aria-hidden="true" data-search-hint>Ctrl K</kbd></div><ul class="docs-search-results" id="${prefix}-results" role="listbox" aria-label="Search results" hidden></ul><p class="docs-search-status" role="status" aria-live="polite" data-search-status></p></div>`;
+  return `<div class="docs-search${large ? ' docs-search-large' : ''}" data-docs-search hidden><label class="docs-search-label" for="${prefix}-search">Search the docs</label><div class="docs-search-field">${icon('search', 18)}<input id="${prefix}-search" type="search" role="combobox" aria-expanded="false" aria-controls="${prefix}-results" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the docs"/><kbd aria-hidden="true" data-search-hint>Ctrl K</kbd></div><div class="docs-search-pop" hidden><ul class="docs-search-results" id="${prefix}-results" role="listbox" aria-label="Search results"></ul></div><p class="docs-search-status" role="status" aria-live="polite" data-search-status></p></div>`;
 }
 
 // Sidebar: sections > pages. The open section is the current one.

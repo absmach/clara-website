@@ -50,6 +50,7 @@ function startSearch(search) {
   for (const box of boxes) {
     const input = box.querySelector('input');
     const list = box.querySelector('[role=listbox]');
+    const pop = box.querySelector('.docs-search-pop');
     const status = box.querySelector('[data-search-status]');
     const hint = box.querySelector('[data-search-hint]');
     let active = -1;
@@ -57,7 +58,13 @@ function startSearch(search) {
     if (hint) hint.textContent = mac ? '\u2318K' : 'Ctrl K';
     box.hidden = false;
 
-    const close = () => { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
+    // Soft fades at the top and bottom edge while there is more list in that direction.
+    const fades = () => {
+      pop.classList.toggle('has-above', list.scrollTop > 1);
+      pop.classList.toggle('has-below', list.scrollTop + list.clientHeight < list.scrollHeight - 1);
+    };
+    list.addEventListener('scroll', fades, { passive: true });
+    const close = () => { pop.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
     const setActive = n => {
       if (!options.length) return;
       active = (n + options.length) % options.length;
@@ -108,7 +115,8 @@ function startSearch(search) {
           setActive(0);
         }
       }
-      list.hidden = false;
+      pop.hidden = false;
+      fades();
       input.setAttribute('aria-expanded', 'true');
     };
 
@@ -123,7 +131,7 @@ function startSearch(search) {
     input.addEventListener('input', update);
     input.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        if (list.hidden && input.value.trim()) render();
+        if (pop.hidden && input.value.trim()) render();
         if (!options.length) return;
         e.preventDefault();
         setActive(active + (e.key === 'ArrowDown' ? 1 : -1));
@@ -131,7 +139,7 @@ function startSearch(search) {
         const target = options[active] || options[0];
         if (target) { e.preventDefault(); location.href = target.href; }
       } else if (e.key === 'Escape') {
-        if (!list.hidden) { e.preventDefault(); close(); } else if (input.value) { input.value = ''; status.textContent = ''; }
+        if (!pop.hidden) { e.preventDefault(); close(); } else if (input.value) { input.value = ''; status.textContent = ''; }
       }
     });
     box.addEventListener('focusout', () => setTimeout(() => { if (!box.contains(document.activeElement)) close(); }, 0));
