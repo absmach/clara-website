@@ -41,3 +41,11 @@ test('keys on the player and on the scrubber', () => {
   assert.deepEqual(keyAction('Home', { slider: true }), { type: 'to', start: true });
   assert.deepEqual(keyAction('End', { slider: true }), { type: 'to', start: false });
 });
+
+test('a failed player import hides the built-in bar and keeps native controls', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const script = await readFile(new URL('../src/docs.js', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
+  assert.match(script, /catch \{[^}]*classList\.add\('no-player'\)/);
+  assert.match(css, /\.no-player \.docs-player-bar\{display:none\}/);
+});
