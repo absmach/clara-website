@@ -67,13 +67,17 @@ for (const page of docs.pages) {
   if (!files.includes(path.join(root, page.route, 'index.html'))) problems.push(`${page.route}: no HTML page in dist (run pnpm run build)`);
   if (!files.includes(path.join(root, `${page.route}.md`))) problems.push(`${page.route}.md: not in dist (run pnpm run build)`);
   const html = pages.get(path.join(root, page.route, 'index.html'))?.html ?? '';
-  for (const [, url] of html.matchAll(/\b(?:src|poster)="(\/assets\/docs\/[^"]+)"/g)) problems.push(`${page.route}: clip address ${url} wasn't rewritten to a ${CDN_BASE} address (is it in docs/media.json?)`);
+  for (const [, url] of html.matchAll(/\b(?:src|poster|href)="(\/assets\/docs\/[^"]+)"/g)) problems.push(`${page.route}: clip address ${url} wasn't rewritten to a ${CDN_BASE} address (is it in docs/media.json?)`);
   if (!html.includes('rel="alternate" type="text/markdown"')) problems.push(`${page.route}: missing the Markdown alternate link`);
 }
 for (const [from, to] of Object.entries(docs.redirects)) {
   if (!files.includes(path.join(root, from, 'index.html'))) problems.push(`${from}: redirect page missing from dist`);
   if (!REDIRECT_TARGET.test(to)) problems.push(`${from}: redirect target ${to} must look like /docs/section/page/`);
   if (!keys.has(to.replace(/\/+$/, ''))) problems.push(`${from}: redirects to ${to}, which is not a docs page`);
+}
+// The Markdown copies and llms-full.txt must not point at a path that only exists in the source (links, clips, posters).
+for (const file of files.filter(f => f.endsWith('.md') || f.endsWith('llms-full.txt'))) {
+  if (/\/assets\/docs\//.test(await readFile(file, 'utf8'))) problems.push(`${path.relative(root, file)}: still points at /assets/docs/ (is the file in docs/media.json?)`);
 }
 for (const name of ['llms.txt', 'llms-full.txt']) if (!files.includes(path.join(root, name))) problems.push(`${name} missing from dist`);
 const llms = files.includes(path.join(root, 'llms.txt')) ? await readFile(path.join(root, 'llms.txt'), 'utf8') : '';

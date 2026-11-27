@@ -701,7 +701,8 @@ dialog .form-success{margin-top:22px}
 .docs-body .docs-player video{margin:0;border:0;border-radius:0;box-shadow:none;aspect-ratio:var(--ratio);cursor:pointer}
 .docs-player-bar{display:flex;align-items:center;gap:2px;padding:4px 8px;border-top:1px solid var(--line);background:#fff}
 .docs-player-btn{flex:none;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ink)}
-.docs-player-btn:hover{background:var(--tint);color:var(--accent)}
+.docs-player-btn:disabled{opacity:.4;cursor:default}
+.docs-player-btn:hover:not(:disabled){background:var(--tint);color:var(--accent)}
 .docs-player-btn:focus-visible,.docs-player-track:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .docs-player-track{flex:1;min-width:48px;height:44px;margin:0 8px;display:flex;align-items:center;border-radius:6px;cursor:pointer;touch-action:none}
 .docs-player-rail{width:100%;height:6px;border-radius:99px;background:var(--surface-soft);overflow:hidden}

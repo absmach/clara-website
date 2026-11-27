@@ -34,8 +34,8 @@ test('keys on the player and on the scrubber', () => {
   assert.deepEqual(keyAction('ArrowRight'), { type: 'seek', delta: 5 });
   assert.equal(keyAction('ArrowUp'), null);
   assert.equal(keyAction('a'), null);
-  // The scrubber leaves Space to the browser and adds up, down, Home and End.
-  assert.equal(keyAction(' ', { slider: true }), null);
+  // The scrubber plays and pauses with Space too, and adds up, down, Home and End.
+  assert.deepEqual(keyAction(' ', { slider: true }), { type: 'toggle' });
   assert.deepEqual(keyAction('ArrowUp', { slider: true }), { type: 'seek', delta: 5 });
   assert.deepEqual(keyAction('ArrowDown', { slider: true }), { type: 'seek', delta: -5 });
   assert.deepEqual(keyAction('Home', { slider: true }), { type: 'to', start: true });

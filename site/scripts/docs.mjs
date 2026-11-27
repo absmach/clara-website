@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { Marked } from 'marked';
 import { applyManifest } from './media.mjs';
+import { playerHtml } from '../src/docs-player.js';
 
 export const docsRoot = fileURLToPath(new URL('../docs/', import.meta.url));
 export const siteUrl = 'https://claragtm.com';
@@ -146,7 +147,8 @@ export function renderMarkdown(body, page = {}) {
       },
     },
   });
-  let html = prepareVideos(marked.parse(body));
+  // Each clip gets its control bar in the HTML, so the page doesn't shift when the script starts.
+  let html = prepareVideos(marked.parse(body)).replace(/(?:<p>)?(<video\b[^>]*>[\s\S]*?<\/video>)(?:<\/p>)?/g, (all, tag) => playerHtml(tag, /\baria-label="([^"]*)"/.exec(tag)?.[1]));
   if (page.tag === LIMITED) html = html.replace('</h1>', `</h1>\n<p class="docs-note docs-note-limited"><strong>${LIMITED}.</strong> ${LIMITED_NOTE}</p>`);
   // Wrap the closing "Next steps" section so it can be styled as a block.
   html = html.replace(/<h2 id="next-steps">[\s\S]*?(?=<h2 |$)/, m => `<section class="docs-next-steps" aria-labelledby="next-steps">${m}</section>`);

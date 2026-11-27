@@ -82,3 +82,16 @@ test('the credentials file is ignored by git', async () => {
   assert.match(ignore, /^\.env\*$/m);
   assert.match(ignore, /^media\/$/m);
 });
+
+test('each clip is wrapped in its player at build time, so the page does not shift', async () => {
+  const docs = await loadDocs();
+  const page = docs.pages.find(p => /<video/.test(p.body));
+  const html = docPage({ page, ...docs, media: await loadMedia() });
+  const clips = (html.match(/<video\b/g) || []).length;
+  assert.ok(clips > 0);
+  assert.equal((html.match(/class="docs-player"/g) || []).length, clips);
+  assert.equal((html.match(/class="docs-player-bar"/g) || []).length, clips);
+  assert.match(html, /<div class="docs-player" role="group" aria-label="Video player: [^"]+"><video/);
+  assert.match(html, /<button type="button" class="docs-player-btn" aria-label="Play" disabled>/);
+  assert.match(html, /role="slider"[^>]*aria-valuenow="0"/);
+});
