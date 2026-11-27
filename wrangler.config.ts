@@ -12,13 +12,11 @@ import { defineWranglerConfig } from "wrangler/experimental-config";
 // command, so create it empty on a fresh clone; the build then fills it.
 mkdirSync(fileURLToPath(new URL("./site/dist", import.meta.url)), { recursive: true });
 
-// Every deploy (production and previews) builds the site and runs the checks,
-// so a failing check blocks the deploy. Only `cf dev` (mode "development")
-// builds without the checks.
-// Only `cf dev` builds without the checks. Wrangler doesn't set a mode for it
-// (mode is undefined there and for preview builds), so detect the dev verb;
-// anything else, including an unexpected command, runs the checks.
-const isDev = process.argv.includes("dev");
+// Only `cf dev` builds without the checks. Wrangler sets no mode for it (mode is
+// undefined there and for preview builds), so match the subcommand, which is the
+// first argument after the script: [.., "dev"] under `cf dev`, [.., "build", ..]
+// otherwise. No flag value can match, and anything unexpected runs the checks.
+const isDev = process.argv[2] === "dev";
 
 export default defineWranglerConfig({
   build: {
