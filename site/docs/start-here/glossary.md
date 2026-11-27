@@ -16,11 +16,11 @@ Short definitions, in alphabetical order. Where a term has its own page, the ter
 - [**Authority tier**](/docs/context/knowledge-sources). How much Clara trusts a knowledge source: **1 · Authoritative**, **2 · Strong evidence**, **3 · Contextual** or **4 · External**. You set it when you add a source, or leave it on **Automatic**.
 - [**Autonomy**](/docs/automate/autonomy). How much Clara may do without asking. The presets are **Assistant**, **Co-pilot** and **Autopilot**. See [Choose your level of autonomy](/docs/automate/autonomy).
 - [**Brand guidelines**](/docs/context/brand). Your voice, audience, writing rules, logo and colours. Clara applies them to every draft.
-- **Campaign.** <!-- TODO link: /docs/create/campaigns --> One brief turned into a set of related drafts.
+- [**Campaign**](/docs/create/campaigns). One brief turned into a set of related drafts.
 - [**Claim**](/docs/publish/review-and-approvals). A statement in a draft that Clara checks against your knowledge, such as a feature name or a number.
 - **Connection.** <!-- TODO link: /docs/connections/overview --> A link between Clara and another account or tool, such as a social account. Connections appear in the sidebar under **Connectors**.
-- **Content piece (draft).** <!-- TODO link: /docs/create/my-work --> One thing Clara has written, such as a post or an article. Drafts are listed in **My work**.
-- **Draft ready.** <!-- TODO link: /docs/create/my-work --> The status of a draft that Clara has finished and that is waiting for you.
+- [**Content piece (draft)**](/docs/create/my-work). One thing Clara has written, such as a post or an article. Drafts are listed in **My work**.
+- [**Draft ready**](/docs/create/my-work). The status of a draft that Clara has finished and that is waiting for you.
 - [**Knowledge source**](/docs/context/knowledge-sources). A website, file or other material that Clara reads to learn about your company.
 - [**Memory**](/docs/context/knowledge-sources). What Clara keeps from its own work, such as conversations, finished drafts and workflow run summaries, so later chats and drafts can find it.
 - **Organization.** <!-- TODO link: /docs/account/organizations --> The workspace everything belongs to: people, products, connections and work.

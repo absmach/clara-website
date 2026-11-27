@@ -15,8 +15,8 @@ These are the building blocks you meet in Clara. Each one has the same name in t
 - [**Products**](/docs/context/products). What you sell. Each product can have its own voice, sources and people. Sidebar → **Products**.
 - [**Brand & knowledge**](/docs/context/brand). Where Clara learns about you: **Brand guidelines** (voice, audience, writing rules, logo, colours), **Sources** (what Clara reads) and **Skills** (reusable instructions). Sidebar → **Brand & knowledge**. See [Brand guidelines](/docs/context/brand).
 - [**Plays**](/docs/create/plays). Ready-made jobs, such as writing a post, planning a launch or finding a new angle. Sidebar → **Plays**. See [From a brief to a first draft](/docs/create/plays).
-- **My work.** <!-- TODO link: /docs/create/my-work --> Everything Clara has drafted, with a status on each piece. Sidebar → **My work**.
-- **Campaigns.** <!-- TODO link: /docs/create/campaigns --> One brief turned into a set of related drafts. Sidebar → **Campaigns**.
+- [**My work**](/docs/create/my-work). Everything Clara has drafted, with a status on each piece. Sidebar → **My work**.
+- [**Campaigns**](/docs/create/campaigns). One brief turned into a set of related drafts. Sidebar → **Campaigns**.
 - [**Agents**](/docs/automate/agents). A role you give Clara, with one or more jobs that run on their own. Sidebar → **Agents**. See [Build your marketing team](/docs/automate/agents).
 - **Workflows.** <!-- TODO link: /docs/automate/workflows --> The step-by-step automations behind agents, or on their own. Sidebar → **Workflows**.
 - [**Autonomy**](/docs/automate/autonomy). How much Clara may do without asking. **Settings** → **Autonomy** offers three presets:
