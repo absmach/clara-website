@@ -21,6 +21,18 @@ Status can be **Live**, **Archived**, **Rejected** or **Not live**. The risk bad
 
 **You should see:** "Skill saved and live." The skill now appears on the **Skills** tab.
 
+## Upload a skill package
+
+1. Click **New skill**, then **Upload a skill**.
+2. Drop a `.zip` or `.md` file on the box, or click it to choose one (up to 50 MB). The package must include a SKILL.md with a name and description, for example `release-notes/SKILL.md`.
+3. When the file shows **Ready**, click **Upload**.
+4. In **Review before saving** ("Nothing is saved yet"), check **Name**, **Description** and **Instructions**, and optionally the content type, tags and **Allowed tools / connectors**.
+5. Click **Save skill**, or **Discard draft**.
+
+<video src="/assets/docs/context/skills-upload.mp4" poster="/assets/docs/context/skills-upload.jpg" autoplay muted loop playsinline aria-label="Clicking New skill, then Upload a skill, choosing release-notes-skill.zip, clicking Upload and then Save skill; the Release notes skill page opens with Source Uploaded and Status Live"></video>
+
+**You should see:** the skill's page, with **Status** Live and **Source** Uploaded. If the file is wrong, the box says why, for example "Choose a .zip, .md, .json, or .yaml file."
+
 ## Import a skill from GitHub
 
 1. Click **New skill**, then **Import from GitHub**.
@@ -40,7 +52,7 @@ Nothing is saved until you click **Save skill**.
 Open a skill with **View instructions**. The page shows its status, version, source and how often it ran, with **Skill details -- full instructions**, tags and allowed tools.
 
 - **Export .zip** downloads the skill as a package. Anyone who can open the skill can do this.
-- People who manage the skill can also **Edit / create version**, **Import new version from GitHub**, **Archive** and **Delete version** or **Delete skill**. An archived version can be restored with **Restore**.
+- People who manage the skill can also **Edit / create version**, **Upload new version**, **Import new version from GitHub**, **Archive** and **Delete version** or **Delete skill**. An archived version can be restored with **Restore**.
 - **Version history** lists every version. **Execution audit** lists when workflows ran the skill (Version, Status, Content piece, Actor, When). Until then it says "Not run by a workflow yet."
 
 ## Share a skill
@@ -61,7 +73,7 @@ A custom skill is private to its creator until you share it. Organization admins
 
 ## FAQ
 
-**What is in a skill package?** A SKILL.md file with the name, description and instructions, and an optional list of tags and allowed tools.
+**What is in a skill package?** A `.zip` with a SKILL.md file, or a single `.md` file, with the name, description and instructions, and an optional list of tags and allowed tools.
 
 **Can a skill publish things?** A skill is instructions. What it may do depends on the tools and connectors you allow and on your autonomy settings. See [Choose your level of autonomy](/docs/automate/autonomy).
 
