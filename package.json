@@ -5,7 +5,7 @@
     "dev": "npm --prefix site run dev",
     "build": "npm --prefix site run build",
     "check": "npm --prefix site run check && node --test \"worker/*.test.js\" \"site/scripts/*.test.mjs\"",
-    "dev:worker": "npm run build && cf dev",
+    "dev:worker": "cf dev",
     "deploy:check": "npm run build && npm run check && cf deploy --mode production --dry-run"
   },
   "devDependencies": {
