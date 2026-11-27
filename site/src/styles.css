@@ -702,7 +702,8 @@ dialog .form-success{margin-top:22px}
 .docs-body .docs-player video{margin:0;border:0;border-radius:0;box-shadow:none;aspect-ratio:var(--ratio);cursor:pointer}
 .docs-player-bar{display:flex;align-items:center;gap:2px;padding:4px 8px;border-top:1px solid var(--line);background:#fff}
 .docs-player-btn{flex:none;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ink)}
-.docs-player-btn:hover{background:var(--tint);color:var(--accent)}
+.docs-player-btn:disabled{opacity:.4;cursor:default}
+.docs-player-btn:hover:not(:disabled){background:var(--tint);color:var(--accent)}
 .docs-player-btn:focus-visible,.docs-player-track:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .docs-player-track{flex:1;min-width:48px;height:44px;margin:0 8px;display:flex;align-items:center;border-radius:6px;cursor:pointer;touch-action:none}
 .docs-player-rail{width:100%;height:6px;border-radius:99px;background:var(--surface-soft);overflow:hidden}
@@ -735,11 +736,11 @@ dialog .form-success{margin-top:22px}
 .docs-search-field kbd{flex:none;font:inherit;font-size:12px;line-height:1;padding:5px 7px;border:1px solid var(--line);border-radius:5px;background:var(--surface-soft);color:var(--muted)}
 .docs-search-field:focus-within kbd{display:none}
 @media(hover:none),(max-width:650px){.docs-search-field kbd{display:none}}
-.docs-search-pop{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 6px);padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 18px 40px #27233420}
+.docs-search-pop{--pop-bg:#fff;position:absolute;z-index:30;left:0;right:0;top:calc(100% + 6px);padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--pop-bg);box-shadow:0 18px 40px #27233420}
 .docs-search-pop[hidden]{display:none}
 .docs-search-pop::before,.docs-search-pop::after{content:'';position:absolute;left:8px;right:8px;height:22px;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s}
-.docs-search-pop::before{top:8px;background:linear-gradient(#fff,#fff0)}
-.docs-search-pop::after{bottom:8px;background:linear-gradient(#fff0,#fff)}
+.docs-search-pop::before{top:8px;background:linear-gradient(var(--pop-bg),transparent)}
+.docs-search-pop::after{bottom:8px;background:linear-gradient(transparent,var(--pop-bg))}
 .docs-search-pop.has-above::before,.docs-search-pop.has-below::after{opacity:1}
 .docs-search-results{list-style:none;margin:0;padding:0;max-height:min(420px,60vh);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:22px;border-radius:6px}
 .docs-sidebar .docs-search-pop{min-width:min(420px,calc(100vw - 32px));right:auto}
@@ -800,10 +801,11 @@ a.docs-card:hover{border-color:#b2a5e2;box-shadow:0 10px 28px #2723340f}
    component, always visible, with no track strip and no arrow buttons. Chromium and Safari use the
    ::-webkit-scrollbar pieces below. Firefox uses the standard properties. */
 @media(forced-colors:none){
-  .docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:rgba(91,96,111,.5);--thumb-strong:rgba(91,96,111,.75)}
-  @supports(color:color-mix(in srgb,red,blue)){.docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:color-mix(in srgb,var(--muted) 55%,transparent);--thumb-strong:color-mix(in srgb,var(--muted) 80%,transparent)}}
+  .docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:rgba(83,87,103,.75);--thumb-strong:rgba(83,87,103,.92)}
+  @supports(color:color-mix(in srgb,red,blue)){.docs-search-results,.docs-sidebar>nav,.docs-mobile-nav nav,.docs-body pre,.docs-body table{--thumb:color-mix(in srgb,var(--muted) 75%,transparent);--thumb-strong:color-mix(in srgb,var(--muted) 92%,transparent)}}
   .docs-search-results::-webkit-scrollbar,.docs-sidebar>nav::-webkit-scrollbar,.docs-mobile-nav nav::-webkit-scrollbar,.docs-body pre::-webkit-scrollbar,.docs-body table::-webkit-scrollbar{width:10px;height:10px;background:transparent}
   .docs-search-results::-webkit-scrollbar-track,.docs-sidebar>nav::-webkit-scrollbar-track,.docs-mobile-nav nav::-webkit-scrollbar-track,.docs-body pre::-webkit-scrollbar-track,.docs-body table::-webkit-scrollbar-track{background:transparent;margin:8px 0}
+  .docs-search-results::-webkit-scrollbar-track:horizontal,.docs-sidebar>nav::-webkit-scrollbar-track:horizontal,.docs-mobile-nav nav::-webkit-scrollbar-track:horizontal,.docs-body pre::-webkit-scrollbar-track:horizontal,.docs-body table::-webkit-scrollbar-track:horizontal{margin:0 8px}
   .docs-search-results::-webkit-scrollbar-corner,.docs-sidebar>nav::-webkit-scrollbar-corner,.docs-mobile-nav nav::-webkit-scrollbar-corner,.docs-body pre::-webkit-scrollbar-corner,.docs-body table::-webkit-scrollbar-corner{background:transparent}
   .docs-search-results::-webkit-scrollbar-button,.docs-sidebar>nav::-webkit-scrollbar-button,.docs-mobile-nav nav::-webkit-scrollbar-button,.docs-body pre::-webkit-scrollbar-button,.docs-body table::-webkit-scrollbar-button{display:none;width:0;height:0}
   .docs-search-results::-webkit-scrollbar-thumb,.docs-sidebar>nav::-webkit-scrollbar-thumb,.docs-mobile-nav nav::-webkit-scrollbar-thumb,.docs-body pre::-webkit-scrollbar-thumb,.docs-body table::-webkit-scrollbar-thumb{background-color:var(--thumb);background-clip:padding-box;border:3px solid transparent;border-radius:99px}

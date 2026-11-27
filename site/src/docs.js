@@ -12,10 +12,12 @@ async function startClips() {
   const clips = videos.filter(video => video.hasAttribute('data-autoplay'));
   if (!clips.length) return;
   const quiet = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (quiet.matches) return;
+  // Reduced motion: no autoplay, and no looping if the reader presses play.
+  if (quiet.matches) { for (const video of videos) video.loop = false; return; }
   const watcher = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     for (const { target, isIntersecting } of entries) {
-      if (isIntersecting && !quiet.matches) target.play().catch(() => native(target));
+      // A clip the reader paused stays paused.
+      if (isIntersecting && !quiet.matches && !target.dataset.userPaused) target.play().catch(() => native(target));
       else target.pause();
     }
   }, { threshold: 0.4 }) : null;
@@ -29,7 +31,7 @@ async function startClips() {
   // If the preference changes while the page is open, stop the clips.
   quiet.addEventListener('change', () => {
     if (!quiet.matches) return;
-    for (const clip of clips) { clip.pause(); native(clip); }
+    for (const clip of clips) { clip.pause(); clip.loop = false; native(clip); }
   });
 }
 startClips();

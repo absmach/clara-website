@@ -19,8 +19,9 @@ export const positionToTime = (x, left, width, duration) => (width > 0 ? clamp((
 export const valueText = (current, duration) => `${formatTime(current)} of ${formatTime(duration)}`;
 
 // A key on the player (or on the scrubber) turned into an action, or null when it isn't ours.
+// Space also plays and pauses from the scrubber, so it never scrolls the page.
 export function keyAction(key, { slider = false } = {}) {
-  if (!slider && (key === ' ' || key === 'k' || key === 'K')) return { type: 'toggle' };
+  if (key === ' ' || key === 'k' || key === 'K') return { type: 'toggle' };
   if (key === 'ArrowLeft' || (slider && key === 'ArrowDown')) return { type: 'seek', delta: -STEP };
   if (key === 'ArrowRight' || (slider && key === 'ArrowUp')) return { type: 'seek', delta: STEP };
   if (slider && key === 'Home') return { type: 'to', start: true };
@@ -36,56 +37,40 @@ const ICONS = {
 };
 const icon = name => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name]}</svg>`;
 
-function button(name, label) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'docs-player-btn';
-  b.setAttribute('aria-label', label);
-  b.innerHTML = icon(name);
-  return b;
+const btn = (name, label) => `<button type="button" class="docs-player-btn" aria-label="${label}" disabled>${icon(name)}</button>`;
+
+// The player's markup, written into the page at build time so it takes up its space from the first paint
+// and nothing moves when the script starts. The buttons stay disabled until mountPlayer() wires them up.
+// Without JavaScript the bar is hidden (see the <noscript> style) and the native controls stay.
+// `label` is the text of the clip's aria-label attribute, as written in the page.
+export function playerHtml(videoTag, label) {
+  return `<div class="docs-player" role="group" aria-label="Video player: ${label || 'clip'}">${videoTag}<div class="docs-player-bar">${btn('play', 'Play')}${btn('back', `Back ${STEP} seconds`)}${btn('forward', `Forward ${STEP} seconds`)}<div class="docs-player-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00 of 0:00"><div class="docs-player-rail"><div class="docs-player-fill"></div></div></div><span class="docs-player-time">0:00 / 0:00</span></div></div>`;
 }
 
-// Wraps one <video> in the player. Returns the wrapper. The native controls are removed
-// only here, so a clip that never reaches this function keeps them.
+// Wires up one player written by playerHtml(). `video` is the <video> inside it.
+// The native controls are removed only here, so a clip that never gets here keeps them.
 export function mountPlayer(video) {
-  if (video.closest('.docs-player')) return video.closest('.docs-player');
-  const label = video.getAttribute('aria-label') || 'clip';
-  const wrap = document.createElement('div');
-  wrap.className = 'docs-player';
-  wrap.tabIndex = 0;
-  wrap.setAttribute('role', 'group');
-  wrap.setAttribute('aria-label', `Video player: ${label}`);
+  const wrap = video.closest('.docs-player');
+  if (!wrap || wrap.dataset.ready) return wrap;
+  wrap.dataset.ready = '1';
   const w = Number(video.getAttribute('width'));
   const h = Number(video.getAttribute('height'));
   if (w > 0 && h > 0) wrap.style.setProperty('--ratio', `${w} / ${h}`);
-  video.before(wrap);
   video.controls = false;
-  wrap.append(video);
-
-  const bar = document.createElement('div');
-  bar.className = 'docs-player-bar';
-  const play = button('play', 'Play');
-  const back = button('back', `Back ${STEP} seconds`);
-  const forward = button('forward', `Forward ${STEP} seconds`);
-  const track = document.createElement('div');
-  track.className = 'docs-player-track';
+  wrap.tabIndex = 0;
+  const [play, back, forward] = wrap.querySelectorAll('.docs-player-btn');
+  for (const b of [play, back, forward]) b.disabled = false;
+  const track = wrap.querySelector('.docs-player-track');
   track.tabIndex = 0;
-  track.setAttribute('role', 'slider');
-  track.setAttribute('aria-label', 'Seek');
-  track.setAttribute('aria-valuemin', '0');
-  const rail = document.createElement('div');
-  rail.className = 'docs-player-rail';
-  const fill = document.createElement('div');
-  fill.className = 'docs-player-fill';
-  rail.append(fill);
-  track.append(rail);
-  const time = document.createElement('span');
-  time.className = 'docs-player-time';
-  bar.append(play, back, forward, track, time);
-  wrap.append(bar);
+  const fill = wrap.querySelector('.docs-player-fill');
+  const time = wrap.querySelector('.docs-player-time');
 
   const duration = () => (Number.isFinite(video.duration) ? video.duration : 0);
-  const toggle = () => { if (video.paused) video.play().catch(() => {}); else video.pause(); };
+  // A clip the reader paused stays paused when it scrolls back into view (see docs.js).
+  const toggle = () => {
+    if (video.paused) { delete video.dataset.userPaused; video.play().catch(() => {}); }
+    else { video.dataset.userPaused = '1'; video.pause(); }
+  };
   const seekTo = t => { video.currentTime = clamp(t, duration()); sync(); };
   const sync = () => {
     const d = duration();
@@ -102,7 +87,7 @@ export function mountPlayer(video) {
     play.setAttribute('aria-label', playing ? 'Pause' : 'Play');
     play.innerHTML = icon(playing ? 'pause' : 'play');
   };
-  const act = (action) => {
+  const act = action => {
     if (!action) return false;
     if (action.type === 'toggle') toggle();
     else if (action.type === 'seek') seekTo(jump(video.currentTime, action.delta, duration()));

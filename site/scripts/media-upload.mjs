@@ -1,7 +1,8 @@
 // pnpm run media:upload [--dry-run]
 // Uploads everything in media/docs/ to the docs media Space and rewrites site/docs/media.json.
 // Credentials: DO_SPACES_KEY and DO_SPACES_SECRET, from the environment or a git-ignored .env.media file.
-// With --dry-run it only checks which files the Space already has.
+// With --dry-run it only checks which files the Space already has. Entries in media.json whose file
+// isn't in media/docs/ are kept (with a warning) unless you pass --prune.
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -11,6 +12,7 @@ const repo = fileURLToPath(new URL('../../', import.meta.url));
 const mediaDir = path.join(repo, 'media/docs');
 const manifestFile = path.join(repo, 'site/docs/media.json');
 const dryRun = process.argv.includes('--dry-run');
+const prune = process.argv.includes('--prune');
 
 async function credentials() {
   let { DO_SPACES_KEY: key, DO_SPACES_SECRET: secret } = process.env;
@@ -65,12 +67,19 @@ for (const relative of files) {
   if (head.status !== 404 && head.status !== 403) throw new Error(`HEAD ${key}: ${head.status}`);
   if (dryRun) { uploaded++; console.log(`would upload ${key}`); continue; }
   const put = await send(auth, 'PUT', key, { body: data, headers: { 'content-type': contentType(path.extname(relative)), 'cache-control': CACHE_CONTROL, 'x-amz-acl': 'public-read' } });
-  if (!put.ok) throw new Error(`PUT ${key}: ${put.status} ${(await put.text()).slice(0, 200)}`);
+  // Only the status and the error code: the response body can repeat the access key.
+  if (!put.ok) throw new Error(`PUT ${key}: ${put.status} ${/<Code>(\w{1,40})<\/Code>/.exec(await put.text())?.[1] ?? ''}`.trim());
   uploaded++;
   console.log(`uploaded ${key}`);
 }
 if (dryRun) console.log(`Dry run: ${uploaded} to upload, ${kept} already there. media.json not changed.`);
 else {
-  await writeFile(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`);
-  console.log(`Done: ${uploaded} uploaded, ${kept} already there. Wrote site/docs/media.json (${files.length} files). Commit it.`);
+  // Entries whose file isn't in media/docs/ are kept, so a partial folder can't drop them. --prune removes them.
+  const existing = await readFile(manifestFile, 'utf8').then(JSON.parse, () => ({}));
+  const missing = Object.keys(existing).filter(k => !(k in manifest));
+  const merged = prune ? manifest : { ...existing, ...manifest };
+  for (const k of missing) console.warn(`${prune ? 'removed' : 'kept   '} ${k} (no local file in media/docs/)`);
+  const sorted = Object.fromEntries(Object.entries(merged).sort(([a], [b]) => a.localeCompare(b)));
+  await writeFile(manifestFile, `${JSON.stringify(sorted, null, 2)}\n`);
+  console.log(`Done: ${uploaded} uploaded, ${kept} already there. Wrote site/docs/media.json (${Object.keys(sorted).length} entries${missing.length && !prune ? `, ${missing.length} kept without a local file; --prune removes them` : ''}). Commit it.`);
 }
