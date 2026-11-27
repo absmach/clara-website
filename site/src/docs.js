@@ -165,3 +165,6 @@ function startSearch(search) {
 }
 // Loaded on its own so a missing search file can never stop the clips above.
 import('/docs-search.js').then(module => startSearch(module.search)).catch(() => {});
+
+// "On this page": highlight the section being read. The list itself is plain HTML from the build.
+import('/docs-toc.js').then(module => module.mountToc()).catch(() => {});

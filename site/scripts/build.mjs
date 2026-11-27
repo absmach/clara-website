@@ -16,7 +16,7 @@ await rm(path.join(out, 'assets/docs'), { recursive: true, force: true });
 const docs = await loadDocs();
 const media = await loadMedia();
 await cp(path.join(src, 'assets'), path.join(out, 'assets'), { recursive: true });
-for (const file of ['styles.css', 'site.js', 'logo-directions.css', 'logo-directions.js', 'bloom-directions.css', 'bloom-directions.js', 'automation-redirect.js', 'docs.js', 'docs-search.js', 'docs-player.js']) await cp(path.join(src, file), path.join(out, file));
+for (const file of ['styles.css', 'site.js', 'logo-directions.css', 'logo-directions.js', 'bloom-directions.css', 'bloom-directions.js', 'automation-redirect.js', 'docs.js', 'docs-search.js', 'docs-player.js', 'docs-toc.js']) await cp(path.join(src, file), path.join(out, file));
 const siteUrl = 'https://claragtm.com';
 const shareImage = `${siteUrl}/assets/og-image.png`;
 const shareImageAlt = 'Clara: You make great things. Let’s tell the world.';

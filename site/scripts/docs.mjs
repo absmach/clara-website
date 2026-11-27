@@ -6,6 +6,7 @@ import path from 'node:path';
 import { Marked } from 'marked';
 import { applyManifest } from './media.mjs';
 import { playerHtml } from '../src/docs-player.js';
+import { tocHtml } from '../src/docs-toc.js';
 
 export const docsRoot = fileURLToPath(new URL('../docs/', import.meta.url));
 export const siteUrl = 'https://claragtm.com';
@@ -55,6 +56,30 @@ const stripCode = md => md.replace(CODE, '');
 
 const UNSAFE_URL = /(?:\]\(\s*<?|(?<![\w-])(?:href|src|poster)\s*=\s*["']?\s*)(?:javascript|data|vbscript):/i;
 
+// The FAQ section is a list of bold questions, each followed by its answer: **Question?** Answer.
+export function faqProblems(prose) {
+  const m = /^## FAQ\s*$/m.exec(prose);
+  if (!m) return [];
+  const rest = prose.slice(m.index + m[0].length);
+  const section = rest.split(/^## /m)[0];
+  const problems = [];
+  let question = null;
+  let answered = true;
+  // A new bold question starts an entry even without a blank line before it.
+  for (const block of section.split(/\n\s*\n|\n(?=\*\*(?:[^*\n]|\*(?!\*))+\?\*\*)/).map(b => b.trim()).filter(Boolean)) {
+    const q = /^\*\*((?:[^*]|\*(?!\*))+?)\*\*(?!\*)\s*([\s\S]*)$/.exec(block);
+    if (q) {
+      if (question && !answered) problems.push(`FAQ question "${question}" has no answer`);
+      question = q[1].trim();
+      answered = q[2].trim().length > 0;
+      if (!question.replace(/[*_`]+$/, '').endsWith('?')) problems.push(`FAQ question "${question}" must end with a question mark`);
+    } else if (!question) problems.push('FAQ must start with a bold question, then its answer ("**Question?** Answer.")');
+    else answered = true;
+  }
+  if (question && !answered) problems.push(`FAQ question "${question}" has no answer`);
+  return problems;
+}
+
 // Problems with one page's own content. Returns a list of messages.
 export function pageProblems(page) {
   const problems = [];
@@ -75,6 +100,7 @@ export function pageProblems(page) {
     if (/^## /m.test(tail)) need('"Next steps" must be the last "## " section');
     if (!/\]\(\/docs\//.test(tail)) need('"Next steps" needs at least one link to another docs page');
   }
+  for (const message of faqProblems(prose)) need(message);
   if (UNSAFE_URL.test(stripCode(page.body))) need('links and clips can\'t use javascript:, data: or vbscript: addresses');
   if (retiredName.test(`${page.title} ${page.description} ${page.body}`)) need('uses the retired product name; the product is Clara');
   return problems;
@@ -130,6 +156,24 @@ export function prettyHref(href) {
   return `${m[1]}/${m[2]}`;
 }
 
+// The "## FAQ" section becomes a list of accordions. Only the HTML changes: the Markdown stays plain text.
+// Each bold question starts an item, and everything up to the next question is its answer.
+export function faqAccordions(html) {
+  return html.replace(/(<h2 id="faq">[\s\S]*?<\/h2>)([\s\S]*?)(?=<h2 |$)/, (all, heading, rest) => {
+    // Two questions on consecutive lines are one paragraph: split them.
+    rest = rest.replace(/\n(?=<strong>(?:(?!<\/strong>)[\s\S])*\?<\/strong>)/g, '</p>\n<p>');
+    const parts = rest.split(/(?=<p><strong>)/).filter(p => p.trim());
+    if (!parts.length || !parts.every(p => p.startsWith('<p><strong>'))) return all;
+    const items = parts.map(part => {
+      const m = /^<p><strong>([\s\S]*?)<\/strong>\s*([\s\S]*)$/.exec(part.trim());
+      if (!m) return '';
+      const answer = m[2].startsWith('</p>') ? m[2].slice(4).trim() : `<p>${m[2]}`;
+      return `<details class="docs-faq-item"><summary>${m[1]}</summary><div class="docs-faq-answer">${answer}</div></details>`;
+    }).join('');
+    return `${heading}<div class="docs-faq">${items}</div>\n`;
+  });
+}
+
 export function renderMarkdown(body, page = {}) {
   const used = new Map();
   const marked = new Marked({
@@ -153,6 +197,7 @@ export function renderMarkdown(body, page = {}) {
   // Each clip gets its control bar in the HTML, so the page doesn't shift when the script starts.
   let html = prepareVideos(marked.parse(body)).replace(/(?:<p>)?(<video\b[^>]*>[\s\S]*?<\/video>)(?:<\/p>)?/g, (all, tag) => playerHtml(tag, /\baria-label="([^"]*)"/.exec(tag)?.[1]));
   if (page.tag === LIMITED) html = html.replace('</h1>', `</h1>\n<p class="docs-note docs-note-limited"><strong>${LIMITED}.</strong> ${LIMITED_NOTE}</p>`);
+  html = faqAccordions(html);
   // Wrap the closing "Next steps" section so it can be styled as a block.
   html = html.replace(/<h2 id="next-steps">[\s\S]*?(?=<h2 |$)/, m => `<section class="docs-next-steps" aria-labelledby="next-steps">${m}</section>`);
   return html;
@@ -255,13 +300,15 @@ export function excerpt(body, max = EXCERPT_LENGTH) {
   return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 1))}…`;
 }
 
+// The h2 and h3 headings of a rendered page, in order.
+export const pageHeadings = html => [...html.matchAll(/<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
+  .map(m => ({ level: Number(m[1]), id: m[2], text: decodeEntities(m[3].replace(/<[^>]+>/g, '')).trim() }));
+
 // What the browser searches: one entry per page, written to /docs/search-index.json.
 export function searchIndex({ pages }) {
   return pages.map(page => {
     const html = renderMarkdown(page.body, page);
-    const headings = [...html.matchAll(/<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
-      .map(m => ({ level: Number(m[1]), id: m[2], text: decodeEntities(m[3].replace(/<[^>]+>/g, '')).trim() }))
-      .filter(h => h.id !== 'next-steps');
+    const headings = pageHeadings(html).filter(h => h.id !== 'next-steps');
     return { title: page.title, task: String(page.task ?? '').trim(), description: page.description, section: page.sectionTitle, route: `/${page.route}/`, headings, excerpt: excerpt(page.body) };
   });
 }
@@ -295,7 +342,11 @@ export function docPage({ page, sections, pages, media = {} }) {
   const prev = pages[i - 1];
   const next = pages[i + 1];
   const pager = link => (link ? `<a href="/${link.route}/"><span>${link === prev ? 'Previous' : 'Next'}</span><strong>${escapeHtml(link.title)}</strong></a>` : '<span></span>');
-  const main = `<article class="docs-article"><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${applyManifest(renderMarkdown(page.body, page), media)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav></article>`;
+  const body = applyManifest(renderMarkdown(page.body, page), media);
+  const toc = tocHtml(pageHeadings(body));
+  // The front-matter description is the lede under the title.
+  const lede = body.replace('</h1>', `</h1>\n<p class="docs-lede">${escapeHtml(page.description)}</p>`);
+  const main = `<div class="docs-page${toc ? ' has-toc' : ''}"><article class="docs-article"><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${lede}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav></article>${toc}</div>`;
   return shell({ sections, current: page, main, sidebarSearch: searchBox('sb'), mobileSearch: searchBox('mb'), mobileLabel: page.sectionTitle });
 }
 
@@ -304,14 +355,9 @@ export function docsIndex({ sections, pages, media = {} }) {
   const start = GET_STARTED.map(item => ({ ...item, page: byRoute.get(item.route) })).filter(item => item.page);
   const startCards = start.map(({ page, poster }, n) => `<li><a class="docs-card docs-start-card" href="/${page.route}/">${poster ? `<img class="docs-start-thumb" src="${poster.src}" width="${poster.width}" height="${poster.height}" alt="" loading="lazy" decoding="async"/>` : ''}<span class="docs-start-copy"><span class="docs-start-head"><span class="docs-step" aria-hidden="true">${n + 1}</span><strong>${escapeHtml(page.title)}</strong></span><span>${escapeHtml(page.description)}</span><span class="docs-start-go" aria-hidden="true">${icon('chevron', 18)}</span></span></a></li>`).join('');
   const tasks = popularTasks(pages);
-  const taskList = tasks.map(({ page, label }) => `<li><a href="/${page.route}/"><span>${escapeHtml(label)}</span>${icon('chevron', 16)}</a></li>`).join('');
-  const topics = sections.map(s => {
-    const link = p => `<li><a href="/${p.route}/">${escapeHtml(p.title)}</a></li>`;
-    const rest = s.pages.slice(3);
-    // Past three pages the rest open in place, so nothing is a click away from the list.
-    const more = rest.length ? `<details class="docs-topic-more"><summary>See all ${s.pages.length} pages</summary><ul>${rest.map(link).join('')}</ul></details>` : '';
-    return `<li class="docs-card docs-topic" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p><ul>${s.pages.slice(0, 3).map(link).join('')}</ul>${more}</li>`;
-  }).join('');
+  const taskList = tasks.map(({ page, label }) => `<li><a class="docs-card docs-task" href="/${page.route}/"><span>${escapeHtml(label)}</span>${icon('chevron', 16)}</a></li>`).join('');
+  // One whole-card link per section, to its first page. The sidebar already lists the pages.
+  const topics = sections.map(s => `<li><a class="docs-card docs-topic" href="/${s.pages[0].route}/" id="topic-${s.id}"><span class="docs-topic-icon">${icon(s.id, 22)}</span><div class="docs-topic-copy"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p></div><span class="docs-topic-meta">${s.pages.length} ${s.pages.length === 1 ? 'page' : 'pages'}</span></a></li>`).join('');
   const head = `<header class="docs-home-head"><h1>Clara documentation</h1><p>Learn how to use Clara, from your first draft to automated marketing.</p>${searchBox('hero', { large: true })}</header>`;
   const main = `<div class="docs-home">${startCards ? `<section aria-labelledby="docs-get-started"><h2 id="docs-get-started">Get started</h2><ol class="docs-start-grid">${startCards}</ol></section>` : ''}${taskList ? `<section aria-labelledby="docs-popular"><h2 id="docs-popular">Popular tasks</h2><ul class="docs-tasks">${taskList}</ul></section>` : ''}<section aria-labelledby="docs-topics"><h2 id="docs-topics">Browse by topic</h2><ul class="docs-topics">${topics}</ul></section><aside class="docs-card docs-help-card" aria-labelledby="docs-need-help"><div><h2 id="docs-need-help">Need help?</h2><p>Can’t find what you’re looking for? The Clara team will help.</p></div><a class="button" href="/contact/">Talk to the Clara team</a></aside></div>`;
   return applyManifest(shell({ sections, current: null, main, head, mobileSearch: searchBox('mb'), mobileLabel: 'All docs', openId: sections[0]?.id }), media);
