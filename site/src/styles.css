@@ -703,6 +703,15 @@ dialog .form-success{margin-top:22px}
 .docs-player-bar{display:flex;align-items:center;gap:2px;padding:4px 8px;border-top:1px solid var(--line);background:#fff}
 .docs-player-btn{flex:none;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ink)}
 .no-player .docs-player-bar{display:none}
+.docs-player-btn[hidden]{display:none}
+/* Full screen: the whole player, with the bar pinned under a contained video on a dark ground. */
+.docs-player:fullscreen{display:flex;flex-direction:column;width:100%;height:100%;margin:0;border:0;border-radius:0;background:#000;box-shadow:none}
+.docs-body .docs-player:fullscreen video{flex:1;min-height:0;width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:#000}
+.docs-player:fullscreen .docs-player-bar{flex:none;border-top:0;background:var(--ink);color:#fff}
+.docs-player:fullscreen .docs-player-btn{color:#fff}
+.docs-player:fullscreen .docs-player-btn:hover:not(:disabled){background:#ffffff26;color:#fff}
+.docs-player:fullscreen .docs-player-rail{background:#ffffff3d}
+.docs-player:fullscreen .docs-player-time{color:#ffffffcc}
 .docs-player-btn:disabled{opacity:.4;cursor:default}
 .docs-player-btn:hover:not(:disabled){background:var(--tint);color:var(--accent)}
 .docs-player-btn:focus-visible,.docs-player-track:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
