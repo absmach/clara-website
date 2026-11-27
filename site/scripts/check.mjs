@@ -71,6 +71,23 @@ for (const [from, to] of Object.entries(docs.redirects)) {
   if (!REDIRECT_TARGET.test(to)) problems.push(`${from}: redirect target ${to} must look like /docs/section/page/`);
   if (!keys.has(to.replace(/\/+$/, ''))) problems.push(`${from}: redirects to ${to}, which is not a docs page`);
 }
+const searchFile = path.join(root, 'docs/search-index.json');
+if (!files.includes(searchFile)) problems.push('docs/search-index.json missing from dist');
+else {
+  const index = JSON.parse(await readFile(searchFile, 'utf8'));
+  for (const page of docs.pages) {
+    const entry = index.find(e => e.route === `/${page.route}/`);
+    if (!entry) problems.push(`search-index.json doesn't list ${page.route}`);
+    else if (!entry.title || !entry.section || !Array.isArray(entry.headings) || typeof entry.excerpt !== 'string') problems.push(`search-index.json: incomplete entry for ${page.route}`);
+  }
+}
+for (const [file, { html }] of pages) {
+  if (!file.startsWith(path.join(root, 'docs') + path.sep)) continue;
+  if (/redirect|has moved/i.test(html) && html.includes('http-equiv="refresh"')) continue;
+  const visible = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/g, '').replace(/<head>[\s\S]*?<\/head>/, '').replace(/<[^>]+>/g, ' ');
+  assert.doesNotMatch(visible, /llms|View this page as Markdown/i, `Visible text for assistants and tools in ${file}`);
+  assert.match(html, /rel="alternate" type="text\/plain" href="[^"]*\/llms\.txt"/, `Missing llms.txt alternate link in ${file}`);
+}
 for (const name of ['llms.txt', 'llms-full.txt']) if (!files.includes(path.join(root, name))) problems.push(`${name} missing from dist`);
 const llms = files.includes(path.join(root, 'llms.txt')) ? await readFile(path.join(root, 'llms.txt'), 'utf8') : '';
 for (const page of docs.pages) if (!llms.includes(`/${page.route}.md`)) problems.push(`llms.txt doesn't list ${page.route}`);

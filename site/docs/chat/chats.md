@@ -2,6 +2,8 @@
 title: Chat history and sharing
 description: Find, rename, archive and share your chats, and see who can open each one.
 order: 2
+popular: 3
+task: Share a chat with a teammate
 ---
 # Chat history and sharing
 

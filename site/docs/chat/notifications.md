@@ -2,6 +2,8 @@
 title: Notifications
 description: See what Clara finished, what failed and what needs you, and choose which notifications to show.
 order: 4
+popular: 5
+task: Choose which notifications to see
 ---
 # Notifications
 

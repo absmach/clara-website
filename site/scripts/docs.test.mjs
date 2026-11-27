@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
+import { parseFrontMatter, pageProblems, referenceProblems, prepareVideos, renderMarkdown, absoluteLinks, redirectPage, REDIRECT_TARGET, prettyHref, llmsTxt, llmsFullTxt, popularTasks, searchIndex, excerpt, docsIndex, docPage, retiredName, LIMITED, LIMITED_NOTE } from './docs.mjs';
 
 const body = '# Plays\n\nText.\n\n## Next steps\n- [Other](/docs/create/campaigns)\n';
 const page = (extra = {}) => ({ section: 'create', slug: 'plays', route: 'docs/create/plays', title: 'Plays', description: 'Pick a play.', order: 1, tag: '', body, ...extra });
@@ -149,4 +149,55 @@ test('code detection handles indented, unclosed and multi-backtick code', () => 
   assert.equal(absoluteLinks(ticks), ticks.replace(/and \[x\]\(\/docs\/x\)/, `and ${abs}`));
   assert.deepEqual(pageProblems(page({ body: `${body}\n- Item\n\n  \`\`\`md\n  [x](javascript:alert(1))\n  \`\`\`\n` })).filter(p => p.includes('javascript')), []);
   assert.deepEqual(pageProblems(page({ body: '# A\n\n```md\n# not a heading\n```\n\n## Next steps\n- [x](/docs/a/b)\n' })), []);
+});
+
+const home = () => {
+  const mk = (slug, extra = {}) => page({ slug, route: `docs/start-here/${slug}`, section: 'start-here', sectionTitle: 'Start here', title: slug.toUpperCase(), order: 1, body: '# T\n\nIntro with **bold** and [a link](/docs/a/b).\n\n```md\nsecret code\n```\n\n## Do it & more\n\n### Detail\n\n## Next steps\n- [x](/docs/a/b)\n', ...extra });
+  const pages = [mk('quickstart', { popular: 2, task: 'Write your first draft' }), mk('concepts', { popular: 1 }), mk('glossary'), mk('welcome', { popular: 3 })];
+  const sections = [{ id: 'start-here', title: 'Start here', description: 'Basics.', pages }];
+  return { sections, pages };
+};
+
+test('popular tasks are sorted, limited and labelled by task or title', () => {
+  const { pages } = home();
+  const tasks = popularTasks(pages);
+  assert.deepEqual(tasks.map(t => t.label), ['CONCEPTS', 'Write your first draft', 'WELCOME']);
+  assert.equal(popularTasks(pages, 2).length, 2);
+  assert.ok(!tasks.some(t => t.page.slug === 'glossary'));
+});
+
+test('popular and task front matter are validated', () => {
+  assert.deepEqual(pageProblems(page({ popular: 1, task: 'Do a thing' })), []);
+  assert.ok(pageProblems(page({ popular: NaN })).some(p => p.includes('popular')));
+  assert.ok(pageProblems(page({ popular: 1, task: '  ' })).some(p => p.includes('task')));
+  assert.ok(pageProblems(page({ task: 'Do a thing' })).some(p => p.includes('popular')));
+});
+
+test('the search index has every field and no Markdown, code or llms text', () => {
+  const entries = searchIndex(home());
+  assert.equal(entries.length, 4);
+  const [entry] = entries;
+  assert.deepEqual(Object.keys(entry).sort(), ['description', 'excerpt', 'headings', 'route', 'section', 'title']);
+  assert.equal(entry.route, '/docs/start-here/quickstart/');
+  assert.deepEqual(entry.headings.map(h => [h.level, h.id, h.text]), [[2, 'do-it-more', 'Do it & more'], [3, 'detail', 'Detail']]);
+  assert.equal(entry.excerpt, 'Intro with bold and a link.');
+  assert.doesNotMatch(JSON.stringify(entries), /secret code|\*\*|llms|\.md\b/);
+  assert.ok(excerpt('# T\n\n' + 'word '.repeat(200)).length <= 241);
+});
+
+test('the docs home and articles show nothing meant for assistants', () => {
+  const docs = home();
+  for (const html of [docsIndex(docs), docPage({ page: docs.pages[0], ...docs })]) {
+    assert.doesNotMatch(html.replace(/<[^>]+>/g, ' '), /llms|View this page as Markdown|for assistants/i);
+    assert.doesNotMatch(html, /docs-raw|\.md"/);
+    assert.match(html, /data-docs-search/);
+  }
+  const index = docsIndex(docs);
+  assert.match(index, /<h1>Clara documentation<\/h1>/);
+  assert.match(index, /Popular tasks/);
+  assert.match(index, /class="docs-sidebar"/);
+  assert.match(index, /Browse the docs/);
+  assert.match(index, /href="\/contact\/"/);
+  assert.match(index, /All 4 pages/);
+  assert.ok(index.indexOf('>Write your first draft<') > index.indexOf('>CONCEPTS<'));
 });

@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { resourcePages } from './resource-pages.mjs';
-import { loadDocs, docPage, docsIndex, llmsTxt, llmsFullTxt, redirectPage, escapeHtml, absoluteLinks } from './docs.mjs';
+import { loadDocs, docPage, docsIndex, llmsTxt, llmsFullTxt, searchIndex, redirectPage, escapeHtml, absoluteLinks } from './docs.mjs';
 import { CONTACT_TOPICS, NOTICE_VERSION } from '../../worker/forms.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -53,9 +53,10 @@ const header = (route) => `<a class="skip-link" href="#main">Skip to content</a>
 const footerColumn = (title, links) => `<nav aria-label="Footer ${title.toLowerCase()} links"><h2>${title}</h2>${links.map(([label, url]) => `<a href="${url}">${label}</a>`).join('')}</nav>`;
 const footer = `<footer class="site-footer"><div class="container"><div class="footer-top"><div class="footer-brand"><a href="/" class="brand" aria-label="Clara home">${brand}</a><p>Your product has a story. Let’s get it out into the world.</p><a class="footer-contact" href="/contact/">Say hello →</a></div>${footerColumn('Product', [['How it works', '/how-it-works/'], ['Agents', '/how-it-works/#agents'], ['Planner', '/how-it-works/#planning'], ['Autonomy', '/how-it-works/#autonomy'], ['Get early access', '/early-access/']])}${footerColumn('Resources', [['Documentation', '/docs/'], ['Getting started', '/docs/start-here/quickstart/'], ['Brand voice', '/docs/context/brand/'], ['Blog', '/blog/']])}${footerColumn('Company', [['About Clara', '/about/'], ['Abstract Machines ↗', 'https://absmach.eu'], ['Explore Atomic ↗', 'https://atomicapp.dev'], ['Contact', '/contact/']])}</div><div class="footer-bottom"><span>© 2026 Abstract Machines</span><a href="/privacy/">Website privacy</a></div></div></footer>`;
 const closing = `<section class="closing"><div class="container closing-inner"><h2>You build the product. <em>Clara helps tell its story.</em></h2><a class="button button-light" href="/early-access/" data-access>Get early access ${arrow}</a></div></section>`;
-const docPages = docs.pages.map(page => ({ route: page.route, title: `${escapeHtml(page.title)} — Clara Docs`, description: escapeHtml(page.description), head: `<link rel="alternate" type="text/markdown" href="${siteUrl}/${page.route}.md"/>`, body: docPage({ page, ...docs }) }));
+const llmsLink = `<link rel="alternate" type="text/plain" href="${siteUrl}/llms.txt" title="llms.txt"/>`;
+const docPages = docs.pages.map(page => ({ route: page.route, title: `${escapeHtml(page.title)} — Clara Docs`, description: escapeHtml(page.description), head: `<link rel="alternate" type="text/markdown" href="${siteUrl}/${page.route}.md"/>${llmsLink}`, body: docPage({ page, ...docs }) }));
 const pages = [
-  { route: 'docs', title: 'Docs — Get started with Clara', description: 'Clara’s user guide: sign up, give Clara your context, make drafts, review and publish, and automate. Every page is also plain Markdown.', head: `<link rel="alternate" type="text/plain" href="${siteUrl}/llms.txt"/>`, body: docsIndex(docs) },
+  { route: 'docs', title: 'Docs — Get started with Clara', description: 'Clara’s user guide: sign up, give Clara your context, make drafts, review and publish, and automate.', head: llmsLink, body: docsIndex(docs) },
   ...docPages,
   ...resourcePages,
   { route: '', file: 'home.html', title: 'Clara — Your product. Out in the world.', description: 'Create on-brand content and campaigns with Clara’s chat and Plays. Scale your marketing with visual workflows, agents, and the autonomy you choose.' },
@@ -86,6 +87,7 @@ await writeFile(path.join(formerFormats, 'index.html'), `<!doctype html><html la
 for (const page of docs.pages) {
   await writeFile(path.join(out, `${page.route}.md`), absoluteLinks(page.raw));
 }
+await writeFile(path.join(out, 'docs/search-index.json'), JSON.stringify(searchIndex(docs)));
 await writeFile(path.join(out, 'llms.txt'), llmsTxt(docs));
 await writeFile(path.join(out, 'llms-full.txt'), llmsFullTxt(docs));
 // Cloudflare static assets read _headers. Without it .md files may be served as plain text.
