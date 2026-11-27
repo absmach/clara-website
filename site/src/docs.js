@@ -1,13 +1,27 @@
-// Docs clips. The build removes `autoplay` and adds controls, so without this script
-// (or with reduced motion) visitors see the poster and can press play.
-(() => {
-  const clips = [...document.querySelectorAll('video[data-autoplay]')];
+// Docs clips. The build removes `autoplay` and adds native controls, so without this script
+// (or with reduced motion) visitors see the poster and can press play. With it, each clip gets
+// the control bar from docs-player.js, and clips that may autoplay play, muted and looping, only while visible.
+async function startClips() {
+  let mount = null;
+  try { ({ mountPlayer: mount } = await import('/docs-player.js')); } catch {
+    // No player: hide the bar the page was built with and keep the native controls.
+    document.documentElement.classList.add('no-player');
+    for (const video of document.querySelectorAll('.docs-body video')) video.controls = true;
+  }
+  const videos = [...document.querySelectorAll('.docs-body video')];
+  if (mount) for (const video of videos) mount(video);
+  // Without the control bar, hand control back to the browser's own.
+  const native = clip => { if (!clip.closest('.docs-player')) clip.controls = true; };
+
+  const clips = videos.filter(video => video.hasAttribute('data-autoplay'));
   if (!clips.length) return;
   const quiet = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (quiet.matches) return;
+  // Reduced motion: no autoplay, and no looping if the reader presses play.
+  if (quiet.matches) { for (const video of videos) video.loop = false; return; }
   const watcher = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     for (const { target, isIntersecting } of entries) {
-      if (isIntersecting && !quiet.matches) target.play().catch(() => { target.controls = true; });
+      // A clip the reader paused stays paused.
+      if (isIntersecting && !quiet.matches && !target.dataset.userPaused) target.play().catch(() => native(target));
       else target.pause();
     }
   }, { threshold: 0.4 }) : null;
@@ -16,11 +30,12 @@
     clip.loop = true;
     clip.controls = false;
     if (watcher) watcher.observe(clip);
-    else clip.play().catch(() => { clip.controls = true; });
+    else clip.play().catch(() => native(clip));
   }
-  // If the preference changes while the page is open, hand control back.
+  // If the preference changes while the page is open, stop the clips.
   quiet.addEventListener('change', () => {
     if (!quiet.matches) return;
-    for (const clip of clips) { clip.pause(); clip.controls = true; }
+    for (const clip of clips) { clip.pause(); clip.loop = false; native(clip); }
   });
-})();
+}
+startClips();

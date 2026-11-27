@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { resourcePages } from './resource-pages.mjs';
+import { applyManifest, loadMedia } from './media.mjs';
 import { loadDocs, docPage, docsIndex, llmsTxt, llmsFullTxt, redirectPage, escapeHtml, absoluteLinks } from './docs.mjs';
 import { CONTACT_TOPICS, NOTICE_VERSION } from '../../worker/forms.js';
 
@@ -13,8 +14,9 @@ await mkdir(out, { recursive: true });
 await rm(path.join(out, 'docs'), { recursive: true, force: true });
 await rm(path.join(out, 'assets/docs'), { recursive: true, force: true });
 const docs = await loadDocs();
+const media = await loadMedia();
 await cp(path.join(src, 'assets'), path.join(out, 'assets'), { recursive: true });
-for (const file of ['styles.css', 'site.js', 'logo-directions.css', 'logo-directions.js', 'bloom-directions.css', 'bloom-directions.js', 'automation-redirect.js', 'docs.js']) await cp(path.join(src, file), path.join(out, file));
+for (const file of ['styles.css', 'site.js', 'logo-directions.css', 'logo-directions.js', 'bloom-directions.css', 'bloom-directions.js', 'automation-redirect.js', 'docs.js', 'docs-player.js']) await cp(path.join(src, file), path.join(out, file));
 const siteUrl = 'https://claragtm.com';
 const shareImage = `${siteUrl}/assets/og-image.png`;
 const shareImageAlt = 'Clara: You make great things. Let’s tell the world.';
@@ -53,7 +55,7 @@ const header = (route) => `<a class="skip-link" href="#main">Skip to content</a>
 const footerColumn = (title, links) => `<nav aria-label="Footer ${title.toLowerCase()} links"><h2>${title}</h2>${links.map(([label, url]) => `<a href="${url}">${label}</a>`).join('')}</nav>`;
 const footer = `<footer class="site-footer"><div class="container"><div class="footer-top"><div class="footer-brand"><a href="/" class="brand" aria-label="Clara home">${brand}</a><p>Your product has a story. Let’s get it out into the world.</p><a class="footer-contact" href="/contact/">Say hello →</a></div>${footerColumn('Product', [['How it works', '/how-it-works/'], ['Agents', '/how-it-works/#agents'], ['Planner', '/how-it-works/#planning'], ['Autonomy', '/how-it-works/#autonomy'], ['Get early access', '/early-access/']])}${footerColumn('Resources', [['Documentation', '/docs/'], ['Getting started', '/docs/start-here/quickstart/'], ['Brand voice', '/docs/context/brand/'], ['Blog', '/blog/']])}${footerColumn('Company', [['About Clara', '/about/'], ['Abstract Machines ↗', 'https://absmach.eu'], ['Explore Atomic ↗', 'https://atomicapp.dev'], ['Contact', '/contact/']])}</div><div class="footer-bottom"><span>© 2026 Abstract Machines</span><a href="/privacy/">Website privacy</a></div></div></footer>`;
 const closing = `<section class="closing"><div class="container closing-inner"><h2>You build the product. <em>Clara helps tell its story.</em></h2><a class="button button-light" href="/early-access/" data-access>Get early access ${arrow}</a></div></section>`;
-const docPages = docs.pages.map(page => ({ route: page.route, title: `${escapeHtml(page.title)} — Clara Docs`, description: escapeHtml(page.description), head: `<link rel="alternate" type="text/markdown" href="${siteUrl}/${page.route}.md"/>`, body: docPage({ page, ...docs }) }));
+const docPages = docs.pages.map(page => ({ route: page.route, title: `${escapeHtml(page.title)} — Clara Docs`, description: escapeHtml(page.description), head: `<link rel="alternate" type="text/markdown" href="${siteUrl}/${page.route}.md"/><noscript><style>.docs-player-bar{display:none}</style></noscript>`, body: docPage({ page, ...docs, media }) }));
 const pages = [
   { route: 'docs', title: 'Docs — Get started with Clara', description: 'Clara’s user guide: sign up, give Clara your context, make drafts, review and publish, and automate. Every page is also plain Markdown.', head: `<link rel="alternate" type="text/plain" href="${siteUrl}/llms.txt"/>`, body: docsIndex(docs) },
   ...docPages,
@@ -68,7 +70,7 @@ const pages = [
 ];
 for (const page of pages) {
   const body = (page.body ?? await readFile(path.join(src, page.file), 'utf8')).replace('{{ACCESS_FORM}}', accessForm('page')).replace('{{CONTACT_FORM}}', contactForm);
-  let html = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#fffcf7"/><title>${page.title}</title><meta name="description" content="${page.description}"/><meta property="og:title" content="${page.title}"/><meta property="og:description" content="${page.description}"/><meta property="og:type" content="website"/>${page.route === '404' ? '' : `<link rel="canonical" href="${siteUrl}/${page.route ? page.route + '/' : ''}"/><meta property="og:url" content="${siteUrl}/${page.route ? page.route + '/' : ''}"/>`}<meta property="og:site_name" content="Clara"/><meta property="og:image" content="${shareImage}"/><meta property="og:image:type" content="image/png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="${shareImageAlt}"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="${shareImage}"/><meta name="twitter:image:alt" content="${shareImageAlt}"/><link rel="icon" type="image/svg+xml" href="/assets/clara-favicon-bloom.svg"/><link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin/><link rel="stylesheet" href="/styles.css"/>${page.head ?? ''}<script src="/site.js" defer></script>${page.route.startsWith('docs') ? '<script src="/docs.js" defer></script>' : ''}</head><body>${header(page.route)}<main id="main">${body}</main>${!['early-access','contact','privacy','404'].includes(page.route) && !page.route.startsWith('docs') && !page.route.startsWith('blog/') ? closing : ''}${footer}<dialog id="access-dialog" aria-labelledby="access-title"><button class="dialog-close" type="button" aria-label="Close early access form">×</button><div class="dialog-body"><h2 id="access-title">A little clarity for your next chapter.</h2><p class="dialog-intro">Tell us about your product. We’ll talk about early access and how Clara could fit your team.</p>${accessForm('dialog')}</div></dialog></body></html>`;
+  let html = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#fffcf7"/><title>${page.title}</title><meta name="description" content="${page.description}"/><meta property="og:title" content="${page.title}"/><meta property="og:description" content="${page.description}"/><meta property="og:type" content="website"/>${page.route === '404' ? '' : `<link rel="canonical" href="${siteUrl}/${page.route ? page.route + '/' : ''}"/><meta property="og:url" content="${siteUrl}/${page.route ? page.route + '/' : ''}"/>`}<meta property="og:site_name" content="Clara"/><meta property="og:image" content="${shareImage}"/><meta property="og:image:type" content="image/png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="${shareImageAlt}"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="${shareImage}"/><meta name="twitter:image:alt" content="${shareImageAlt}"/><link rel="icon" type="image/svg+xml" href="/assets/clara-favicon-bloom.svg"/><link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin/><link rel="stylesheet" href="/styles.css"/>${page.head ?? ''}<script src="/site.js" defer></script>${page.route.startsWith('docs') ? '<script type="module" src="/docs.js"></script>' : ''}</head><body>${header(page.route)}<main id="main">${body}</main>${!['early-access','contact','privacy','404'].includes(page.route) && !page.route.startsWith('docs') && !page.route.startsWith('blog/') ? closing : ''}${footer}<dialog id="access-dialog" aria-labelledby="access-title"><button class="dialog-close" type="button" aria-label="Close early access form">×</button><div class="dialog-body"><h2 id="access-title">A little clarity for your next chapter.</h2><p class="dialog-intro">Tell us about your product. We’ll talk about early access and how Clara could fit your team.</p>${accessForm('dialog')}</div></dialog></body></html>`;
   // Keep trailing arrows on the same line as the word before them.
   html = html.replace(/(\w) ([↗→←↓])/g, '$1&nbsp;$2');
   const dir = page.route && page.route !== '404' ? path.join(out, page.route) : out;
@@ -84,10 +86,10 @@ await writeFile(path.join(formerFormats, 'index.html'), `<!doctype html><html la
 
 // Raw Markdown next to each page, plus the files for assistants.
 for (const page of docs.pages) {
-  await writeFile(path.join(out, `${page.route}.md`), absoluteLinks(page.raw));
+  await writeFile(path.join(out, `${page.route}.md`), absoluteLinks(applyManifest(page.raw, media)));
 }
 await writeFile(path.join(out, 'llms.txt'), llmsTxt(docs));
-await writeFile(path.join(out, 'llms-full.txt'), llmsFullTxt(docs));
+await writeFile(path.join(out, 'llms-full.txt'), llmsFullTxt(docs, media));
 // Cloudflare static assets read _headers. Without it .md files may be served as plain text.
 await writeFile(path.join(out, '_headers'), '/docs/*.md\n  Content-Type: text/markdown; charset=utf-8\n/llms.txt\n  Content-Type: text/plain; charset=utf-8\n/llms-full.txt\n  Content-Type: text/plain; charset=utf-8\n');
 console.log(`Built ${docs.pages.length} docs pages, their Markdown, llms.txt and llms-full.txt.`);
