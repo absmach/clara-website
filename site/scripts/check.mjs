@@ -2,6 +2,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { loadMedia, manifestProblems, CDN_BASE } from './media.mjs';
 import { loadDocs, referenceProblems, pageKeys, redirectKeys, retiredName, REDIRECT_TARGET } from './docs.mjs';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
@@ -58,12 +59,15 @@ const docs = await loadDocs().catch(error => assert.fail(error.message));
 const keys = pageKeys(docs.pages);
 const redirects = redirectKeys(docs.redirects);
 const problems = [];
-const clipExists = url => files.includes(path.resolve(root, '.' + url));
+const media = await loadMedia().catch(error => assert.fail(`docs/media.json: ${error.message}`));
+problems.push(...manifestProblems(media));
+const clipExists = url => url in media;
 for (const page of docs.pages) {
   problems.push(...referenceProblems(page, keys, redirects, clipExists));
   if (!files.includes(path.join(root, page.route, 'index.html'))) problems.push(`${page.route}: no HTML page in dist (run pnpm run build)`);
   if (!files.includes(path.join(root, `${page.route}.md`))) problems.push(`${page.route}.md: not in dist (run pnpm run build)`);
   const html = pages.get(path.join(root, page.route, 'index.html'))?.html ?? '';
+  for (const [, url] of html.matchAll(/\b(?:src|poster)="(\/assets\/docs\/[^"]+)"/g)) problems.push(`${page.route}: clip address ${url} wasn't rewritten to a ${CDN_BASE} address (is it in docs/media.json?)`);
   if (!html.includes('rel="alternate" type="text/markdown"')) problems.push(`${page.route}: missing the Markdown alternate link`);
 }
 for (const [from, to] of Object.entries(docs.redirects)) {

@@ -4,6 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { Marked } from 'marked';
+import { applyManifest } from './media.mjs';
 
 export const docsRoot = fileURLToPath(new URL('../docs/', import.meta.url));
 export const siteUrl = 'https://claragtm.com';
@@ -97,7 +98,7 @@ export function referenceProblems(page, pageKeys, redirectKeys, exists) {
     for (const [kind, url] of [['clip', src], ['poster', poster]]) {
       if (!url) continue;
       if (!url.startsWith('/assets/docs/')) problems.push(`${where}: ${kind} ${url} must live under /assets/docs/`);
-      else if (!exists(url)) problems.push(`${where}: ${kind} ${url} not found in site/src${url}`);
+      else if (!exists(url)) problems.push(`${where}: ${kind} ${url} isn't in docs/media.json (put the file in media/docs/ and run pnpm run media:upload)`);
     }
   }
   return problems;
@@ -206,13 +207,13 @@ export function sidebar(sections, current) {
   return `<div class="docs-nav-list"><a class="docs-overview${current ? '' : ' is-current'}" href="/docs/"${current ? '' : ' aria-current="page"'}>All docs</a>${body}</div>`;
 }
 
-export function docPage({ page, sections, pages }) {
+export function docPage({ page, sections, pages, media = {} }) {
   const i = pages.indexOf(page);
   const prev = pages[i - 1];
   const next = pages[i + 1];
   const nav = sidebar(sections, page);
   const pager = link => (link ? `<a href="/${link.route}/"><span>${link === prev ? 'Previous' : 'Next'}</span><strong>${escapeHtml(link.title)}</strong></a>` : '<span></span>');
-  return `<div class="container docs-shell"><aside class="docs-sidebar"><p class="eyebrow">CLARA DOCS</p><nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us →</a></aside><article class="docs-article"><details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(page.sectionTitle)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${renderMarkdown(page.body, page)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav><p class="docs-raw"><a href="/${page.route}.md">View this page as Markdown</a></p></article></div>`;
+  return `<div class="container docs-shell"><aside class="docs-sidebar"><p class="eyebrow">CLARA DOCS</p><nav aria-label="Documentation">${nav}</nav><a class="docs-help" href="/contact/">Need a hand? Talk to us →</a></aside><article class="docs-article"><details class="docs-mobile-nav"><summary><span>Browse the docs</span><strong>${escapeHtml(page.sectionTitle)}</strong></summary><nav aria-label="Documentation menu">${nav}</nav></details><a class="breadcrumb" href="/docs/">Docs / ${escapeHtml(page.sectionTitle)}</a><div class="docs-body">${applyManifest(renderMarkdown(page.body, page), media)}</div><nav class="docs-pager" aria-label="Previous and next pages">${pager(prev)}${pager(next)}</nav><p class="docs-raw"><a href="/${page.route}.md">View this page as Markdown</a></p></article></div>`;
 }
 
 export function docsIndex({ sections, pages }) {
@@ -234,9 +235,9 @@ export function llmsTxt({ sections }) {
 // Root-relative links and clips become absolute, for copies read away from the site.
 export const absoluteLinks = md => mapProse(md, text => text.replace(/\]\(\/(?!\/)/g, `](${siteUrl}/`).replace(/(?<![\w-])(href|src|poster)="\/(?!\/)/g, `$1="${siteUrl}/`));
 
-export function llmsFullTxt({ pages }) {
+export function llmsFullTxt({ pages }, media = {}) {
   const intro = '# Clara user guide\n\nEvery page of the Clara user guide, in reading order. Each page starts with its address.\n';
-  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(p.body.trim())}\n`)].join('\n');
+  return [intro, ...pages.map(p => `---\n\nSource: ${siteUrl}/${p.route}/${p.tag ? `\nAvailability: ${p.tag}` : ''}\n\n${absoluteLinks(applyManifest(p.body.trim(), media))}\n`)].join('\n');
 }
 
 export const REDIRECT_TARGET = /^\/docs\/[a-z0-9/-]+\/$/;
