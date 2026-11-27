@@ -9,9 +9,14 @@ export function tocHtml(headings) {
   return `<aside class="docs-toc"><nav aria-labelledby="docs-toc-title"><p class="docs-toc-title" id="docs-toc-title">On this page</p><ul>${items}</ul></nav></aside>`;
 }
 
+// The same 100px the page keeps free above a heading it scrolls to (html scroll-padding-top), plus a pixel or
+// so of rounding, so a clicked entry is the highlighted one.
+const SCROLL_OFFSET = 104;
+
 // Which heading the reader is in: the last one whose top edge has reached `offset` pixels from the top
-// of the window, or -1 before the first.
-export function activeIndex(tops, offset = 140) {
+// of the window, or -1 before the first. At the very end of the page the last heading counts, even if it can't reach the top.
+export function activeIndex(tops, offset = SCROLL_OFFSET, atBottom = false) {
+  if (atBottom && tops.length) return tops.length - 1;
   let active = -1;
   tops.forEach((top, i) => { if (top <= offset) active = i; });
   return active;
@@ -23,7 +28,8 @@ export function mountToc() {
   if (!links.length || targets.some(t => !t)) return;
   let current = -2;
   const update = () => {
-    const i = activeIndex(targets.map(t => t.getBoundingClientRect().top));
+    const atBottom = scrollY > 0 && innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    const i = activeIndex(targets.map(t => t.getBoundingClientRect().top), SCROLL_OFFSET, atBottom);
     if (i === current) return;
     current = i;
     links.forEach((a, n) => { if (n === i) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });

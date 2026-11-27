@@ -328,3 +328,21 @@ test('the Welcome page has no "Where to find it" line, task pages keep theirs', 
   assert.doesNotMatch(welcome, /Where to find it/);
   assert.match(chats, /Where to find it/);
 });
+
+test('questions on consecutive lines are split, and a question may hold code or italics', () => {
+  const md = '# T\n\n## FAQ\n\n**Is it free?** Yes.\n**Is `x` *set*?** No.\n\n## Next steps\n- [x](/docs/a/b)\n';
+  assert.deepEqual(faqProblems(md), []);
+  const html = renderMarkdown(md);
+  assert.equal((html.match(/<details class="docs-faq-item">/g) || []).length, 2);
+  assert.match(html, /<summary>Is it free\?<\/summary><div class="docs-faq-answer"><p>Yes\.<\/p><\/div>/);
+  assert.match(html, /<summary>Is <code>x<\/code> <em>set<\/em>\?<\/summary>/);
+  // A bold-leading answer paragraph counts as a new question, so check flags it.
+  assert.ok(faqProblems('## FAQ\n\n**Is it free?** Yes.\n\n**Note:** Only today.\n').some(p => p.includes('question mark')));
+});
+
+test('the contents highlight follows the same offset as a clicked heading, and the last entry at the bottom', () => {
+  assert.equal(activeIndex([100, 600, 1200]), 0);
+  assert.equal(activeIndex([-50, 100.5, 700]), 1);
+  assert.equal(activeIndex([-900, 300, 900], 104, true), 2);
+  assert.equal(activeIndex([], 104, true), -1);
+});

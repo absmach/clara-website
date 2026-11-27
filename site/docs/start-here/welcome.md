@@ -21,14 +21,16 @@ You can work with Clara in two ways. Talk to it in **New chat**, or pick a ready
 
 ## What you can make
 
-Clara writes in the formats on the **Plays** page:
+Clara writes in many formats. For example, from the **Plays** page:
 
 - Blog posts, release notes and newsletters
 - Posts for LinkedIn, X, Facebook Page, Threads, Bluesky, Mastodon and Instagram, and X threads
 - Carousels
 - Videos, including short-form video posts
 - Campaigns: one brief turned into a set of related drafts
+- Images for your posts
 - Competitor and positioning research
+- Website visibility: what to fix so people and AI assistants can find your site
 
 For example, you can ask for "a LinkedIn post announcing the new dashboard in Acme Analytics" and get a draft in your brand's voice. See [From a brief to a first draft](/docs/create/plays).
 

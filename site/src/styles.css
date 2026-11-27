@@ -680,7 +680,7 @@ dialog .form-success{margin-top:22px}
 .docs-article{max-width:760px;min-width:0}
 .docs-body{font-size:18px;line-height:1.75;overflow-wrap:break-word}
 .docs-body h1{font-size:clamp(34px,5vw,52px);line-height:1.1;letter-spacing:-.045em;margin:12px 0 18px}
-.docs-body h2{font-size:clamp(24px,3vw,30px);line-height:1.25;letter-spacing:-.03em;margin:48px 0 14px;scroll-margin-top:100px}
+.docs-body h2{font-size:clamp(24px,3vw,30px);line-height:1.25;letter-spacing:-.03em;margin:48px 0 14px}
 .docs-body h3{font-size:20px;margin:30px 0 10px}
 .docs-body p,.docs-body ul,.docs-body ol,.docs-body blockquote,.docs-body figure,.docs-body video,.docs-body pre,.docs-body table{margin:0 0 18px}
 .docs-body ul,.docs-body ol{padding-left:1.4em}
@@ -795,8 +795,8 @@ a.docs-card:hover{border-color:#b2a5e2;box-shadow:0 10px 28px #2723340f}
 .docs-lede{margin:0 0 28px;max-width:60ch;font-size:clamp(18px,2vw,21px);line-height:1.55;color:var(--muted)}
 .docs-page{display:block}
 .docs-toc{display:none}
-@media(min-width:1200px){
-  .docs-page.has-toc{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:40px;align-items:start}
+@media(min-width:1280px){
+  .docs-page.has-toc{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:24px;align-items:start}
   .docs-toc{display:block;position:sticky;top:100px;max-height:calc(100vh - 140px);overflow-y:auto}
 }
 .docs-toc-title{margin-bottom:10px;font-size:14px;font-weight:650;color:var(--ink)}

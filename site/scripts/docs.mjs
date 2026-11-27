@@ -65,13 +65,14 @@ export function faqProblems(prose) {
   const problems = [];
   let question = null;
   let answered = true;
-  for (const block of section.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean)) {
-    const q = /^\*\*([^*]+)\*\*\s*([\s\S]*)$/.exec(block);
+  // A new bold question starts an entry even without a blank line before it.
+  for (const block of section.split(/\n\s*\n|\n(?=\*\*(?:[^*\n]|\*(?!\*))+\?\*\*)/).map(b => b.trim()).filter(Boolean)) {
+    const q = /^\*\*((?:[^*]|\*(?!\*))+?)\*\*(?!\*)\s*([\s\S]*)$/.exec(block);
     if (q) {
       if (question && !answered) problems.push(`FAQ question "${question}" has no answer`);
       question = q[1].trim();
       answered = q[2].trim().length > 0;
-      if (!question.endsWith('?')) problems.push(`FAQ question "${question}" must end with a question mark`);
+      if (!question.replace(/[*_`]+$/, '').endsWith('?')) problems.push(`FAQ question "${question}" must end with a question mark`);
     } else if (!question) problems.push('FAQ must start with a bold question, then its answer ("**Question?** Answer.")');
     else answered = true;
   }
@@ -159,6 +160,8 @@ export function prettyHref(href) {
 // Each bold question starts an item, and everything up to the next question is its answer.
 export function faqAccordions(html) {
   return html.replace(/(<h2 id="faq">[\s\S]*?<\/h2>)([\s\S]*?)(?=<h2 |$)/, (all, heading, rest) => {
+    // Two questions on consecutive lines are one paragraph: split them.
+    rest = rest.replace(/\n(?=<strong>(?:(?!<\/strong>)[\s\S])*\?<\/strong>)/g, '</p>\n<p>');
     const parts = rest.split(/(?=<p><strong>)/).filter(p => p.trim());
     if (!parts.length || !parts.every(p => p.startsWith('<p><strong>'))) return all;
     const items = parts.map(part => {

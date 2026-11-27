@@ -46,7 +46,7 @@ Front matter has `title`, `description` and `order` (a number), plus the optiona
 
 ## FAQ sections
 
-Write each question as a bold line that ends with a question mark, followed by its answer: `**Does Clara publish by itself?** Not by default.` The site shows the `## FAQ` section as accordions. The Markdown and `llms` files stay plain text. `pnpm run check` fails when a FAQ entry doesn't start with a bold question or has no answer.
+Write each question as a bold line that ends with a question mark, followed by its answer: `**Does Clara publish by itself?** Not by default.` Put each question on its own line or paragraph. It can contain `code` or *italics*. Don't start an answer paragraph with bold text (for example **Note:**): a bold start always means a new question. The site shows the `## FAQ` section as accordions. The Markdown and `llms` files stay plain text. `pnpm run check` fails when a FAQ entry doesn't start with a bold question or has no answer.
 
 Every page's description is shown as the intro under its title. Pages with two or more headings also get an "On this page" list on wide screens.
 
